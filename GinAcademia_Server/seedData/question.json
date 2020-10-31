@@ -1,0 +1,157 @@
+[{
+  "_id": {
+    "$oid": "5f8fb2ca10d40337e0b01e1c"
+  },
+  "QuestionId": "00001",
+  "Question": "3 màu cơ bản gồm những màu gì",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Đỏ, xanh, vàng"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Cam, vàng, đỏ"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Đỏ, xanh, lục"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Xanh, lục, xám"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb30e10d40320a405b22a"
+  },
+  "QuestionId": "00002",
+  "Question": "1+1=?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "1"
+    },
+    {
+      "OptionId": 2,
+      "Option": "2"
+    },
+    {
+      "OptionId": 3,
+      "Option": "3"
+    },
+    {
+      "OptionId": 4,
+      "Option": "4"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb350875b211644eb9521"
+  },
+  "QuestionId": "00003",
+  "Question": "Ngôn ngữ bậc cao nhất trong các ngôn ngữ lập trình sau:",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Python"
+    },
+    {
+      "OptionId": 2,
+      "Option": "C++"
+    },
+    {
+      "OptionId": 3,
+      "Option": "C#"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Java"
+    }
+  ],
+  "Answer": 1,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb392875b210afc4c2c7a"
+  },
+  "QuestionId": "00004",
+  "Question": "Trái Đất có hình gì?:",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Hình trụ"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Hình elip"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Hình tròn"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Hình cầu"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb3d7875b211a444f1e14"
+  },
+  "QuestionId": "00005",
+  "Question": "Việt Nam có hình chữ gì?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Chữ C"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Chữ E"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Chữ S"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Chữ H"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb41b875b2138740f6b68"
+  },
+  "QuestionId": "00006",
+  "Question": "Đại học Sài Gòn viết tắt là gì?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "UEF"
+    },
+    {
+      "OptionId": 2,
+      "Option": "SGU"
+    },
+    {
+      "OptionId": 3,
+      "Option": "STU"
+    },
+    {
+      "OptionId": 4,
+      "Option": "HUTECH"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+}]

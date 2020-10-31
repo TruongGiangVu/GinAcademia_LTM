@@ -1,0 +1,81 @@
+[{
+  "_id": {
+    "$oid": "5f8fb48b875b21079c0a4d82"
+  },
+  "PlayerId": "00001",
+  "Name": "Vũ Trường Giang",
+  "Username": "user1",
+  "Password": "12345",
+  "Email": "abcd@gmail.com",
+  "Birthdate": "Fri Oct 15 00:00:00 +0700 1999",
+  "Gender": false,
+  "Wins": 10,
+  "Loses": 5,
+  "MaxWinSequence": 5,
+  "MaxLoseSequence": 4,
+  "CurrentWinSequence": 4,
+  "CurrentLoseSequence": 0,
+  "IQPoint": 90,
+  "Image": "",
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb4b9875b212dd019cda3"
+  },
+  "PlayerId": "00002",
+  "Name": "Đỗ Trung Hiếu",
+  "Username": "user2",
+  "Password": "12345",
+  "Email": "abc@gmail.com",
+  "Birthdate": "Mon Jul 26 00:00:00 +0700 1999",
+  "Gender": false,
+  "Wins": 6,
+  "Loses": 2,
+  "MaxWinSequence": 4,
+  "MaxLoseSequence": 2,
+  "CurrentWinSequence": 4,
+  "CurrentLoseSequence": 0,
+  "IQPoint": 0,
+  "Image": "",
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb4d5875b2115006ccae4"
+  },
+  "PlayerId": "00003",
+  "Name": "Triệu Nguyễn Quốc Việt",
+  "Username": "user3",
+  "Password": "12345",
+  "Email": "abce@gmail.com",
+  "Birthdate": "Fri Oct 16 00:00:00 +0700 1998",
+  "Gender": false,
+  "Wins": 5,
+  "Loses": 3,
+  "MaxWinSequence": 3,
+  "MaxLoseSequence": 2,
+  "CurrentWinSequence": 0,
+  "CurrentLoseSequence": 2,
+  "IQPoint": 0,
+  "Image": "",
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fb515875b2106207a78ae"
+  },
+  "PlayerId": "00004",
+  "Name": "Lê Cao Thanh Huyền",
+  "Username": "user4",
+  "Password": "12345",
+  "Email": "abcl@gmail.com",
+  "Birthdate": "Mon Jun 05 00:00:00 +0700 2000",
+  "Gender": true,
+  "Wins": 0,
+  "Loses": 0,
+  "MaxWinSequence": 0,
+  "MaxLoseSequence": 0,
+  "CurrentWinSequence": 0,
+  "CurrentLoseSequence": 0,
+  "IQPoint": 0,
+  "Image": "",
+  "Status": 0
+}]
