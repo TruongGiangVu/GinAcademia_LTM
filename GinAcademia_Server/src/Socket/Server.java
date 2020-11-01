@@ -27,7 +27,8 @@ public class Server {
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Client off ngu vl");
+//			e.printStackTrace();
 		}
 	}
 	private void close() throws IOException {

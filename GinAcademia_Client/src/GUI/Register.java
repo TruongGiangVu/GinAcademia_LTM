@@ -28,13 +28,14 @@ import org.jdatepicker.impl.*;
 
 import Module.DateLabelFormatter;
 import Module.MyRegEx;
+import Module.MyFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import Server.BUS.PlayerBUS;
 import Model.Player;
 
-public class Register extends JFrame {
+public class Register extends MyFrame {
 
 	private JPanel contentPane;
 	private Panel panel;

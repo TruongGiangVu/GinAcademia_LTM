@@ -16,13 +16,14 @@ import java.util.ArrayList;
 
 import Model.Player;
 import Module.RankTableModel;
+import Module.MyPanel;
 import Server.BUS.PlayerBUS;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
 
-public class Rank extends JPanel {
+public class Rank extends MyPanel {
 	
 	private PlayerBUS bus = new PlayerBUS();
 	private JTable table;

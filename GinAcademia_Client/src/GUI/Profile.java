@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import Model.Player;
 import Module.DateLabelFormatter;
+import Module.MyPanel;
 import Server.BUS.PlayerBUS;
 
 import javax.swing.JLabel;
@@ -28,7 +29,7 @@ import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 
-public class Profile extends JPanel implements ActionListener{
+public class Profile extends MyPanel implements ActionListener{
 	private JLabel lblNewLabel;
 	private JPanel panelInfo;
 	private JTextField txtName;
@@ -55,8 +56,9 @@ public class Profile extends JPanel implements ActionListener{
 	private JButton btnEdit;
 	private JButton btnCancel;
 	private JButton btnUpdate;
+	private JButton btnLogout;
 	
-	private PlayerBUS bus = new PlayerBUS();
+//	private PlayerBUS bus = new PlayerBUS();
 
 	/**
 	 * Create the panel.
@@ -206,9 +208,14 @@ public class Profile extends JPanel implements ActionListener{
 		lblIQ.setBounds(115, 110, 50, 20);
 		panelGame.add(lblIQ);
 		
+		btnLogout = new JButton("Đăng xuất");
+		btnLogout.setBounds(400, 450, 120, 25);
+		add(btnLogout);
+		
 		btnEdit.addActionListener(this);
 		btnCancel.addActionListener(this);
 		btnUpdate.addActionListener(this);
+		btnLogout.addActionListener(this);
 		
 		this.loadInfo();
 		this.loadGame();
@@ -260,7 +267,8 @@ public class Profile extends JPanel implements ActionListener{
 		}else if(source == btnUpdate) {
 			this.updateData();
 			//socket
-			bus.update(this.player);
+//			bus.update(this.player);
+			
 			
 			this.loadInfo();
 			this.activeText(false);
@@ -270,6 +278,12 @@ public class Profile extends JPanel implements ActionListener{
 			// update on MainFrame
 			MainFrame parent = (MainFrame)SwingUtilities.getWindowAncestor(this);
 			parent.lblName.setText(this.player.getName());
+		}else if(source == btnLogout) {
+			// socket
+			Login login = new Login();
+			login.hashCode();
+			MainFrame parent = (MainFrame)SwingUtilities.getWindowAncestor(this);
+			parent.dispose();
 		}
 	}
 }

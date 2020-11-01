@@ -22,12 +22,13 @@ import javax.swing.JLabel;
 
 import Module.OptionChoose;
 import Module.MyLabel;
+import Module.MyPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 //import javax.swing.Timer;
 
-public class Contest extends JPanel implements MouseListener {
+public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblQuestion;
 	private JPanel panelOption;
 	
@@ -51,6 +52,10 @@ public class Contest extends JPanel implements MouseListener {
 	private JLabel lblYourPoint;
 	private ArrayList<Question> arrQ ;
 	Timer timer;
+	
+	private Player player;
+	private JLabel lblEnemyname;
+	private JLabel lblEnemyPoint;
 //	private javax.swing.Timer timer = null;
 
 	/**
@@ -61,6 +66,7 @@ public class Contest extends JPanel implements MouseListener {
 		
 	}
 	public Contest(Player p) {
+		this.player = p;
 		init();
 		
 	}
@@ -126,8 +132,21 @@ public class Contest extends JPanel implements MouseListener {
 		
 		lblYourPoint = new JLabel("0");
 		lblYourPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblYourPoint.setBounds(53, 47, 98, 22);
+		lblYourPoint.setBounds(50, 55, 98, 22);
 		add(lblYourPoint);
+		
+		JLabel lblYourname = new JLabel(this.player.getName());
+		lblYourname.setBounds(40, 23, 188, 35);
+		add(lblYourname);
+		
+		lblEnemyname = new JLabel("abc");
+		lblEnemyname.setBounds(402, 23, 188, 35);
+		add(lblEnemyname);
+		
+		lblEnemyPoint = new JLabel("0");
+		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblEnemyPoint.setBounds(412, 55, 98, 22);
+		add(lblEnemyPoint);
 	}
 	public void playGame() {
 		// socket

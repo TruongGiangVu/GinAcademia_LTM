@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-public class ImagePanel extends JPanel{
+public class ImagePanel extends MyPanel{
 	private ImageIcon img;
 	public ImagePanel() {
 		Image temp = new ImageIcon("./img/background.jpg").getImage().getScaledInstance(600, 600, java.awt.Image.SCALE_AREA_AVERAGING);

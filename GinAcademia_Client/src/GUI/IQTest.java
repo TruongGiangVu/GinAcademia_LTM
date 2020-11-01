@@ -1,8 +1,9 @@
 package GUI;
 
 import javax.swing.JPanel;
+import Module.MyPanel;
 
-public class IQTest extends JPanel {
+public class IQTest extends MyPanel {
 
 	/**
 	 * Create the panel.

@@ -25,9 +25,11 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import Server.BUS.PlayerBUS;
+//import Server.BUS.PlayerBUS;
+import Socket.Client;
+import Module.MyFrame;
 
-public class Login extends JFrame {
+public class Login extends MyFrame {
 
 	private JPanel contentPane;
 	private Panel panel;
@@ -38,7 +40,7 @@ public class Login extends JFrame {
 	private JLabel lblChaCTi;
 	private JLabel label_1;
 	private JButton btnNewButton;
-	private PlayerBUS bus;
+//	private PlayerBUS bus;
 	int xx,xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
@@ -62,7 +64,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-		bus = new PlayerBUS();
+//		bus = new PlayerBUS();
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -219,12 +221,23 @@ public class Login extends JFrame {
 	public void loginPlayer() {
 		// socket
 		if(this.checkData()) {
-			Player p = bus.loginCheckPlayer(this.txtUsername.getText(), this.txtPassword.getText());
+//			Player p = bus.loginCheckPlayer(this.txtUsername.getText(), this.txtPassword.getText());
+			client.connect(this.txtUsername.getText(), this.txtPassword.getText());
 			MainFrame frame;
-			if(p == null)
+			if(client.isLogin == false) {
 				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
-			else 
+			}else {
+				Player p= client.getPlayer();
+				this.dispose();
 				frame = new MainFrame(p);
+				frame.setClientSocket(client);
+			}
+//			if(p == null)
+//				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
+//			else {
+//				this.dispose();
+//				frame = new MainFrame(p);
+//			}
 		}		
 	}
 }

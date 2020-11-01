@@ -30,11 +30,14 @@ import javax.swing.border.LineBorder;
 import Model.Player;
 import Module.MenuButton;
 import Module.ImagePanel;
+import Module.MyFrame;
+import Module.MyPanel;
+
 import javax.swing.border.MatteBorder;
 import javax.swing.JToggleButton;
 import javax.swing.ButtonGroup;
 
-public class MainFrame extends JFrame implements MouseListener,ActionListener{
+public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 
 	private JPanel panelMain;
 	private JPanel panelMenu;
@@ -46,16 +49,16 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 	private MenuButton btnRank;
 	private MenuButton btnProfile;
 	int xx,xy;
-	private JPanel panelContent;
+	private MyPanel panelContent;
 	private Player player = null;
 	
 	private ImageIcon img;
 	private CardLayout deck = new CardLayout();
-	private JPanel pnRank ;
-	private JPanel pnProfile ;
+	private MyPanel pnRank ;
+	private MyPanel pnProfile ;
 	private ImagePanel pnHome ;
-	private JPanel pnIQTest ;
-	private JPanel pnContest ;
+	private MyPanel pnIQTest ;
+	private MyPanel pnContest ;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	/**
@@ -78,7 +81,6 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 	 * Create the frame.
 	 */
 	public MainFrame() {//./img/profile.png
-		
 		this.init();
 	}
 	public MainFrame(Player p) {
@@ -140,7 +142,7 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 		buttonGroup.add(btnProfile);
 		panelButton.add(btnProfile);
 		
-		panelContent = new JPanel();
+		panelContent = new MyPanel();
 		panelContent.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		panelContent.setLayout(deck);
 
@@ -156,12 +158,13 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 		panelContent.add(pnHome,"home");
 		
 		pnProfile = new Profile(this.player);
+		pnProfile.setClientSocket(client);
 		panelContent.add(pnProfile,"profile");
 		
 		pnIQTest = new IQTest();
 		panelContent.add(pnIQTest,"iqTest");
 		
-		pnContest = new Contest();
+		pnContest = new Contest(this.player);
 		panelContent.add(pnContest,"contest");
 		
 		deck.show(panelContent, "home");
@@ -235,6 +238,7 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 //			panelContent = new Profile();
 			deck.removeLayoutComponent(pnProfile);
 			this.pnProfile= new Profile(this.player);
+			pnProfile.setClientSocket(client);
 			panelContent.add(pnProfile,"profile");
 			deck.show(panelContent, "profile");
 		}
@@ -255,7 +259,7 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 	}
 	public void clickStart() {
 		deck.removeLayoutComponent(pnContest);
-		this.pnRank= new Rank(this.player);
+		this.pnContest= new Contest(this.player);
 		panelContent.add(pnContest,"contest");
 		deck.show(panelContent, "contest");
 	}
@@ -266,4 +270,5 @@ public class MainFrame extends JFrame implements MouseListener,ActionListener{
 		icon = new ImageIcon(newimg);
 		lblImage.setIcon(icon);
 	}
+
 }

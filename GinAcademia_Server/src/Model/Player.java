@@ -1,5 +1,6 @@
 package Model;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
-public class Player {
+public class Player implements Serializable {
 	@SerializedName("PlayerId")
 	private String PlayerId = "";
 	@SerializedName("Name")
