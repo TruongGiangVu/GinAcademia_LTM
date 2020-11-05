@@ -11,7 +11,8 @@ public class SocketRequest implements Serializable{
         PROFILE,
         RANK,
         UPDATEPROFILE,
-        IQTEST
+        IQTEST,
+        CONTEST
     }
 
     Action action;

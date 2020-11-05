@@ -14,13 +14,15 @@ import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import Server.BUS.QuestionBUS;
 import Model.Player;
 import Model.Question;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import Module.OptionChoose;
+import Socket.Request.SocketRequest;
+import Socket.Response.SocketResponse;
+import Socket.Response.SocketResponseContest;
 import Module.MyLabel;
 import Module.MyPanel;
 import java.awt.event.ActionListener;
@@ -31,9 +33,6 @@ import java.awt.event.ActionEvent;
 public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblQuestion;
 	private JPanel panelOption;
-	
-	
-	private QuestionBUS bus = new QuestionBUS();
 	
 	private ArrayList<MyLabel> arrTxt = new ArrayList<MyLabel>();
 	private MyLabel txtA;
@@ -149,9 +148,16 @@ public class Contest extends MyPanel implements MouseListener {
 		add(lblEnemyPoint);
 	}
 	public void playGame() {
-		// socket
-		arrQ = bus.ReadContest();
-
+		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST));
+		SocketResponse response = client.getResponse();
+		if(response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
+			SocketResponseContest contest = (SocketResponseContest) response;
+			arrQ = contest.getQuestionList();
+		}
+		else {
+			System.out.println("Fail");
+		}
+	
 		this.currentQ = arrQ.get(0);
 		timer = new Timer();
         timer.scheduleAtFixedRate(new App(), 0, 1000);
