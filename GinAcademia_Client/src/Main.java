@@ -35,7 +35,6 @@ public class Main {
 		System.out.println("client");
 		Login login = new Login();
 		login.setClientSocket(clientSocket);
-		login.setVisible(true);
 		System.out.println("over");
 //		clientSocketConnect.
 		

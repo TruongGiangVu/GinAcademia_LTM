@@ -11,7 +11,7 @@ public class SocketResponse implements Serializable {
         MESSAGE,
         NET_CLOSE,
         UPDATE_GAMEROOM,
-        PLAYER
+        PLAYER,
     }
 
     Status status;

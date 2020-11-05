@@ -17,7 +17,8 @@ import java.util.ArrayList;
 import Model.Player;
 import Module.RankTableModel;
 import Module.MyPanel;
-import Server.BUS.PlayerBUS;
+import Socket.Response.SocketResponseRank;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -25,7 +26,6 @@ import javax.swing.DefaultComboBoxModel;
 
 public class Rank extends MyPanel {
 	
-	private PlayerBUS bus = new PlayerBUS();
 	private JTable table;
 	private JPanel panelTable;
 	private DefaultTableCellRenderer cellRenderer;
@@ -43,8 +43,7 @@ public class Rank extends MyPanel {
 		this.player = p;
 		
 		this.setSize(600,600);
-		//socket
-		ArrayList<Player> listplayer = bus.Read();
+		ArrayList<Player> listplayer = ((SocketResponseRank) client.getResponse()).getList();
 		
         RankTableModel tableModel = new RankTableModel(listplayer);
         setLayout(null);

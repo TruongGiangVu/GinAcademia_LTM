@@ -28,11 +28,13 @@ import org.jdatepicker.impl.*;
 
 import Module.DateLabelFormatter;
 import Module.MyRegEx;
+import Socket.Request.SocketRequest;
+import Socket.Request.SocketRequestPlayer;
+import Socket.Response.SocketResponse;
 import Module.MyFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import Server.BUS.PlayerBUS;
 import Model.Player;
 
 public class Register extends MyFrame {
@@ -66,7 +68,6 @@ public class Register extends MyFrame {
 	private JLabel errorEmail;
 	private JLabel errorBirthdate;
 	
-	private PlayerBUS bus = new PlayerBUS();
 
 	/**
 	 * Launch the application.
@@ -359,12 +360,13 @@ public class Register extends MyFrame {
 		// socket
 		if(this.checkData()) {
 			Player p = getData();
-			if(bus.checkExistPlayer(p) == true) {
-				JOptionPane.showMessageDialog(this,"Username này đã tồn tại, Xin hãy đổi tên khác!","Alert",JOptionPane.WARNING_MESSAGE);
+			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,p));
+			SocketResponse response = client.getResponse();	
+			if(response.getStatus().equals(SocketResponse.Status.FAILED)) {
+				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
 			}		
 			else {
-				JOptionPane.showMessageDialog(this, "Tạo tài khoản thành công.");
-				bus.insert(p);
+				JOptionPane.showMessageDialog(this, "client.message");
 				this.dispose();
 				MainFrame frame = new MainFrame(p);
 				frame.setVisible(true);

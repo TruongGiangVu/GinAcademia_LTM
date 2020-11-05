@@ -130,7 +130,7 @@ public class Login extends MyFrame {
 		contentPane.add(label);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setText("12345");
+//		txtPassword.setText("12345");
 		txtPassword.setBounds(391, 186, 280, 36);
 		contentPane.add(txtPassword);
 		
@@ -212,7 +212,7 @@ public class Login extends MyFrame {
 			errorUsername.setText(regex.error.get("username").toString());
 			check = false;
 		} else errorUsername.setText("");
-		if(!this.txtPassword.getText().matches(regex.pattern.get("password").toString())) {
+		if(!String.valueOf(this.txtPassword.getPassword()).matches(regex.pattern.get("password").toString())) {
 			errorPassword.setText(regex.error.get("password").toString()); 
 			check = false;
 		} else errorPassword.setText("");
@@ -222,22 +222,16 @@ public class Login extends MyFrame {
 		// socket
 		if(this.checkData()) {
 //			Player p = bus.loginCheckPlayer(this.txtUsername.getText(), this.txtPassword.getText());
-			client.connect(this.txtUsername.getText(), this.txtPassword.getText());
+			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
 			MainFrame frame;
 			if(client.isLogin == false) {
-				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
 			}else {
 				Player p= client.getPlayer();
 				this.dispose();
 				frame = new MainFrame(p);
-				frame.setClientSocket(client);
+				frame.setClientSocket( new Client("localhost",5000) );
 			}
-//			if(p == null)
-//				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
-//			else {
-//				this.dispose();
-//				frame = new MainFrame(p);
-//			}
 		}		
 	}
 }

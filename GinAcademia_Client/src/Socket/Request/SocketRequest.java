@@ -9,7 +9,9 @@ public class SocketRequest implements Serializable{
         REGISTER,
         DISCONNECT,
         PROFILE,
-        RANK
+        RANK,
+        UPDATEPROFILE,
+        IQTEST
     }
 
     Action action;

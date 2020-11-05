@@ -5,9 +5,9 @@ import javax.swing.JPanel;
 import Model.Player;
 import Module.DateLabelFormatter;
 import Module.MyPanel;
-import Server.BUS.PlayerBUS;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -28,6 +28,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+
+import Socket.Client;
+import Socket.Request.SocketRequest;
+import Socket.Request.SocketRequestPlayer;
+import Socket.Response.SocketResponse;
 
 public class Profile extends MyPanel implements ActionListener{
 	private JLabel lblNewLabel;
@@ -266,22 +271,27 @@ public class Profile extends MyPanel implements ActionListener{
 			this.btnUpdate.setVisible(false);
 		}else if(source == btnUpdate) {
 			this.updateData();
-			//socket
-//			bus.update(this.player);
-			
-			
-			this.loadInfo();
-			this.activeText(false);
-			this.btnEdit.setVisible(true);
-			this.btnCancel.setVisible(false);
-			this.btnUpdate.setVisible(false);
-			// update on MainFrame
+			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,this.player));
+			SocketResponse response = client.getResponse();		
+			System.out.println("has gotton");
+			if(response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
+				this.loadInfo();
+				this.activeText(false);
+				this.btnEdit.setVisible(true);
+				this.btnCancel.setVisible(false);
+				this.btnUpdate.setVisible(false);
+				JOptionPane.showMessageDialog(this,client.message);
+			}
+			System.out.println("ok");
+			// update name on MainFrame
 			MainFrame parent = (MainFrame)SwingUtilities.getWindowAncestor(this);
 			parent.lblName.setText(this.player.getName());
 		}else if(source == btnLogout) {
-			// socket
+			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT,"Logout"));
+			this.client.close();
+			
 			Login login = new Login();
-			login.hashCode();
+			login.setClientSocket( new Client("localhost",5000));
 			MainFrame parent = (MainFrame)SwingUtilities.getWindowAncestor(this);
 			parent.dispose();
 		}

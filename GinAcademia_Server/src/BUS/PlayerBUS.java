@@ -46,7 +46,7 @@ public class PlayerBUS {
 	}
 	public boolean loginCheck(String user, String pass) {
 		boolean check = false;
-		ArrayList<Player> arr = dao.read();
+		ArrayList<Player> arr = dao.readAll();
 		for (Player p : arr) {
 			if (p.getUsername().equals(user) && p.getPassword().equals(pass)) {
 				check = true;
@@ -55,7 +55,7 @@ public class PlayerBUS {
 		return check;
 	}
 	public Player loginCheckPlayer(String user, String pass) {
-		ArrayList<Player> arr = dao.read();
+		ArrayList<Player> arr = dao.readAll();
 		for (Player p : arr) {
 			if (p.getUsername().equals(user) && p.getPassword().equals(pass)) {
 				return p;

@@ -7,13 +7,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import Model.Player;
-import Socket.Request.SocketRequest;
 import Socket.Request.*;
 import Socket.Response.SocketResponse;
 import Socket.Response.*;
 import BUS.PlayerBUS;
 
 public class ClientHandler implements Runnable {
+	public int id = 0;
 	Socket socket;
 	ArrayList<ClientHandler> clients;
 	ObjectInputStream receiver;
@@ -22,9 +22,10 @@ public class ClientHandler implements Runnable {
 	boolean isLoggedIn = false;
 	Player player = null;
 
-	public ClientHandler(Socket socket, ArrayList<ClientHandler> clients) {
+	public ClientHandler(int id,Socket socket, ArrayList<ClientHandler> clients) {
 		// TODO Auto-generated constructor stub
 		try {
+			this.id = id;
 			this.clients = new ArrayList<ClientHandler>();
 			this.socket = socket;
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
@@ -45,20 +46,29 @@ public class ClientHandler implements Runnable {
 				SocketRequest requestRaw = receiveRequest();
 				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) {
 					if (this.performValidateClient(requestRaw)) {
-						isLoggedIn = true;
-						sendResponse(new SocketResponsePlayer(this.player));
+						if(this.player.getStatus() == 1) {
+							sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+									"Tài khoản này đã bị khóa!"));
+						}
+						else if(this.player.getStatus() == 0){
+							isLoggedIn = true;
+							sendResponse(new SocketResponsePlayer(this.player));
+						}
 					} else {
 						sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-								"Invalid login credentials."));
+								"Tài khoản hoặc mật khẩu không đúng."));
 					}
 				}
 				else if(requestRaw.getAction().equals(SocketRequest.Action.REGISTER)) {
-					// code
+					
 				}
 				else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) {
+					this.close();
 					break;
 				} else {
 					// code here
+					System.out.println("update");
+					new RequestProcess(this,requestRaw,bus).init();
 				}
 			}
 			this.close();
@@ -68,6 +78,7 @@ public class ClientHandler implements Runnable {
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("Client thoat ngu vl");
 		}
 	}
 
@@ -97,6 +108,7 @@ public class ClientHandler implements Runnable {
 
 	protected SocketRequest receiveRequest() throws IOException, ClassNotFoundException {
 		SocketRequest request = null;
+		
 		request = (SocketRequest) receiver.readObject();
 		return request;
 	}
