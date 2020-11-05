@@ -188,17 +188,17 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	public void mouseEntered(MouseEvent arg0) {
 		MenuButton a=(MenuButton) arg0.getSource();
 	
-//		a.setBorder(null);
-//		a.setForeground(Color.WHITE);
-//		a.setBackground(new Color(8, 87, 40).brighter());
+		a.setBorder(null);
 		
+		a.setBackground(new Color(8, 87, 40).brighter());
+		a.setForeground(Color.WHITE);
 		
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-//		MenuButton a=(MenuButton) e.getSource();
-//		a.setBackground(Color.white);
-//		a.setForeground(Color.black);
+		MenuButton a=(MenuButton) e.getSource();
+		a.setBackground(Color.white);
+		a.setForeground(Color.black);
 		
 	}
 

@@ -18,9 +18,9 @@ public class ImagePanel extends MyPanel{
 		setLayout(null);
 		
 	}
-	public ImagePanel(Image img) {
+	public ImagePanel(Image img,int width, int height) {
 		
-		this.img = new ImageIcon(img.getScaledInstance(600, 600, java.awt.Image.SCALE_SMOOTH));
+		this.img = new ImageIcon(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
 		
 //		Dimension size = new Dimension(img.getWidth(null),img.getHeight(null));
 //		Dimension size = new Dimension(600,600);

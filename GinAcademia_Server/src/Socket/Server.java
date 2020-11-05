@@ -9,14 +9,14 @@ import java.util.concurrent.Executors;
 
 public class Server {
 	static ArrayList<ClientHandler> clients;
-	private ExecutorService pool;
-//	private ExecutorService pool = Executors.newCachedThreadPool();
+//	private ExecutorService pool;
+	private ExecutorService pool = Executors.newCachedThreadPool();
 	int numThread = 2;
 	
 	public ServerSocket server;
 	public Server() {
 		try {
-			pool = Executors.newFixedThreadPool(numThread);
+//			pool = Executors.newFixedThreadPool(numThread);
 			clients = new ArrayList<ClientHandler>();
 			server = new ServerSocket(5000);
 			System.out.println("Waiting client connect ...." );
@@ -40,8 +40,6 @@ public class Server {
 			ClientHandler clientThread = new ClientHandler(client,clients);
 			clients.add(clientThread);
 			pool.execute(clientThread);
-			if(clients.size() >= numThread)
-				pool.shutdown();
 			if(pool.isTerminated()) {
 				System.out.println("All clients have been killed." );
 				break;

@@ -53,7 +53,7 @@ public class Register extends MyFrame {
 	private JTextField txtEmail;
 	private JLabel lblNgySinh;
 	private JLabel lblGiiTnh;
-	private JComboBox txtGender;
+	private JComboBox<String> txtGender;
 	private JDatePickerImpl datePicker;
 	private JLabel lblCTi;
 	private JLabel lblngNhpNgay;
@@ -93,7 +93,8 @@ public class Register extends MyFrame {
 		
 		setBackground(new Color(31, 22, 127));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(400, 10, 730, 715);
+		setBounds(400, 10, 730, 630
+				);
 		contentPane = new JPanel();
 		contentPane.setForeground(new Color(0, 0, 0));
 		contentPane.setBackground(Color.WHITE);
@@ -137,12 +138,12 @@ public class Register extends MyFrame {
 		lblTnTiKhon = new JLabel("TÊN TÀI KHOẢN");
 		lblTnTiKhon.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblTnTiKhon.setForeground(Color.BLACK);
-		lblTnTiKhon.setBounds(391, 105, 159, 25);
+		lblTnTiKhon.setBounds(391, 253, 159, 25);
 		contentPane.add(lblTnTiKhon);
 		
 		txtPassword = new JPasswordField("12345");
 		txtPassword.setToolTipText("password");
-		txtPassword.setBounds(391, 220, 280, 35);
+		txtPassword.setBounds(391, 368, 280, 35);
 		contentPane.add(txtPassword);
 		
 		btnNewButton = new JButton("Đăng ký");
@@ -166,7 +167,7 @@ public class Register extends MyFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(0, 51, 204));
-		btnNewButton.setBounds(450, 605, 205, 35);
+		btnNewButton.setBounds(430, 508, 205, 35);
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);
 		
@@ -174,43 +175,43 @@ public class Register extends MyFrame {
 		txtUsername.setText("user3");
 		txtUsername.setToolTipText("username");
 		txtUsername.setColumns(10);
-		txtUsername.setBounds(391, 140, 280, 35);
+		txtUsername.setBounds(391, 288, 280, 35);
 		contentPane.add(txtUsername);
 		
 		lblMtKhu = new JLabel("MẬT KHẨU");
 		lblMtKhu.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMtKhu.setForeground(Color.BLACK);
-		lblMtKhu.setBounds(391, 185, 159, 25);
+		lblMtKhu.setBounds(391, 333, 159, 25);
 		contentPane.add(lblMtKhu);
 		
 		lblNhpLiMt = new JLabel("NHẬP LẠI MẬT KHẨU");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNhpLiMt.setForeground(Color.BLACK);
-		lblNhpLiMt.setBounds(391, 265, 181, 25);
+		lblNhpLiMt.setBounds(391, 413, 181, 25);
 		contentPane.add(lblNhpLiMt);
 		
 		txtRePassword = new JPasswordField("123456");
 		txtRePassword.setToolTipText("password");
-		txtRePassword.setBounds(391, 300, 280, 35);
+		txtRePassword.setBounds(391, 448, 280, 35);
 		contentPane.add(txtRePassword);
 		
 		lblEmail = new JLabel("EMAIL");
 		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblEmail.setForeground(Color.BLACK);
-		lblEmail.setBounds(391, 345, 159, 25);
+		lblEmail.setBounds(391, 173, 159, 25);
 		contentPane.add(lblEmail);
 		
 		txtEmail = new JTextField();
 		txtEmail.setText("abc@gmail.com");
 		txtEmail.setToolTipText("email");
 		txtEmail.setColumns(10);
-		txtEmail.setBounds(391, 380, 280, 35);
+		txtEmail.setBounds(391, 208, 280, 35);
 		contentPane.add(txtEmail);
 		
 		lblNgySinh = new JLabel("NGÀY SINH");
 		lblNgySinh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNgySinh.setForeground(Color.BLACK);
-		lblNgySinh.setBounds(391, 425, 159, 25);
+		lblNgySinh.setBounds(391, 105, 159, 25);
 		contentPane.add(lblNgySinh);
 		
 		UtilDateModel model = new UtilDateModel();
@@ -219,26 +220,33 @@ public class Register extends MyFrame {
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
+//		model.setDate(1999, 01, 01);
+		model.setSelected(true);
 		JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
 		datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
-		datePicker.setSize(202, 23);
-		datePicker.setLocation(391, 460);
+		datePicker.getJFormattedTextField().setBackground(Color.WHITE);
+		datePicker.setSize(173, 28);
+		datePicker.setLocation(391, 140);
+			
 		contentPane.add(datePicker);
 		lblGiiTnh = new JLabel("GIỚI TÍNH");
 		lblGiiTnh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblGiiTnh.setForeground(Color.BLACK);
-		lblGiiTnh.setBounds(391, 505, 103, 25);
+		lblGiiTnh.setBounds(611, 106, 103, 28);
 		contentPane.add(lblGiiTnh);
 		
 		txtGender = new JComboBox();
+		txtGender.setBackground(Color.WHITE);
 		txtGender.setModel(new DefaultComboBoxModel(new String[] {"Nam", "Nữ"}));
-		txtGender.setBounds(391, 540, 72, 35);
+		txtGender.setBounds(611, 140, 72, 25);
+		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
+		((JTextField)txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
 		
 		lblCTi = new JLabel("Đã có tài khoản?");
 		lblCTi.setForeground(Color.BLACK);
 		lblCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCTi.setBounds(450, 645, 103, 25);
+		lblCTi.setBounds(440, 554, 103, 25);
 		contentPane.add(lblCTi);
 		
 		lblngNhpNgay = new JLabel("Đăng nhập ngay");
@@ -264,7 +272,7 @@ public class Register extends MyFrame {
 		});
 		lblngNhpNgay.setForeground(Color.BLACK);
 		lblngNhpNgay.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblngNhpNgay.setBounds(548, 645, 159, 25);
+		lblngNhpNgay.setBounds(535, 554, 159, 25);
 		contentPane.add(lblngNhpNgay);
 		
 		errorName = new JLabel("");
