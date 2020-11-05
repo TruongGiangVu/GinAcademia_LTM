@@ -31,6 +31,7 @@ import Module.MyRegEx;
 import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestPlayer;
 import Socket.Response.SocketResponse;
+import Socket.Response.SocketResponsePlayer;
 import Module.MyFrame;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -371,12 +372,12 @@ public class Register extends MyFrame {
 			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,p));
 			SocketResponse response = client.getResponse();	
 			if(response.getStatus().equals(SocketResponse.Status.FAILED)) {
-				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this,response.getMessage(),"Alert",JOptionPane.WARNING_MESSAGE);
 			}		
 			else {
-				JOptionPane.showMessageDialog(this, "client.message");
-				this.dispose();
-				MainFrame frame = new MainFrame(p);
+				SocketResponsePlayer player = (SocketResponsePlayer) response;
+				JOptionPane.showMessageDialog(this, player .getMessage());
+				MainFrame frame = new MainFrame(player.getPlayer());
 				frame.setVisible(true);
 			}
 		}

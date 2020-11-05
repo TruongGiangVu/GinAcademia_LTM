@@ -68,7 +68,7 @@ public class ClientHandler implements Runnable {
 				} else {
 					// code here
 					System.out.println("update");
-					new RequestProcess(this,requestRaw,bus).init();
+					new RequestProcess(this,requestRaw).init();
 				}
 			}
 			this.close();

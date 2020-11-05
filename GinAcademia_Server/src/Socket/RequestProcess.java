@@ -9,18 +9,23 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import BUS.PlayerBUS;
+import BUS.QuestionBUS;
 import Model.Player;
+import Model.Question;
 
 public class RequestProcess {
 	ClientHandler client;
 	public SocketRequest request;
-	PlayerBUS bus;
+	PlayerBUS playerBus;
+	QuestionBUS questionBUS; 
 	Thread thread;
 
-	public RequestProcess(ClientHandler clientHandler, SocketRequest requestRaw, PlayerBUS bus) {
+	public RequestProcess(ClientHandler clientHandler, SocketRequest requestRaw) {
 		this.client = clientHandler;
 		this.request = requestRaw;
-		this.bus = bus;
+		
+		this.playerBus = new PlayerBUS();
+		this.questionBUS = new QuestionBUS();
 	}
 
 	public void createThread() {
@@ -39,6 +44,8 @@ public class RequestProcess {
 					break;
 				case IQTEST:
 					break;
+				case CONTEST:
+					break;
 				default:
 					break;
 				}
@@ -53,25 +60,29 @@ public class RequestProcess {
 
 	private void updateProfileProcess() {
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
-		bus.update(tempRequest.player);
+		playerBus.update(tempRequest.player);
 		client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
 				"Cập nhật thành công!"));
 	}
 
 	private void rankProcess() {
-		ArrayList<Player> arr = bus.Read();
+		ArrayList<Player> arr = playerBus.Read();
 		client.sendResponse(new SocketResponseRank(arr));
 	}
 
 	private void registerProcess() {
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
-		if (bus.checkExistPlayer(tempRequest.player) == true) {
+		if (playerBus.checkExistPlayer(tempRequest.player) == true) {
 			client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 					"Username này đã tồn tại, Xin hãy đổi tên khác!"));
 		} else {
-			bus.insert(tempRequest.player);
-			client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-					"Tạo tài khoản thành công!"));
+			playerBus.insert(tempRequest.player);
+			Player p = playerBus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
+			client.sendResponse(new SocketResponsePlayer(p));
 		}
+	}
+	private void contestProcess() {
+		ArrayList<Question> arr = questionBUS.ReadContest();
+		client.sendResponse(new SocketResponseContest(arr));
 	}
 }
