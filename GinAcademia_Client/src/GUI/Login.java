@@ -17,6 +17,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import java.awt.Font;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -27,12 +30,13 @@ import java.awt.event.ActionEvent;
 
 //import Server.BUS.PlayerBUS;
 import Socket.Client;
+import Module.ImagePanel;
 import Module.MyFrame;
 
 public class Login extends MyFrame {
 
 	private JPanel contentPane;
-	private Panel panel;
+	private ImagePanel panel;
 	private JTextField txtUsername;
 	private JLabel lblNewLabel;
 	private JLabel label;
@@ -44,6 +48,8 @@ public class Login extends MyFrame {
 	int xx,xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
+	private Image bg;
+	private JLabel lblngNhp;
 	/**
 	 * Launch the application.
 	 */
@@ -81,7 +87,8 @@ public class Login extends MyFrame {
 				Login.this.setLocation(x-xx,y-xy);
 			}
 		});
-		
+		Image temp = new ImageIcon("./img/background.jpg").getImage();
+		this.bg = temp;
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 720, 420);
@@ -91,7 +98,8 @@ public class Login extends MyFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		panel = new Panel();
+		panel = new ImagePanel(this.bg,365,400);
+	
 		panel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -107,8 +115,8 @@ public class Login extends MyFrame {
 				xy = e.getY();
 			}
 		});
-		panel.setBackground(new Color(31, 22, 127));
-		panel.setBounds(-15, 0, 350, 453);
+//		panel.setBackground(new Color(31, 22, 127));
+		panel.setBounds(0, 0, 365, 390);
 		contentPane.add(panel);
 		
 		txtUsername = new JTextField();
@@ -151,16 +159,16 @@ public class Login extends MyFrame {
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				label_1.setForeground(new Color(0, 51, 204));
+				label_1.setForeground(new Color(8,87,40).brighter());
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
 
-				label_1.setForeground(Color.BLACK);
+				label_1.setForeground(new Color(8,87,40));
 			}
 		});
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_1.setForeground(Color.BLACK);
+		label_1.setForeground(new Color(8,87,40));
 		label_1.setBounds(540, 327, 94, 14);
 		contentPane.add(label_1);
 		
@@ -174,16 +182,16 @@ public class Login extends MyFrame {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				btnNewButton.setBorder(null);
-				btnNewButton.setBackground(new Color(1, 143, 255));
+				btnNewButton.setBackground(new Color(8, 87, 40).brighter());
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(new Color(0, 51, 204));
+				btnNewButton.setBackground(new Color(8, 87, 40));
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(0, 51, 204));
+		btnNewButton.setBackground(new Color(8, 87, 40));
 		btnNewButton.setBounds(428, 287, 205, 35);
 		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnNewButton.setFocusable(false);
@@ -200,6 +208,8 @@ public class Login extends MyFrame {
 		errorPassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorPassword.setBounds(391, 219, 280, 14);
 		contentPane.add(errorPassword);
+		
+		
 		
 //		this.setUndecorated(true);
 		setResizable(false);
