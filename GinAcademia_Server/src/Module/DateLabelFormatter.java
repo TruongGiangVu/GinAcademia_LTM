@@ -6,6 +6,7 @@ import java.util.Calendar;
 
 import javax.swing.JFormattedTextField.AbstractFormatter;
 // class for text field birth date
+@SuppressWarnings("serial")
 public class DateLabelFormatter extends AbstractFormatter {
 
 	private String datePattern = "dd/MM/yyyy";

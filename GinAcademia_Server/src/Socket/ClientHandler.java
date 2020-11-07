@@ -12,6 +12,7 @@ import Socket.Response.SocketResponse;
 import Socket.Response.*;
 import BUS.PlayerBUS;
 
+// a client Thread for connect to just 1 player
 public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
@@ -43,30 +44,30 @@ public class ClientHandler implements Runnable {
 		try {
 			System.out.println(socket.getInetAddress() + " " + socket.getPort() + " accept");
 			while (true) {
+				// get request from client
 				SocketRequest requestRaw = receiveRequest();
-				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) {
-					if (this.performValidateClient(requestRaw)) {
-						if(this.player.getStatus() == 1) {
+				
+				// check request
+				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) { 	// if client login
+					if (this.performValidateClient(requestRaw)) { // check data, and get this.player
+						if(this.player.getStatus() == 1) { // if client is blocked
 							sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 									"Tài khoản này đã bị khóa!"));
 						}
-						else if(this.player.getStatus() == 0){
+						else if(this.player.getStatus() == 0){ // login ok
 							isLoggedIn = true;
 							sendResponse(new SocketResponsePlayer(this.player));
 						}
-					} else {
+					} else { // data wrong
 						sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 								"Tài khoản hoặc mật khẩu không đúng."));
 					}
 				}
-				else if(requestRaw.getAction().equals(SocketRequest.Action.REGISTER)) {
-					
-				}
-				else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) {
+				else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
 					this.close();
 					break;
 				} else {
-					// code here
+					// if not login or disconnect, create new Thread and solve it, then delete this thread
 					System.out.println("update");
 					new RequestProcess(this,requestRaw).init();
 				}
@@ -108,22 +109,25 @@ public class ClientHandler implements Runnable {
 
 	protected SocketRequest receiveRequest() throws IOException, ClassNotFoundException {
 		SocketRequest request = null;
-		
 		request = (SocketRequest) receiver.readObject();
+		if(request == null) {
+			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+					"Deo !"));
+		}
 		return request;
 	}
 
-	private boolean performValidateClient(SocketRequest requestRaw) {
+	private boolean performValidateClient(SocketRequest requestRaw) { // check data
 		boolean isValidated = false;
 		SocketRequestLogin request = (SocketRequestLogin) requestRaw;
 		if (bus.loginCheck(request.username, request.password)) {
 			isValidated = true;
-			player = bus.loginCheckPlayer(request.username, request.password);
+			player = bus.loginCheckPlayer(request.username, request.password); //get player
 		}
 		return isValidated;
 	}
 
-	public void runCommand() {
+	public void runCommand() {// write for fun, just to test
 		try {
 			System.out.println(socket.getInetAddress() + " " + socket.getPort() + " accept");
 			String response = "";

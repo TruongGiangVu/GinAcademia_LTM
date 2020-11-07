@@ -5,10 +5,13 @@ import javax.swing.JFrame;
 import Socket.Client;
 import Socket.Request.SocketRequest;
 
+@SuppressWarnings("serial")
 public class MyFrame extends JFrame{
 	public Client client;
-	public void setClientSocket(Client client) {
+	public MyFrame(Client client) {
+		// TODO Auto-generated constructor stub
 		this.client = client;
+		
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -23,5 +26,8 @@ public class MyFrame extends JFrame{
 				System.exit(0);   
 		    }
 		});
+	}
+	public void setClientSocket(Client client) {
+		this.client = client;
 	}
 }

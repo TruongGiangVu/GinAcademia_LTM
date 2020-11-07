@@ -102,6 +102,7 @@ public class Client {
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {
+			System.out.println("");
 			e.printStackTrace();
 		}
 	}

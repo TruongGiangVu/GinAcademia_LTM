@@ -3,10 +3,7 @@ package Socket;
 import Socket.Request.*;
 import Socket.Response.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 import BUS.PlayerBUS;
 import BUS.QuestionBUS;
@@ -28,7 +25,7 @@ public class RequestProcess {
 		this.questionBUS = new QuestionBUS();
 	}
 
-	public void createThread() {
+	public void createThread() { // create a thread to solve request and send response
 		this.thread = new Thread() {
 			@Override
 			public void run() {
@@ -45,15 +42,17 @@ public class RequestProcess {
 				case IQTEST:
 					break;
 				case CONTEST:
+					contestProcess();
 					break;
 				default:
 					break;
 				}
 			}
 		};
+		// after finish, this thread will be deleted
 	}
 
-	public void init() {
+	public void init() { // run init to, start thread
 		this.createThread();
 		thread.start();
 	}

@@ -7,6 +7,7 @@ import java.util.Comparator;
 import Model.Player;
 import javax.swing.table.AbstractTableModel;
  
+@SuppressWarnings("serial")
 public class RankTableModel extends AbstractTableModel {
     private static final int COLUMN_NO      = 0;
     private static final int COLUMN_NAME    = 1;

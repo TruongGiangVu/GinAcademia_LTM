@@ -1,42 +1,34 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.Cursor;
 
 import javax.swing.SwingConstants;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
-import java.awt.event.MouseMotionAdapter;
-import javax.swing.border.LineBorder;
 
 import Model.Player;
 import Module.MenuButton;
 import Module.ImagePanel;
 import Module.MyFrame;
 import Module.MyPanel;
+import Socket.Client;
 
 import javax.swing.border.MatteBorder;
-import javax.swing.JToggleButton;
 import javax.swing.ButtonGroup;
 
+@SuppressWarnings("serial")
 public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 
 	private JPanel panelMain;
@@ -65,25 +57,28 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainFrame frame = new MainFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MainFrame frame = new MainFrame();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public MainFrame() {//./img/profile.png
+	public MainFrame(Client client) {//./img/profile.png
+		super(client);
+		this.player = client.player;
 		this.init();
 	}
-	public MainFrame(Player p) {
+	public MainFrame(Client client, Player p) {
+		super(client);
 		this.player = p;
 		this.init();
 	}
@@ -142,7 +137,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		buttonGroup.add(btnProfile);
 		panelButton.add(btnProfile);
 		
-		panelContent = new MyPanel();
+		panelContent = new MyPanel(client);
 		panelContent.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
 		panelContent.setLayout(deck);
 
@@ -150,21 +145,21 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		panelContent.setBounds(200, 0, 600, 600);
 		panelMain.add(panelContent);
 		
-		pnRank = new Rank(this.player);
-		panelContent.add(pnRank,"rank");
-		
 //		pnHome = new Home(this.img);
-		pnHome = new Home();
+		pnHome = new Home(client);
 		panelContent.add(pnHome,"home");
 		
-		pnProfile = new Profile(this.player);
-		pnProfile.setClientSocket(client);
+		pnProfile = new Profile(client);
 		panelContent.add(pnProfile,"profile");
 		
-		pnIQTest = new IQTest();
+		pnIQTest = new IQTest(client);
 		panelContent.add(pnIQTest,"iqTest");
 		
-		pnContest = new Contest(this.player);
+		pnRank = new Rank(client);
+		panelContent.add(pnRank,"rank");
+		
+		pnContest = new Contest(client);
+		pnContest.setClientSocket(client);
 		panelContent.add(pnContest,"contest");
 		
 		deck.show(panelContent, "home");
@@ -212,7 +207,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		MenuButton a = (MenuButton) arg0.getSource();
+//		MenuButton a = (MenuButton) arg0.getSource();
 		
 	}
 
@@ -229,7 +224,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		if(source == this.btnHome) {
 //			this.panelContent = new Home();
 			deck.removeLayoutComponent(pnHome);
-			this.pnHome = new Home(this.img);
+			this.pnHome = new Home(client,this.img);
 			panelContent.add(pnHome,"home");
 			deck.show(panelContent, "home");
 
@@ -237,29 +232,28 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		else if(source == this.btnProfile) {
 //			panelContent = new Profile();
 			deck.removeLayoutComponent(pnProfile);
-			this.pnProfile= new Profile(this.player);
-			pnProfile.setClientSocket(client);
+			this.pnProfile= new Profile(client);
 			panelContent.add(pnProfile,"profile");
 			deck.show(panelContent, "profile");
 		}
 		else if(source == this.btnIQ) {
 //			panelContent = new Profile();
 			deck.removeLayoutComponent(pnIQTest);
-			this.pnIQTest= new IQTest();
+			this.pnIQTest= new IQTest(client);
 			panelContent.add(pnIQTest,"iqTest");
 			deck.show(panelContent, "iqTest");
 		}
 		else if(source == this.btnRank) {
 //			panelContent = new Rank();
 			deck.removeLayoutComponent(pnRank);
-			this.pnRank= new Rank(this.player);
+			this.pnRank= new Rank(client);
 			panelContent.add(pnRank,"rank");
 			deck.show(panelContent, "rank");
 		}
 	}
 	public void clickStart() {
 		deck.removeLayoutComponent(pnContest);
-		this.pnContest= new Contest(this.player);
+		this.pnContest= new Contest(client);
 		panelContent.add(pnContest,"contest");
 		deck.show(panelContent, "contest");
 	}

@@ -1,5 +1,6 @@
 package Socket.Request;
 
+@SuppressWarnings("serial")
 public class SocketRequestLogin extends SocketRequest {
     public String username;
     public String password;

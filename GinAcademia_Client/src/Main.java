@@ -1,5 +1,4 @@
 
-
 import Socket.Client;
 
 import javax.swing.UIManager;
@@ -32,8 +31,7 @@ public class Main {
 		System.out.println("run...");
 		clientSocket = new Client("localhost",5000);
 		System.out.println("client");
-		Login login = new Login();
-		login.setClientSocket(clientSocket);
+		Login login = new Login(clientSocket);
 		System.out.println("over");
 //		clientSocketConnect.
 		
