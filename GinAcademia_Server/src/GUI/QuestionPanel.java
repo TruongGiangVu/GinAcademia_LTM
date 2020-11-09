@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 @SuppressWarnings("serial")
 public class QuestionPanel extends JPanel implements ActionListener {
@@ -32,6 +33,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	private JButton btnView;
 	private JTextField txtSearch;
 	private JButton btnSearch;
+	private JLabel lblNewLabel;
 
 	public QuestionPanel() {
 		this.setSize(600, 600);
@@ -40,7 +42,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		arr = bus.sort(arr, false);
 
 		panelTable = new JPanel();
-		panelTable.setBounds(20, 130, 560, 400);
+		panelTable.setBounds(30, 155, 540, 400);
 		add(panelTable);
 
 		tableModel = new DefaultTableModel();
@@ -55,11 +57,11 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
 		panelTable.add(scrollPane);
 
-		btnAdd = new JButton("Thêm mới");
+		btnAdd = new JButton("Thêm");
 		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnAdd.setBackground(Color.GREEN);
+		btnAdd.setBackground(new Color(0, 153, 0));
 		btnAdd.setForeground(Color.WHITE);
-		btnAdd.setBounds(20, 41, 101, 30);
+		btnAdd.setBounds(30, 70, 101, 30);
 		add(btnAdd);
 
 		btnAdd.addActionListener(this);
@@ -69,18 +71,24 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		btnView.setForeground(Color.WHITE);
 		btnView.setBackground(Color.BLUE);
 		btnView.addActionListener(this);
-		btnView.setBounds(280, 90, 100, 25);
+		btnView.setBounds(470, 115, 100, 25);
 		add(btnView);
 
 		txtSearch = new JTextField();
-		txtSearch.setBounds(20, 91, 150, 25);
+		txtSearch.setBounds(30, 115, 150, 25);
 		add(txtSearch);
 		txtSearch.setColumns(10);
 
 		btnSearch = new JButton("Tìm kiếm");
-		btnSearch.setBounds(181, 92, 89, 23);
+		btnSearch.setBounds(195, 115, 90, 23);
 		btnSearch.addActionListener(this);
 		add(btnSearch);
+		
+		lblNewLabel = new JLabel("Quản lý câu hỏi");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblNewLabel.setBackground(Color.WHITE);
+		lblNewLabel.setBounds(30, 15, 205, 40);
+		add(lblNewLabel);
 	}
 
 	public void RefreshTableData() {

@@ -18,8 +18,8 @@ public class Main {
         }
 		MainFrame frame = new MainFrame();
 		frame.setVisible(true);
-//		Server server = new Server();
-//		server.hashCode();
+		Server server = new Server();
+		server.hashCode();
 		
 	}
 

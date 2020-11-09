@@ -90,7 +90,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		setBounds(100, 100, 800, 600);
 		panelMain = new JPanel();
 		
-
+		this.setTitle("GinAcademia");
 		panelMain.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(panelMain);
 		panelMain.setLayout(null);

@@ -74,7 +74,7 @@ public class RankTableModel extends AbstractTableModel {
 		case COLUMN_RATE:
 			int total = player.getWins() + player.getLoses();
 			if (total == 0)
-				returnValue = 0;
+				returnValue = 0.0;
 			else
 				returnValue = Double.valueOf(1.0 * player.getWins() / (total));
 			break;
@@ -108,7 +108,7 @@ public class RankTableModel extends AbstractTableModel {
 			return (p2.getWins() - p2.getLoses()) - (p1.getWins() - p1.getLoses());
 		}
 	}
-
+	
 	public int getRankById(String id) {
 		int rank = 0;
 		int n = this.getRowCount();

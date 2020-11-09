@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -8,7 +9,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import java.util.ArrayList;
 
@@ -18,6 +22,7 @@ import Module.MyPanel;
 import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponseRank;
+import javax.swing.JTextField;
 
 @SuppressWarnings("serial")
 public class Rank extends MyPanel {
@@ -34,12 +39,13 @@ public class Rank extends MyPanel {
 	
 	private ArrayList<Player> listplayer;
 	private RankTableModel tableModel;
+	private JTextField txtSearch;
 
 	public Rank(Client client) {
 		super(client);
 		this.player = client.player;
 		this.setSize(600, 600);
-
+		this.setBackground(Color.WHITE);
 		SocketRequest request = new SocketRequest(SocketRequest.Action.RANK, "Rank view");
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
@@ -74,9 +80,9 @@ public class Rank extends MyPanel {
 //        table.setRowSorter(sorter);
 
 		panelTable = new JPanel();
-		panelTable.setBounds(15, 150, 570, 400);
+		panelTable.setBounds(30, 134, 540, 435);
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
-
+		panelTable.setBackground(Color.WHITE);
 		JScrollPane scrollPane = new JScrollPane(table);
 		panelTable.add(scrollPane);
 
@@ -98,6 +104,9 @@ public class Rank extends MyPanel {
 		table.getColumnModel().getColumn(4).setPreferredWidth(30);
 		table.getColumnModel().getColumn(5).setPreferredWidth(40);
 		table.getColumnModel().getColumn(6).setPreferredWidth(40);
+		
+
+		
 		cellRenderer = new DefaultTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
@@ -105,24 +114,35 @@ public class Rank extends MyPanel {
 	private void initComponent() {
 		lblNewLabel = new JLabel("Hạng của bạn:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
-		lblNewLabel.setBounds(27, 26, 101, 24);
+		lblNewLabel.setBounds(30, 26, 105, 24);
 		add(lblNewLabel);
 
 		lblYourRank = new JLabel("0");
-		lblYourRank.setFont(new Font("Tahoma", Font.ITALIC, 14));
-		lblYourRank.setBounds(136, 33, 38, 14);
+		lblYourRank.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblYourRank.setBounds(145, 28, 38, 20);
 		lblYourRank.setText(tableModel.getRankById(this.player.getId()) + "");
 		add(lblYourRank);
 
 		lblNewLabel_2 = new JLabel("Hạng:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNewLabel_2.setBounds(27, 104, 63, 24);
+		lblNewLabel_2.setBounds(30, 80, 45, 30);
 		add(lblNewLabel_2);
 
 		comboBox = new JComboBox<String>();
 		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		comboBox.setBackground(Color.WHITE);
 		comboBox.setModel(new DefaultComboBoxModel<String>(new String[] { "Tăng dần", "Giảm dần" }));
-		comboBox.setBounds(100, 101, 101, 30);
+		comboBox.setBounds(85, 80, 101, 30);
 		add(comboBox);
+		
+		JLabel lblSearch = new JLabel("Tìm kiếm: ");
+		lblSearch.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblSearch.setBounds(276, 80, 70, 30);
+		add(lblSearch);
+		
+		txtSearch = new JTextField();
+		txtSearch.setBounds(356, 80, 214, 30);
+		add(txtSearch);
+		txtSearch.setColumns(10);
 	}
 }
