@@ -3,16 +3,22 @@ package GUI;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Panel;
+import java.awt.Rectangle;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
@@ -83,6 +89,7 @@ public class Login extends JFrame {
 		});
 		Image temp = new ImageIcon("./img/background.jpg").getImage();
 		this.bg = temp;
+		this.setTitle("GinAcademia - Đăng nhập");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 720, 420);
@@ -173,6 +180,27 @@ public class Login extends JFrame {
 				Login.this.loginPlayer();
 			}
 		});
+		btnNewButton.setUI(new  MetalToggleButtonUI() {
+			@Override
+		    protected Color getSelectColor() {
+		        return new Color(8, 87, 40).brighter();
+		    }
+		    
+		    @Override
+		    protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
+		    	Color fg;
+		    	if(btnNewButton.isSelected() || btnNewButton.getModel().isArmed()) {
+		    		fg = Color.WHITE;
+		    	}
+		    		
+		    	else {
+		    		fg = Color.BLACK;
+		    	}
+		    	
+		    	setForeground(fg);
+		    	super.paintText(g, b, textRect, text);
+		    }
+		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -228,6 +256,7 @@ public class Login extends JFrame {
 		}
 		if(this.checkData()) {
 			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
+			
 			if(client.isLogin == false) {
 				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
 			}else {

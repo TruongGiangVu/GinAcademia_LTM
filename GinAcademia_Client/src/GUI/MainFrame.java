@@ -71,6 +71,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 
 	/**
 	 * Create the frame.
+	 * @wbp.parser.constructor
 	 */
 	public MainFrame(Client client) {//./img/profile.png
 		super(client);
@@ -162,6 +163,11 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		pnContest.setClientSocket(client);
 		panelContent.add(pnContest,"contest");
 		
+//		btnHome.addMouseListener(this);
+//		btnProfile.addMouseListener(this);
+//		btnRank.addMouseListener(this);
+//		btnIQ.addMouseListener(this);
+		
 		deck.show(panelContent, "home");
 		btnHome.addActionListener(this);
 		btnProfile.addActionListener(this);
@@ -176,10 +182,10 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	public void mouseEntered(MouseEvent arg0) {
 		MenuButton a=(MenuButton) arg0.getSource();
 	
-		a.setBorder(null);
-		
-		a.setBackground(new Color(8, 87, 40).brighter());
+//		a.setBorder(null);
 		a.setForeground(Color.WHITE);
+		a.setBackground(new Color(8, 87, 40).brighter());
+		
 		
 	}
 	@Override
@@ -193,8 +199,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		MenuButton a=(MenuButton) arg0.getSource();
-		a.setForeground(Color.WHITE);
+		
 	}
 
 	@Override

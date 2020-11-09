@@ -1,6 +1,7 @@
 package Module;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
@@ -33,7 +34,7 @@ public class MenuButton extends JToggleButton{
 		    @Override
 		    protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
 		    	Color fg;
-		    	if(isSelected() || getModel().isArmed()) {
+		    	if(isSelected() || getModel().isArmed() || getModel().isRollover()) {
 		    		fg = Color.WHITE;
 		    	}
 		    		
@@ -49,6 +50,7 @@ public class MenuButton extends JToggleButton{
 //		this.setForeground(Color.black);
 		this.setFont(new Font("SansSerif", Font.BOLD, 13));
 		this.setBackground(Color.white);
+		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.setBorder(null);
 		this.setFocusable(false);
 		

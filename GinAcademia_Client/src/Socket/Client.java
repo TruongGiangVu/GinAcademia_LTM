@@ -39,9 +39,11 @@ public class Client {
 	}
 
 	public void init() {
+		
 		try {
 			this.socket = new Socket(host, port);
-			System.out.println("Socket client");
+			
+			System.out.println("Socket client");	
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 			System.out.println("Socket client");
@@ -100,6 +102,7 @@ public class Client {
 	public void sendRequest(SocketRequest request) {
 		try {
 			System.out.println("send Ob");
+			
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {

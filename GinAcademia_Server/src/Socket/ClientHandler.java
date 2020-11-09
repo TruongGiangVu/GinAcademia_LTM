@@ -72,7 +72,8 @@ public class ClientHandler implements Runnable {
 					this.close();
 					break;
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) {
-					this.contest(requestRaw);
+					new RequestProcess(this, requestRaw).init();
+//					this.contest(requestRaw);
 				} else {
 					// if not login or disconnect, create new Thread and solve it, then delete this
 					new RequestProcess(this, requestRaw).init();

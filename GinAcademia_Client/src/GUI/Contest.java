@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -29,20 +30,19 @@ import Module.MyLabel;
 import Module.MyPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.FlowLayout;
 
 //import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblQuestion;
-	private JPanel panelOption;
 	private JLabel lblYourPoint;
-
-	private ArrayList<MyLabel> arrTxt = new ArrayList<MyLabel>();
 	private MyLabel txtA;
 	private MyLabel txtB;
 	private MyLabel txtC;
 	private MyLabel txtD;
+	private ArrayList<MyLabel> arrTxt = new ArrayList<MyLabel>();
 	
 	private OptionChoose optionColor = new OptionChoose();
 	private JLabel lblTime;
@@ -72,18 +72,12 @@ public class Contest extends MyPanel implements MouseListener {
 	public void init() {
 		setLayout(null);
 		this.setSize(600, 600);
-		
+		this.setBackground(Color.WHITE);
 		lblQuestion = new JLabel("Question");
 		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuestion.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblQuestion.setBounds(30, 80, 540, 101);
 		add(lblQuestion);
-
-		panelOption = new JPanel();
-		panelOption.setBounds(30, 177, 540, 331);
-		add(panelOption);
-		panelOption.setVisible(false);
-		panelOption.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		this.initQuestion();
 
@@ -119,32 +113,33 @@ public class Contest extends MyPanel implements MouseListener {
 		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblEnemyPoint.setBounds(412, 55, 98, 22);
 		add(lblEnemyPoint);
+		
+		
 	}
 	
 	private void initQuestion() {
 		txtA = new MyLabel();
 		txtA.setText("A");
-		txtA.setOpaque(true);
-		panelOption.add(txtA);
-
-		txtB = new MyLabel();
-		txtB.setText("B");
-		txtB.setOpaque(true);
-		panelOption.add(txtB);
-
-		txtC = new MyLabel();
-		txtC.setText("C");
-		txtC.setOpaque(true);
-		panelOption.add(txtC);
-
-		txtD = new MyLabel();
-		txtD.setText("D");
-		txtD.setOpaque(true);
-		panelOption.add(txtD);
-
+		txtA.setBounds(50, 150, 500, 80);
+		add(txtA);
 		this.arrTxt.add(txtA);
+		
+		txtB = new MyLabel();
+		txtB.setBounds(50, 240, 500, 80);
+		txtB.setText("B");
+		add(txtB);
 		this.arrTxt.add(txtB);
+		
+		txtC = new MyLabel();
+		txtC.setBounds(50, 330, 500, 80);
+		txtC.setText("C");
+		add(txtC);
 		this.arrTxt.add(txtC);
+		
+		txtD = new MyLabel();
+		txtD.setBounds(50, 420, 500, 80);
+		txtD.setText("D");
+		add(txtD);
 		this.arrTxt.add(txtD);
 		
 		txtA.addMouseListener(this);
@@ -154,7 +149,7 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	public void playGame() {
-//		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST,"start contest"));
+		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST,"start contest"));
 		
 		MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 		parent.setActiveMenuButton(false);
@@ -175,41 +170,42 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	class App extends TimerTask {
-		int countdown = 10;
-		int repeat = 0;
-
-		public App() {
-			loadQuestion(currentQ);
-		}
-
-		public App(int repeat) {
-			this.repeat = --repeat;
-			if (repeat >= 5) {
-				JOptionPane.showMessageDialog(Contest.this, "Over");
-				this.cancel();
-			} else {
-				currentQ = arrQ.get(repeat);
-				loadQuestion(currentQ);
-			}
-		}
-
-		public void run() {
-			countdown = countdown - 1;
-			if (this.countdown <= 10)
-				Contest.this.lblTime.setText(countdown + "");
-			if (countdown == 0) {
-				repeat++;
-				countdown = 12;
-				if (repeat >= 5) {
-					JOptionPane.showMessageDialog(Contest.this, "Over");
-					this.cancel();
-				} else {
-					currentQ = arrQ.get(repeat);
-					Contest.this.lblTime.setText(10 + "");
-					loadQuestion(currentQ);
-				}
-			}
-		}
+	    int countdown = 10;
+	    int repeat = 0;
+	    public App() {
+	    	loadQuestion(currentQ);
+	    }
+	    public App(int repeat) {
+	    	this.repeat = --repeat;
+	    	if(repeat >= 5) {
+        		JOptionPane.showMessageDialog(Contest.this, "Over");
+        		this.cancel();
+        	}	
+	    	else {
+	    		currentQ = arrQ.get(repeat);
+		    	loadQuestion(currentQ);
+	    	}
+	    }
+	    
+	    public void run() {
+	        countdown = countdown - 1;
+	        if(this.countdown <= 10)
+	        	Contest.this.lblTime.setText(countdown+"");
+	        if(countdown == 0) {
+	        	repeat++;
+	        	countdown = 12;
+	        	if(repeat >= 5) {
+	        		JOptionPane.showMessageDialog(Contest.this, "Over");
+	        		this.cancel();
+	        	}	
+	        	else {
+	        		currentQ = arrQ.get(repeat);
+	        		Contest.this.lblTime.setText(10+"");
+		        	loadQuestion(currentQ);
+	        	}
+	        }	
+	    }
+	    
 	}
 
 	private void CancelAnRenewTimer() {
@@ -228,7 +224,6 @@ public class Contest extends MyPanel implements MouseListener {
 		this.currentQ = q;
 		this.lblQuestion.setText("Câu " + this.stt + ": " + q.getQuestion());
 		stt++;
-		this.panelOption.setVisible(true);
 
 //		javax.swing.Timer time = new javax.swing.Timer(2000, new ActionListener() {
 //		    @Override
@@ -253,9 +248,8 @@ public class Contest extends MyPanel implements MouseListener {
 		for (int i = 0; i < 4; ++i) {
 			this.arrTxt.get(i).setText(symbol.get(i) + " " + q.getOptions().get(i).Option);
 			this.arrTxt.get(i).theme = q.getOptions().get(i).OptionId + "";
-			this.arrTxt.get(i).setBackground(null);
+//			this.arrTxt.get(i).setBackground(null);
 		}
-		this.panelOption.setVisible(true);
 		this.setEnableOption(true);
 	}
 
@@ -300,12 +294,14 @@ public class Contest extends MyPanel implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-
+		MyLabel source = (MyLabel) arg0.getSource();
+		source.setBackground(new Color(204,204,204));
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-
+		MyLabel source = (MyLabel) arg0.getSource();
+		source.setBackground(Color.WHITE);
 	}
 
 	@Override

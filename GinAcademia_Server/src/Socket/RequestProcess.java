@@ -62,6 +62,7 @@ public class RequestProcess {
 		playerBus.update(tempRequest.player);
 		client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
 				"Cập nhật thành công!"));
+		System.out.println("Update");
 	}
 
 	private void rankProcess() {
