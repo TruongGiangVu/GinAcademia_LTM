@@ -288,7 +288,7 @@ public class Profile extends MyPanel implements ActionListener {
 			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout"));
 			this.client.close(); // disconnect to server
 			// open login frame
-			Login login = new Login(new Client("localhost", 5000)); // create new socket for new login
+			Login login = new Login(); // create new socket for new login
 			login.hashCode();
 			// close this main frame
 			MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);

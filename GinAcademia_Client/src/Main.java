@@ -27,12 +27,12 @@ public class Main {
 //		Client client = new Client();
 //		client.hashCode();
 		
-		Client clientSocket = null;
-		System.out.println("run...");
-		clientSocket = new Client("localhost",5000);
-		System.out.println("client");
-		Login login = new Login(clientSocket);
-		System.out.println("over");
+//		Client clientSocket = null;
+//		System.out.println("run...");
+//		clientSocket = new Client("localhost",5000);
+//		System.out.println("client");
+		Login login = new Login();
+		login.hashCode();
 //		clientSocketConnect.
 		
 	}

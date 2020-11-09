@@ -1,6 +1,8 @@
 package Socket;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Model.GameConfig;
 import Model.Player;
@@ -21,10 +23,14 @@ public class ContestRoom {
 	public int currentQ = 0;
 	public Player winner = null;
 	public int countAns = 0;
+	
+	public boolean isEndContest = false;
 
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<Integer> points;
 	ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
+	
+	Timer contestTimer;
 
 	public ContestRoom(int RoomId, GameConfig config) {
 		this.RoomId = RoomId;
@@ -63,30 +69,45 @@ public class ContestRoom {
 	}
 
 	public void startContest() {
-		try {
-			this.sendContest(); // announce to all players about starting game
-			// timer 10s
-			while (true) {
-				this.sendQuestionToAll();
-//				this.getAnswer(request);
-				if (this.countAns == this.config.getNumPlayer()) { // all players have answered
-					this.endTurn();
-				}
-				// if end time
-				break;
+		this.sendContest(); // announce to all players about starting game
+		
+		contestTimer = new Timer();
+		contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
+	}
+	
+	class ContestTask extends TimerTask{
+		int countdown = 10;
+		public ContestTask() {
+			sendQuestionToAll();
+		}
+		public void run() {
+			if (countAns == config.getNumPlayer()) { // all players have answered
+				endTurn();
 			}
-			this.endGame();
-		} catch (Exception e) {
-			e.printStackTrace();
+			if(countdown == 0) { // time out
+				endTurn();
+			}
+			countdown--;
 		}
 	}
 
 	public void endTurn() {
 		try {
-			this.sendAllAnswer();
-			Thread.sleep(2000);
-			this.currentQ++;
-			this.sendQuestionToAll();
+			contestTimer.cancel(); // cancel current timer
+			this.sendAllAnswer(); // send answer
+			Thread.sleep(2000); // stop 2s
+			
+			// send next question
+			this.currentQ++; 
+			if(this.currentQ == this.config.getNumQuestion() ) { // currentQ == 5, stop repeat
+				
+				this.endGame();
+			}
+			this.sendQuestionToAll(); 
+			
+			// create new timer for next question
+			contestTimer = new Timer(); 
+			contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -158,6 +179,7 @@ public class ContestRoom {
 					new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thua!"));
 
 		}
+		this.isEndContest = true;
 	}
 
 }

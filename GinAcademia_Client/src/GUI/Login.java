@@ -27,8 +27,8 @@ import Module.ImagePanel;
 import Module.MyFrame;
 
 @SuppressWarnings("serial")
-public class Login extends MyFrame {
-
+public class Login extends JFrame {
+	private Client client;
 	private JPanel contentPane;
 	private ImagePanel panel;
 	private JTextField txtUsername;
@@ -61,9 +61,10 @@ public class Login extends MyFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Login(Client client) {
-		super(client);
-//		bus = new PlayerBUS();
+	public Login() {
+		System.out.println("run...");
+		client = new Client("localhost",5000);
+		System.out.println("over");
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -221,6 +222,10 @@ public class Login extends MyFrame {
 		return check;
 	}
 	public void loginPlayer() {
+		if(this.client.getSocket() == null) {
+			JOptionPane.showMessageDialog(this, "Khong the ket noi toi may chu");
+			return;
+		}
 		if(this.checkData()) {
 			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
 			if(client.isLogin == false) {

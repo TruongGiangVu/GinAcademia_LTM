@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Request.*;
@@ -48,7 +50,6 @@ public class Client {
 //			this.runCommand();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -156,4 +157,9 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+	
 }

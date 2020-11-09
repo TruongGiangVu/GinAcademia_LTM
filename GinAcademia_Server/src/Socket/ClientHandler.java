@@ -151,15 +151,16 @@ public class ClientHandler implements Runnable {
 			this.contestRoom = null;
 			return;
 		}
-		if (this.contestRoom == null) { // join room
+		if (this.contestRoom == null) { //doesn't have room -> join room
 			this.contestRoom = this.contestRoomManager.findingAvailableRoom();
 			this.contestRoom.joinGame(player, this);
-		} else if (requestRaw.getMessage().equals("answer")) { // player answer Question
-			this.contestRoom.getAnswer(requestRaw);
+		} else if (requestRaw.getMessage().equals("answer")) { //has room, player answer Question
+			this.contestRoom.getAnswer(requestRaw); // 
 		}
 		
-		// finish room
-//		this.contestRoomManager.finishRoom(this.contestRoom.RoomId);
+		if(this.contestRoom.isEndContest) { // finish room, stop game
+			this.contestRoomManager.finishRoom(this.contestRoom.RoomId); // delete this room
+		}
 	}
 
 	public void runCommand() {// write for fun, just to test

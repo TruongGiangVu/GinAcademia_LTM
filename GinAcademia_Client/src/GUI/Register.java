@@ -249,7 +249,7 @@ public class Register extends MyFrame {
 			public void mouseClicked(MouseEvent e) {
 				// return login
 				Register.this.dispose();
-				Login frame = new Login(client);
+				Login frame = new Login();
 				frame.setVisible(true);
 			}
 			@Override
