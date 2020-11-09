@@ -251,6 +251,7 @@ public class Login extends MyFrame {
 	public void loginPlayer() {
 		if(this.checkData()) {
 			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
+			
 			if(client.isLogin == false) {
 				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
 			}else {

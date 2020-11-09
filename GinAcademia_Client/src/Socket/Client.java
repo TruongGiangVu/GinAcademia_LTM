@@ -6,6 +6,8 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Request.*;
@@ -37,9 +39,11 @@ public class Client {
 	}
 
 	public void init() {
+		
 		try {
 			this.socket = new Socket(host, port);
-			System.out.println("Socket client");
+			
+			System.out.println("Socket client");	
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 			System.out.println("Socket client");
@@ -48,7 +52,8 @@ public class Client {
 //			this.runCommand();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			this.message = "Không thể kết nối đến máy chủ";
+			JOptionPane.showMessageDialog(null,this.message);
 			e.printStackTrace();
 		}
 	}
@@ -99,6 +104,7 @@ public class Client {
 	public void sendRequest(SocketRequest request) {
 		try {
 			System.out.println("send Ob");
+			
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {
