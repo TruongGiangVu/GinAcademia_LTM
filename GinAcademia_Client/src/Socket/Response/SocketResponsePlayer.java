@@ -2,6 +2,7 @@ package Socket.Response;
 
 import Model.Player;
 
+@SuppressWarnings("serial")
 public class SocketResponsePlayer extends SocketResponse {
 	Player player= null;
 	public SocketResponsePlayer(Player player) {

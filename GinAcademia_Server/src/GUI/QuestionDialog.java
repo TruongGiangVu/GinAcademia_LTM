@@ -20,6 +20,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@SuppressWarnings("serial")
 public class QuestionDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -41,11 +42,8 @@ public class QuestionDialog extends JDialog {
 	private JButton updateButton;
 	
 	public Question question = new Question();
-	private JComboBox txtAnswer;
+	private JComboBox<String> txtAnswer;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		try {
 			QuestionDialog dialog = new QuestionDialog();
@@ -56,9 +54,6 @@ public class QuestionDialog extends JDialog {
 		}
 	}
 
-	/**
-	 * Create the dialog.
-	 */
 	public QuestionDialog() {
 		init();
 	}
@@ -126,9 +121,9 @@ public class QuestionDialog extends JDialog {
 		lblNewLabel_5.setBounds(30, 168, 45, 25);
 		contentPanel.add(lblNewLabel_5);
 		
-		txtAnswer = new JComboBox();
+		txtAnswer = new JComboBox<String>();
 		txtAnswer.setFont(new Font("Tahoma", Font.BOLD, 12));
-		txtAnswer.setModel(new DefaultComboBoxModel(new String[] {"A", "B", "C", "D"}));
+		txtAnswer.setModel(new DefaultComboBoxModel<String>(new String[] {"A", "B", "C", "D"}));
 		txtAnswer.setBounds(85, 170, 61, 23);
 		contentPanel.add(txtAnswer);
 		{

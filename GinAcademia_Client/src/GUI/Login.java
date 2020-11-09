@@ -1,14 +1,9 @@
 package GUI;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
-
-import Module.MyRegEx;
-import Model.Player;
 
 import java.awt.Color;
 import java.awt.Cursor;
@@ -26,18 +21,18 @@ import java.awt.Image;
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-//import Server.BUS.PlayerBUS;
+import Module.MyRegEx;
 import Socket.Client;
 import Module.ImagePanel;
 import Module.MyFrame;
 
+@SuppressWarnings("serial")
 public class Login extends MyFrame {
 
 	private JPanel contentPane;
@@ -49,32 +44,31 @@ public class Login extends MyFrame {
 	private JLabel lblChaCTi;
 	private JLabel label_1;
 	private JButton btnNewButton;
-//	private PlayerBUS bus;
 	int xx,xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
 	private Image bg;
-	private JLabel lblngNhp;
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Login frame = new Login(client);
+//					
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
 	/**
 	 * Create the frame.
 	 */
-	public Login() {
+	public Login(Client client) {
+		super(client);
 //		bus = new PlayerBUS();
 		
 		addMouseListener(new MouseAdapter() {
@@ -104,7 +98,7 @@ public class Login extends MyFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		panel = new ImagePanel(this.bg,365,400);
+		panel = new ImagePanel(client,this.bg,365,400);
 	
 		panel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
@@ -144,7 +138,7 @@ public class Login extends MyFrame {
 		contentPane.add(label);
 		
 		txtPassword = new JPasswordField();
-		txtPassword.setText("12345");
+//		txtPassword.setText("12345");
 		txtPassword.setBounds(391, 186, 280, 36);
 		contentPane.add(txtPassword);
 		
@@ -161,7 +155,8 @@ public class Login extends MyFrame {
 			public void mouseClicked(MouseEvent e) {
 				// return login
 				Login.this.dispose();
-				Register frame = new Register();
+				Register frame = new Register(client);
+				frame.hashCode();
 			}
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -236,8 +231,6 @@ public class Login extends MyFrame {
 		errorPassword.setBounds(391, 219, 280, 14);
 		contentPane.add(errorPassword);
 		
-		
-		
 //		this.setUndecorated(true);
 		setResizable(false);
 		this.setVisible(true);
@@ -249,32 +242,22 @@ public class Login extends MyFrame {
 			errorUsername.setText(regex.error.get("username").toString());
 			check = false;
 		} else errorUsername.setText("");
-		if(!this.txtPassword.getText().matches(regex.pattern.get("password").toString())) {
+		if(!String.valueOf(this.txtPassword.getPassword()).matches(regex.pattern.get("password").toString())) {
 			errorPassword.setText(regex.error.get("password").toString()); 
 			check = false;
 		} else errorPassword.setText("");
 		return check;
 	}
 	public void loginPlayer() {
-		// socket
 		if(this.checkData()) {
-//			Player p = bus.loginCheckPlayer(this.txtUsername.getText(), this.txtPassword.getText());
 			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
-			MainFrame frame;
 			if(client.isLogin == false) {
-				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(this,client.message,"Alert",JOptionPane.WARNING_MESSAGE);
 			}else {
-				Player p= client.getPlayer();
 				this.dispose();
-				frame = new MainFrame(p);
-				frame.setClientSocket(client);
+				MainFrame frame = new MainFrame(client);
+				frame.hashCode(); // just for not warming
 			}
-//			if(p == null)
-//				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
-//			else {
-//				this.dispose();
-//				frame = new MainFrame(p);
-//			}
 		}		
 	}
 }

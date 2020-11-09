@@ -2,12 +2,13 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
@@ -29,12 +29,13 @@ import org.jdatepicker.impl.*;
 import Module.DateLabelFormatter;
 import Module.MyRegEx;
 import Module.MyFrame;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import Server.BUS.PlayerBUS;
 import Model.Player;
+import Socket.Client;
+import Socket.Request.SocketRequest;
+import Socket.Request.SocketRequestPlayer;
+import Socket.Response.SocketResponse;
 
+@SuppressWarnings("serial")
 public class Register extends MyFrame {
 
 	private JPanel contentPane;
@@ -65,30 +66,21 @@ public class Register extends MyFrame {
 	private JLabel errorEmail;
 	private JLabel errorBirthdate;
 	
-	private PlayerBUS bus = new PlayerBUS();
-
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Register frame = new Register();
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Register frame = new Register();
+//					
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public Register() {
-		
-
+	public Register(Client client) {
+		super(client);
 		
 		setBackground(new Color(31, 22, 127));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -200,7 +192,7 @@ public class Register extends MyFrame {
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
-//		model.setDate(1999, 01, 01);
+		model.setDate(1999, 01, 01);
 		model.setSelected(true);
 		JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
 		datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
@@ -215,10 +207,10 @@ public class Register extends MyFrame {
 		lblGiiTnh.setBounds(219, 106, 103, 28);
 		contentPane.add(lblGiiTnh);
 		
-		txtGender = new JComboBox();
+		txtGender = new JComboBox<String>();
 		txtGender.setBackground(Color.WHITE);
-		txtGender.setModel(new DefaultComboBoxModel(new String[] {"Nam", "Nữ"}));
-		txtGender.setBounds(219, 140, 72, 25);
+		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
+		txtGender.setBounds(611, 140, 72, 25);
 		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
 		((JTextField)txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
@@ -237,7 +229,7 @@ public class Register extends MyFrame {
 			public void mouseClicked(MouseEvent e) {
 				// return login
 				Register.this.dispose();
-				Login frame = new Login();
+				Login frame = new Login(client);
 				frame.setVisible(true);
 			}
 			@Override
@@ -308,17 +300,17 @@ public class Register extends MyFrame {
 		this.setVisible(true);
 		
 	}
-	private Player getData() {
+	private Player getData() { // take data
 		String name = this.txtName.getText();
 		String user = this.txtUsername.getText();
-		String pass = this.txtPassword.getText();
+		String pass = String.valueOf(this.txtPassword.getPassword());
 		String email = this.txtEmail.getText();
 		String birthdate = this.datePicker.getJFormattedTextField().getText();
 		boolean gender = this.txtGender.getSelectedItem().toString().equals("Nam") ? true: false ;
 		Player p = new Player(name, user, pass, email, birthdate, gender);
 		return p;
 	}
-	private boolean checkData() {
+	private boolean checkData() { //check data, return true if data is OK
 		boolean check = true;
 		MyRegEx regex = new MyRegEx();
 		int num = 0;
@@ -331,7 +323,9 @@ public class Register extends MyFrame {
 			else this.arrError.get(num).setText("");
 			num++;
 		}
-		if(!this.txtPassword.getText().trim().equals(txtRePassword.getText().trim())) {
+		String pass = String.valueOf(this.txtPassword.getPassword()).trim();
+		String rePass =String.valueOf(txtRePassword.getPassword()).trim();
+		if(!pass.equals(rePass)) {
 			this.errorRePassword.setText("Mật khẩu nhập lại phải khớp với mật khẩu trên.");
 			check = false;
 		}
@@ -344,17 +338,20 @@ public class Register extends MyFrame {
 		return check;
 	}
 	public void registerPlayer() {
-		// socket
 		if(this.checkData()) {
+			// send request to server
 			Player p = getData();
-			if(bus.checkExistPlayer(p) == true) {
-				JOptionPane.showMessageDialog(this,"Username này đã tồn tại, Xin hãy đổi tên khác!","Alert",JOptionPane.WARNING_MESSAGE);
+			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,p));
+			SocketResponse response = client.getResponse();	
+			
+			// check if register OK
+			if(response.getStatus().equals(SocketResponse.Status.FAILED)) { // failed
+				JOptionPane.showMessageDialog(this,response.getMessage(),"Alert",JOptionPane.WARNING_MESSAGE);
 			}		
-			else {
-				JOptionPane.showMessageDialog(this, "Tạo tài khoản thành công.");
-				bus.insert(p);
-				this.dispose();
-				MainFrame frame = new MainFrame(p);
+			else { // success
+				client.connect(p.getUsername(), p.getPassword()); // connect Player
+				JOptionPane.showMessageDialog(this, client.message);
+				MainFrame frame = new MainFrame(client); // open main frame
 				frame.setVisible(true);
 			}
 		}

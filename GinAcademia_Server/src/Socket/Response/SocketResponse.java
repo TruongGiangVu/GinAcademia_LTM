@@ -2,6 +2,7 @@ package Socket.Response;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class SocketResponse implements Serializable {
     public static enum Status {
         SUCCESS,
@@ -11,7 +12,8 @@ public class SocketResponse implements Serializable {
         MESSAGE,
         NET_CLOSE,
         UPDATE_GAMEROOM,
-        PLAYER
+        PLAYER,
+        CONTEST
     }
 
     Status status;

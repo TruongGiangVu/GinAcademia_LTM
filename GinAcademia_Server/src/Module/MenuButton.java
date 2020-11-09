@@ -4,14 +4,12 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+@SuppressWarnings("serial")
 public class MenuButton extends JToggleButton{
 	
 	public MenuButton() {

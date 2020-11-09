@@ -4,10 +4,8 @@ import java.io.BufferedReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
-import GUI.Login;
 import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Request.*;
@@ -26,6 +24,7 @@ public class Client {
 
 	public boolean isLogin = false;
 	public Player player = null;
+	public String message = "";
 
 	public Client() {
 		init();
@@ -69,6 +68,7 @@ public class Client {
 			System.out.println(this.player.getId() + " login success");
 			break;
 		case FAILED:
+			this.message = authenticationResponse.getMessage();
 			System.out.println("Login failed");
 			break;
 		}
@@ -88,6 +88,7 @@ public class Client {
 
 	public void sendRequest(String str) {
 		try {
+			System.out.println("send str");
 			sender.writeUTF(str);
 			sender.flush();
 		} catch (IOException e) {
@@ -97,9 +98,11 @@ public class Client {
 
 	public void sendRequest(SocketRequest request) {
 		try {
+			System.out.println("send Ob");
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {
+			System.out.println("");
 			e.printStackTrace();
 		}
 	}
@@ -111,7 +114,9 @@ public class Client {
 	public SocketResponse getResponse() {
 		SocketResponse response = null;
 		try {
+			System.out.println("get Ob");
 			response = (SocketResponse) this.receiver.readObject();
+			this.message = response.getMessage();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -119,7 +124,7 @@ public class Client {
 	}
 
 	// test
-	private void runCommand() {
+	public void runCommand() {
 		try {
 			System.out.println("Connect successfully:");
 			String response = "";

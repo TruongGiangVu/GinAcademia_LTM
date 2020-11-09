@@ -2,6 +2,7 @@ package Socket.Request;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class SocketRequest implements Serializable{
 	public static enum Action {
         MESSAGE,
@@ -9,7 +10,10 @@ public class SocketRequest implements Serializable{
         REGISTER,
         DISCONNECT,
         PROFILE,
-        RANK
+        RANK,
+        UPDATEPROFILE,
+        IQTEST,
+        CONTEST
     }
 
     Action action;

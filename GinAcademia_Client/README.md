@@ -10,7 +10,6 @@ Run by `Main.java` outside (in default package, if you use Eclipse)
   - Response: class for receive response
   - Class Client: for connecting to server by Client
 - BUS: process business
-- Server (temporatory) will delete later
 - Module: extend feature and design
 - Model: object classes
 

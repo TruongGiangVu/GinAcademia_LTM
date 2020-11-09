@@ -1,14 +1,16 @@
 package Model;
 
+import java.io.Serializable;
+
 import com.google.gson.annotations.SerializedName;
 
-public class Option {
+@SuppressWarnings("serial")
+public class Option implements Serializable {
 	@SerializedName("OptionId")
 	public int OptionId = 0;
 	@SerializedName("Option")
 	public String Option ="";
 	public Option() {
-		// TO DO Auto-generated constructor stub
 	}
 	public Option(int optionId, String option) {
 		super();

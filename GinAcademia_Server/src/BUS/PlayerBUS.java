@@ -46,7 +46,7 @@ public class PlayerBUS {
 	}
 	public boolean loginCheck(String user, String pass) {
 		boolean check = false;
-		ArrayList<Player> arr = dao.read();
+		ArrayList<Player> arr = dao.readAll();
 		for (Player p : arr) {
 			if (p.getUsername().equals(user) && p.getPassword().equals(pass)) {
 				check = true;
@@ -55,7 +55,7 @@ public class PlayerBUS {
 		return check;
 	}
 	public Player loginCheckPlayer(String user, String pass) {
-		ArrayList<Player> arr = dao.read();
+		ArrayList<Player> arr = dao.readAll();
 		for (Player p : arr) {
 			if (p.getUsername().equals(user) && p.getPassword().equals(pass)) {
 				return p;
@@ -91,5 +91,15 @@ public class PlayerBUS {
 		if(newLose > p.getMaxLoseSequence())
 			p.setMaxLoseSequence(newLose);
 		this.update(p);
+	}
+	public boolean comparePlayer(Player p1, Player p2) {
+		if(p1.getUsername().equals(p2.getUsername())) 
+			return true;
+		else return false;
+	}
+	public boolean comparePlayer(String user1, Player p2) {
+		if(user1.equals(p2.getUsername())) 
+			return true;
+		else return false;
 	}
 }
