@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 import Module.MyRegEx;
 import Model.Player;
@@ -12,13 +13,17 @@ import Model.Player;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Panel;
+import java.awt.Rectangle;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -89,6 +94,7 @@ public class Login extends MyFrame {
 		});
 		Image temp = new ImageIcon("./img/background.jpg").getImage();
 		this.bg = temp;
+		this.setTitle("GinAcademia - Đăng nhập");
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 720, 420);
@@ -178,6 +184,27 @@ public class Login extends MyFrame {
 				Login.this.loginPlayer();
 			}
 		});
+		btnNewButton.setUI(new  MetalToggleButtonUI() {
+			@Override
+		    protected Color getSelectColor() {
+		        return new Color(8, 87, 40).brighter();
+		    }
+		    
+		    @Override
+		    protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
+		    	Color fg;
+		    	if(btnNewButton.isSelected() || btnNewButton.getModel().isArmed()) {
+		    		fg = Color.WHITE;
+		    	}
+		    		
+		    	else {
+		    		fg = Color.BLACK;
+		    	}
+		    	
+		    	setForeground(fg);
+		    	super.paintText(g, b, textRect, text);
+		    }
+		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
@@ -232,7 +259,7 @@ public class Login extends MyFrame {
 		// socket
 		if(this.checkData()) {
 //			Player p = bus.loginCheckPlayer(this.txtUsername.getText(), this.txtPassword.getText());
-			client.connect(this.txtUsername.getText(), this.txtPassword.getText());
+			client.connect(this.txtUsername.getText(), String.valueOf(this.txtPassword.getPassword()));
 			MainFrame frame;
 			if(client.isLogin == false) {
 				JOptionPane.showMessageDialog(this,"Tài khoản hoặc Mật khẩu không đúng!","Alert",JOptionPane.WARNING_MESSAGE);
