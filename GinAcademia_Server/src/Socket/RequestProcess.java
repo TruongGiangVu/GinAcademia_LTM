@@ -81,7 +81,7 @@ public class RequestProcess {
 		}
 	}
 	private void contestProcess() {
-		ArrayList<Question> arr = questionBUS.ReadContest();
+		ArrayList<Question> arr = questionBUS.ReadContest(5);
 		client.sendResponse(new SocketResponseContest(arr));
 	}
 }

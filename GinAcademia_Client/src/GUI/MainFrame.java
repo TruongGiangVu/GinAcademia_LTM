@@ -168,13 +168,6 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		btnRank.addActionListener(this);
 		btnIQ.addActionListener(this);
 		
-//		btnHome.addMouseListener(this);
-//		btnIQ.addMouseListener(this);
-//		btnRank.addMouseListener(this);
-//		btnProfile.addMouseListener(this);
-		
-
-		
 //		this.setUndecorated(true);
 		setResizable(false);
 		this.setVisible(true);
@@ -218,11 +211,9 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		MenuButton source=(MenuButton) arg0.getSource();
 		
 		if(source == this.btnHome) {
-//			this.panelContent = new Home();
 			deck.removeLayoutComponent(pnHome);
 			this.pnHome = new Home(client,this.img);
 			panelContent.add(pnHome,"home");
@@ -230,26 +221,29 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 
 		}
 		else if(source == this.btnProfile) {
-//			panelContent = new Profile();
 			deck.removeLayoutComponent(pnProfile);
 			this.pnProfile= new Profile(client);
 			panelContent.add(pnProfile,"profile");
 			deck.show(panelContent, "profile");
 		}
 		else if(source == this.btnIQ) {
-//			panelContent = new Profile();
 			deck.removeLayoutComponent(pnIQTest);
 			this.pnIQTest= new IQTest(client);
 			panelContent.add(pnIQTest,"iqTest");
 			deck.show(panelContent, "iqTest");
 		}
 		else if(source == this.btnRank) {
-//			panelContent = new Rank();
 			deck.removeLayoutComponent(pnRank);
 			this.pnRank= new Rank(client);
 			panelContent.add(pnRank,"rank");
 			deck.show(panelContent, "rank");
 		}
+	}
+	public void setActiveMenuButton(boolean isActive) {
+		btnHome.setEnabled(isActive);
+		btnProfile.setEnabled(isActive);
+		btnRank.setEnabled(isActive);
+		btnIQ.setEnabled(isActive);
 	}
 	public void clickStart() {
 		deck.removeLayoutComponent(pnContest);

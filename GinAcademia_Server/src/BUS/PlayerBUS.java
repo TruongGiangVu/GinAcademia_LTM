@@ -92,4 +92,14 @@ public class PlayerBUS {
 			p.setMaxLoseSequence(newLose);
 		this.update(p);
 	}
+	public boolean comparePlayer(Player p1, Player p2) {
+		if(p1.getUsername().equals(p2.getUsername())) 
+			return true;
+		else return false;
+	}
+	public boolean comparePlayer(String user1, Player p2) {
+		if(user1.equals(p2.getUsername())) 
+			return true;
+		else return false;
+	}
 }

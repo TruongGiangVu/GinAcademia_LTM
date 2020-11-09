@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -152,6 +154,11 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	public void playGame() {
+//		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST,"start contest"));
+		
+		MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+		parent.setActiveMenuButton(false);
+		
 		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST));
 		SocketResponse response = client.getResponse();
 		if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
@@ -258,7 +265,10 @@ public class Contest extends MyPanel implements MouseListener {
 		this.txtC.setEnabled(en);
 		this.txtD.setEnabled(en);
 	}
-
+	
+	public void contest() {
+		
+	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		MyLabel source = (MyLabel) arg0.getSource();
