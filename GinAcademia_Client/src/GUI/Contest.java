@@ -26,6 +26,7 @@ import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
+import Socket.Response.SocketResponseContestTest;
 import Module.MyLabel;
 import Module.MyPanel;
 import java.awt.event.ActionListener;
@@ -58,11 +59,7 @@ public class Contest extends MyPanel implements MouseListener {
 	private Player player;
 	private JLabel lblEnemyname;
 	private JLabel lblEnemyPoint;
-//	private javax.swing.Timer timer = null;
 
-	/**
-	 * Create the panel.
-	 */
 	public Contest(Client client) {
 		super(client);
 		this.player = client.getPlayer();
@@ -157,7 +154,7 @@ public class Contest extends MyPanel implements MouseListener {
 		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST));
 		SocketResponse response = client.getResponse();
 		if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
-			SocketResponseContest contest = (SocketResponseContest) response;
+			SocketResponseContestTest contest = (SocketResponseContestTest) response;
 			arrQ = contest.getQuestionList();
 			this.currentQ = arrQ.get(0);
 		} else {

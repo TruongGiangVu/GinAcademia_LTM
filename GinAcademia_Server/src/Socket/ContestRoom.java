@@ -8,8 +8,10 @@ import Model.GameConfig;
 import Model.Player;
 import Model.Question;
 import Socket.Request.SocketRequest;
-import Socket.Request.SocketRequestContest;
+import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
+import Socket.Response.SocketResponseAnswer;
+import Socket.Response.SocketResponseContest;
 import Socket.Response.SocketResponseQuestion;
 import BUS.QuestionBUS;
 import BUS.PlayerBUS;
@@ -23,13 +25,14 @@ public class ContestRoom {
 	public int currentQ = 0;
 	public Player winner = null;
 	public int countAns = 0;
-	
+
 	public boolean isEndContest = false;
 
 	ArrayList<Player> players = new ArrayList<Player>();
-	ArrayList<Integer> points;
+	ArrayList<Integer> points = new ArrayList<Integer>();
+	ArrayList<Integer> answers = new ArrayList<Integer>();
 	ArrayList<ClientHandler> clients = new ArrayList<ClientHandler>();
-	
+
 	Timer contestTimer;
 
 	public ContestRoom(int RoomId, GameConfig config) {
@@ -43,6 +46,7 @@ public class ContestRoom {
 			this.players.add(player);
 			this.clients.add(client);
 			this.points.add(0);
+			this.answers.add(0);
 		} else if (this.players.size() == this.config.getNumPlayer()) {
 			// start contest
 			this.startContest();
@@ -69,22 +73,24 @@ public class ContestRoom {
 	}
 
 	public void startContest() {
-		this.sendContest(); // announce to all players about starting game
-		
+		this.sendStartContest(); // announce to all players about starting game
+
 		contestTimer = new Timer();
 		contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
-	
-	class ContestTask extends TimerTask{
+
+	class ContestTask extends TimerTask {
 		int countdown = 10;
+
 		public ContestTask() {
 			sendQuestionToAll();
 		}
+
 		public void run() {
 			if (countAns == config.getNumPlayer()) { // all players have answered
 				endTurn();
 			}
-			if(countdown == 0) { // time out
+			if (countdown == 0) { // time out
 				endTurn();
 			}
 			countdown--;
@@ -96,17 +102,17 @@ public class ContestRoom {
 			contestTimer.cancel(); // cancel current timer
 			this.sendAllAnswer(); // send answer
 			Thread.sleep(2000); // stop 2s
-			
+
 			// send next question
-			this.currentQ++; 
-			if(this.currentQ == this.config.getNumQuestion() ) { // currentQ == 5, stop repeat
-				
+			this.currentQ++;
+			if (this.currentQ == this.config.getNumQuestion()) { // currentQ == 5, stop repeat
 				this.endGame();
+				return;
 			}
-			this.sendQuestionToAll(); 
-			
+			this.sendQuestionToAll();
+
 			// create new timer for next question
-			contestTimer = new Timer(); 
+			contestTimer = new Timer();
 			contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -114,7 +120,6 @@ public class ContestRoom {
 	}
 
 	public void sendALL(SocketResponse response) {
-		this.countAns = 0;
 		int n = this.clients.size();
 		for (int i = 0; i < n; ++i) {
 			this.clients.get(i).sendResponse(response);
@@ -127,34 +132,43 @@ public class ContestRoom {
 	}
 
 	public void sendAllAnswer() {
-		// code
-		this.sendALL(null);
+		this.sendALL(
+				new SocketResponseAnswer(this.players, this.answers, this.questions.get(this.currentQ).getAnswer()));
+		this.refreshAnswer();
 	}
 
-	public void sendContest() {
-		// code
-		this.sendALL(null);
+	public void sendStartContest() {
+		this.sendALL(new SocketResponseContest(this.players, this.points));
 	}
 
 	public void getAnswer(SocketRequest requestRaw) {
-		SocketRequestContest request = (SocketRequestContest) requestRaw;
+		SocketRequestAnswer request = (SocketRequestAnswer) requestRaw;
+		int index = this.players.indexOf(request.player);
+		this.answers.set(index, request.getAns());
 		boolean ans = false;
 		if (request.getAns() == this.questions.get(this.currentQ).getAnswer()) { // answer right
 			ans = true;
 		}
 		int time = request.getTime();
-		this.updatePoint(request.player, ans, time);
+
+		this.updatePoint(index, ans, time);
 	}
 
-	public void updatePoint(Player player, boolean ans, int time) {
-		int i = this.players.indexOf(player);
-		int currentPoint = this.points.get(i);
+	public void updatePoint(int index, boolean ans, int time) {
+		int currentPoint = this.points.get(index);
 		int res = currentPoint;
 		if (ans) {
 			res = currentPoint + time / 10;
 		}
-		this.points.set(i, res);
+		this.points.set(index, res);
 		this.countAns++;
+	}
+
+	public void refreshAnswer() { // refresh to No (0) answer
+		int n = this.answers.size();
+		for (int i = 0; i < n; ++i) {
+			this.answers.set(i, 0);
+		}
 	}
 
 	public void endGame() {

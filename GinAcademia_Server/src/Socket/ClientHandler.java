@@ -155,7 +155,7 @@ public class ClientHandler implements Runnable {
 		if (this.contestRoom == null) { //doesn't have room -> join room
 			this.contestRoom = this.contestRoomManager.findingAvailableRoom();
 			this.contestRoom.joinGame(player, this);
-		} else if (requestRaw.getMessage().equals("answer")) { //has room, player answer Question
+		} else if (requestRaw.getMessage().equals("answer")) { //has room, player answer Que/stion
 			this.contestRoom.getAnswer(requestRaw); // 
 		}
 		

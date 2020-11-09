@@ -16,10 +16,10 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//		MainFrame frame = new MainFrame();
-//		frame.setVisible(true);
-		Server server = new Server();
-		server.hashCode();
+		MainFrame frame = new MainFrame();
+		frame.setVisible(true);
+//		Server server = new Server();
+//		server.hashCode();
 		
 	}
 
