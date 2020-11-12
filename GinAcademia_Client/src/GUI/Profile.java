@@ -275,31 +275,32 @@ public class Profile extends MyPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		JButton source = (JButton) arg0.getSource();
-		if (source == btnEdit) {
+		if (source == btnEdit) { // show button update
 			this.viewUpdateButton(true);
 			this.activeText(true);
-		} else if (source == btnCancel) {
+		} else if (source == btnCancel) { // off buttons of update
 			this.activeText(false);
 			this.loadInfo();
 			this.viewUpdateButton(false);
 		} else if (source == btnUpdate) {
-			// update to database
+			// update player
+			this.updateData();
 			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
 			SocketResponse response = client.getResponse();
 			if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
-				this.updateData();
+				// update on GUI
 				this.loadInfo();
+				// enable view
 				this.activeText(false);
 				this.viewUpdateButton(false);
-				// update on GUI
-				
 				// update name on MainFrame
 				MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 				parent.lblName.setText(this.player.getName());
+				// show info
 				JOptionPane.showMessageDialog(this, response.getMessage());
 			}
-		} else if (source == btnLogout) {
-			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout"));
+		} else if (source == btnLogout) { // logout account
+			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to disconnect
 			this.client.close(); // disconnect to server
 			// open login frame
 			Login login = new Login(); // create new socket for new login

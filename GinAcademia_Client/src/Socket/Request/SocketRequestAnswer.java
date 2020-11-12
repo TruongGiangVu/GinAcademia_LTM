@@ -3,11 +3,11 @@ package Socket.Request;
 import Model.Player;
 
 @SuppressWarnings("serial")
-public class SocketRequestContest extends SocketRequest {
+public class SocketRequestAnswer extends SocketRequest {
 	public Player player;
 	public int ans = 0;
 	public int time = 10000;
-	public SocketRequestContest(Player player, int ans, int time ) {
+	public SocketRequestAnswer(Player player, int ans, int time ) {
 		 super(SocketRequest.Action.CONTEST, "answer");
 		 this.player = player;
 		 this.ans = ans;
