@@ -1,7 +1,9 @@
 package GUI;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -9,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.RowSorter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
@@ -23,6 +27,7 @@ import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponseRank;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class Rank extends MyPanel {
@@ -40,6 +45,7 @@ public class Rank extends MyPanel {
 	private ArrayList<Player> listplayer;
 	private RankTableModel tableModel;
 	private JTextField txtSearch;
+	private JButton btnNewButton;
 
 	public Rank(Client client) {
 		super(client);
@@ -80,7 +86,7 @@ public class Rank extends MyPanel {
 //        table.setRowSorter(sorter);
 
 		panelTable = new JPanel();
-		panelTable.setBounds(30, 134, 540, 435);
+		panelTable.setBounds(30, 134, 540, 400);
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
 		panelTable.setBackground(Color.WHITE);
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -137,12 +143,24 @@ public class Rank extends MyPanel {
 		
 		JLabel lblSearch = new JLabel("Tìm kiếm: ");
 		lblSearch.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblSearch.setBounds(276, 80, 70, 30);
+		lblSearch.setBounds(240, 80, 70, 30);
 		add(lblSearch);
 		
 		txtSearch = new JTextField();
-		txtSearch.setBounds(356, 80, 214, 30);
+		txtSearch.setBounds(315, 80, 214, 30);
 		add(txtSearch);
 		txtSearch.setColumns(10);
+		
+		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH);
+//		Icon icon = new ImageIcon("./img/search_icon.png");
+		
+		btnNewButton = new JButton();
+		btnNewButton.setBounds(539, 80, 31, 30);
+		btnNewButton.setBorder(null);
+		btnNewButton.setOpaque(false);
+		btnNewButton.setBackground(null);
+		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnNewButton.setIcon(new ImageIcon(scaled));
+		add(btnNewButton);
 	}
 }

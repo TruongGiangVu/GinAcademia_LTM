@@ -51,18 +51,7 @@ public class Login extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Login frame = new Login(client);
-//					
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-	}
+
 
 	/**
 	 * Create the frame.
@@ -146,7 +135,7 @@ public class Login extends JFrame {
 		lblChaCTi = new JLabel("Chưa có tài khoản?");
 		lblChaCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblChaCTi.setForeground(Color.BLACK);
-		lblChaCTi.setBounds(428, 327, 113, 14);
+		lblChaCTi.setBounds(427, 305, 113, 14);
 		contentPane.add(lblChaCTi);
 		
 		label_1 = new JLabel("Đăng ký ngay");
@@ -171,7 +160,7 @@ public class Login extends JFrame {
 		});
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		label_1.setForeground(new Color(8,87,40));
-		label_1.setBounds(540, 327, 94, 14);
+		label_1.setBounds(539, 305, 94, 14);
 		contentPane.add(label_1);
 		
 		btnNewButton = new JButton("Đăng nhập");
@@ -215,7 +204,7 @@ public class Login extends JFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(8, 87, 40));
-		btnNewButton.setBounds(428, 287, 205, 35);
+		btnNewButton.setBounds(391, 265, 280, 35);
 		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);

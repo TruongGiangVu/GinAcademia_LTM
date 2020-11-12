@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.Color;
+
 import Module.MyPanel;
 import Socket.Client;
 
@@ -11,6 +13,7 @@ public class IQTest extends MyPanel {
 	 */
 	public IQTest(Client client) {
 		super(client);
+		this.setBackground(Color.WHITE);
 	}
 
 }

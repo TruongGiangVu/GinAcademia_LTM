@@ -139,7 +139,7 @@ public class Register extends MyFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(8,87,40));
-		btnNewButton.setBounds(70, 508, 205, 35);
+		btnNewButton.setBounds(30, 508, 280, 35);
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);
 		
@@ -210,7 +210,7 @@ public class Register extends MyFrame {
 		txtGender = new JComboBox<String>();
 		txtGender.setBackground(Color.WHITE);
 		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
-		txtGender.setBounds(611, 140, 72, 25);
+		txtGender.setBounds(219, 140, 72, 25);
 		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
 		((JTextField)txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
@@ -218,7 +218,7 @@ public class Register extends MyFrame {
 		lblCTi = new JLabel("Đã có tài khoản?");
 		lblCTi.setForeground(Color.BLACK);
 		lblCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCTi.setBounds(80, 554, 103, 25);
+		lblCTi.setBounds(72, 554, 103, 25);
 		contentPane.add(lblCTi);
 		
 		lblngNhpNgay = new JLabel("Đăng nhập ngay");
@@ -244,7 +244,7 @@ public class Register extends MyFrame {
 		});
 		lblngNhpNgay.setForeground(new Color(8,87,40));
 		lblngNhpNgay.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblngNhpNgay.setBounds(175, 554, 159, 25);
+		lblngNhpNgay.setBounds(167, 554, 159, 25);
 		contentPane.add(lblngNhpNgay);
 		
 		errorName = new JLabel("");
