@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import javax.swing.JOptionPane;
-
 import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Request.*;
@@ -101,7 +99,7 @@ public class Client {
 
 	public void sendRequest(SocketRequest request) {
 		try {
-			System.out.println("send Ob");
+			System.out.println("send Ob" + request.getAction());
 			
 			sender.writeObject(request);
 			sender.flush();

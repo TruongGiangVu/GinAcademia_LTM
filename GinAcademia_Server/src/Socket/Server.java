@@ -10,13 +10,13 @@ import java.util.concurrent.Executors;
 import Model.GameConfig;
 
 public class Server {
-	static ArrayList<ClientHandler> clients;
+	public static ArrayList<ClientHandler> clients;
 //	private ExecutorService pool;
-	private ContestRoomManager contestRoomManager;
+	public static ContestRoomManager contestRoomManager;
 	private ExecutorService pool;
 	int numThread = 2;
 	int id = 1;
-	
+
 	GameConfig config;
 
 	public ServerSocket server;
@@ -27,11 +27,11 @@ public class Server {
 			pool = Executors.newCachedThreadPool();
 			contestRoomManager = new ContestRoomManager(this.config);
 			clients = new ArrayList<ClientHandler>();
-			server = new ServerSocket(5000);
+			server = new ServerSocket(1234);
 			System.out.println("Waiting client connect ....");
 
 			this.running();
-			
+
 			System.out.println("Finish");
 			this.close();
 
@@ -49,7 +49,7 @@ public class Server {
 	public void running() throws IOException {
 		while (true) {
 			Socket client = server.accept();
-			ClientHandler clientThread = new ClientHandler(id, client, clients, contestRoomManager);
+			ClientHandler clientThread = new ClientHandler(id, client);
 			id++;
 			clients.add(clientThread);
 			pool.submit(clientThread);
@@ -67,5 +67,36 @@ public class Server {
 			System.out.println("All clients have been killed 2.");
 		}
 		pool.shutdown();
+	}
+
+	public static boolean isOnlinePlayer(String username) {
+		boolean isExist = false;
+
+		int n = clients.size();
+		System.out.println("Size clients:" + n);
+		if (n <= 1)
+			isExist = false;
+		else
+			for (int i = 0; i < n; ++i) {
+				System.out.print(i+" ");
+				if(clients.get(i).isLoggedIn) {
+					if (username.equals(clients.get(i).player.getUsername())) {
+						
+						isExist = true;
+						break;
+					}
+				}
+			}
+		System.out.println("is Exist: " + isExist);
+		return isExist;
+	}
+
+	public static int getIndexOf(int id) {
+		int n = Server.clients.size();
+		for (int i = 0; i < n; ++i) {
+			if (id == Server.clients.get(i).id)
+				return i;
+		}
+		return -1;
 	}
 }

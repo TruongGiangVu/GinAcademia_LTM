@@ -100,6 +100,11 @@ public class PlayerBUS {
 	public boolean comparePlayer(String user1, Player p2) {
 		if(user1.equals(p2.getUsername())) 
 			return true;
-		else return false;
+		return false;
+	}
+	public boolean comparePlayer(String user1, String user2) {
+		if(user1.equals(user2)) 
+			return true;
+		return false;
 	}
 }

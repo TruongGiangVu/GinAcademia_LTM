@@ -4,9 +4,6 @@ import javax.swing.UIManager;
 import Socket.*;
 import GUI.*;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -16,8 +13,8 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-		MainFrame frame = new MainFrame();
-		frame.setVisible(true);
+//		MainFrame frame = new MainFrame();
+//		frame.setVisible(true);
 		Server server = new Server();
 		server.hashCode();
 		

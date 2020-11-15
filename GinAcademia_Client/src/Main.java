@@ -2,8 +2,6 @@
 import Socket.Client;
 
 import javax.swing.UIManager;
-
-import Model.*;
 import GUI.*;
 
 public class Main {
@@ -16,7 +14,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+		
 		Login login = new Login();
 		login.hashCode();
 //		clientSocketConnect.

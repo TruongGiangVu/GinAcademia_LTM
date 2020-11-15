@@ -156,10 +156,10 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		pnIQTest = new IQTest(client);
 		panelContent.add(pnIQTest,"iqTest");
 		
-		pnRank = new Rank(client);
+		pnRank = new Rank(client,0);
 		panelContent.add(pnRank,"rank");
 		
-		pnContest = new Contest(client);
+		pnContest = new Contest(client,0);
 		pnContest.setClientSocket(client);
 		panelContent.add(pnContest,"contest");
 		
@@ -239,7 +239,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		}
 		else if(source == this.btnRank) {
 			deck.removeLayoutComponent(pnRank);
-			this.pnRank= new Rank(client);
+			this.pnRank= new Rank(client,1);
 			panelContent.add(pnRank,"rank");
 			deck.show(panelContent, "rank");
 		}
@@ -252,9 +252,15 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	}
 	public void clickStart() {
 		deck.removeLayoutComponent(pnContest);
-		this.pnContest= new Contest(client);
+		this.pnContest= new Contest(client,1);
 		panelContent.add(pnContest,"contest");
 		deck.show(panelContent, "contest");
+	}
+	public void clickReturenHome() {
+		deck.removeLayoutComponent(pnHome);
+		this.pnHome = new Home(client,this.img);
+		panelContent.add(pnHome,"home");
+		deck.show(panelContent, "home");
 	}
 	public void loadImage(String nameImage) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon

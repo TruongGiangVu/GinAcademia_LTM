@@ -45,7 +45,7 @@
     },
     {
       "OptionId": 4,
-      "Option": "4"
+      "Option": "5"
     }
   ],
   "Answer": 2,
@@ -63,7 +63,7 @@
     },
     {
       "OptionId": 2,
-      "Option": "C++"
+      "Option": "C/C++"
     },
     {
       "OptionId": 3,
@@ -153,5 +153,369 @@
     }
   ],
   "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5f8fc87a94c3951ed054d5ec"
+  },
+  "QuestionId": "00007",
+  "Question": "Chữ cái cuối cùng trong bảng chữ cái tiếng anh:",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "R"
+    },
+    {
+      "OptionId": 2,
+      "Option": "C"
+    },
+    {
+      "OptionId": 3,
+      "Option": "B"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Z"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9136849bc0406a86dac9f"
+  },
+  "QuestionId": "00008",
+  "Question": "Công thức hóa học của nước là ...",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "CH4"
+    },
+    {
+      "OptionId": 2,
+      "Option": "HCl"
+    },
+    {
+      "OptionId": 3,
+      "Option": "H30"
+    },
+    {
+      "OptionId": 4,
+      "Option": "H20"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9139e49bc0406a86daca0"
+  },
+  "QuestionId": "00009",
+  "Question": "Cầu vồng có mấy màu?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "8"
+    },
+    {
+      "OptionId": 2,
+      "Option": "7"
+    },
+    {
+      "OptionId": 3,
+      "Option": "6"
+    },
+    {
+      "OptionId": 4,
+      "Option": "9"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9141949bc0406a86daca1"
+  },
+  "QuestionId": "00010",
+  "Question": "Tiếng Nhật có mấy bảng chữ?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "1"
+    },
+    {
+      "OptionId": 2,
+      "Option": "2"
+    },
+    {
+      "OptionId": 3,
+      "Option": "3"
+    },
+    {
+      "OptionId": 4,
+      "Option": "4"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9148749bc0406a86daca2"
+  },
+  "QuestionId": "00011",
+  "Question": "Đâu là chất hóa học của Bazo ?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Fe2O3"
+    },
+    {
+      "OptionId": 2,
+      "Option": "NaOH"
+    },
+    {
+      "OptionId": 3,
+      "Option": "H2SO4"
+    },
+    {
+      "OptionId": 4,
+      "Option": "HNO3"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9155349bc0406a86daca3"
+  },
+  "QuestionId": "00012",
+  "Question": "Cỗ máy thời gian có tồn tại ở trong phim nào trong các phim sau đây?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Dragon Ball"
+    },
+    {
+      "OptionId": 2,
+      "Option": "One Piece"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Naruto"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Shigatsu wa kimi no uso"
+    }
+  ],
+  "Answer": 1,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa915a049bc0406a86daca4"
+  },
+  "QuestionId": "00013",
+  "Question": "Anime nào có nhiều Drama nhất?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "One Piece"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Fairy Tail"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Shigatsu wa kimi no uso"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Bakuman"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa915f749bc0406a86daca5"
+  },
+  "QuestionId": "00014",
+  "Question": "Con gà có trước hay trứng có trước?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Gà"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Trứng"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Cả hai"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Không cái nào"
+    }
+  ],
+  "Answer": 1,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa916d449bc0406a86daca6"
+  },
+  "QuestionId": "00015",
+  "Question": "Bốn kiệt tác văn học cổ đại Trung Quốc, cái nào sau đây không phải?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Tây du kí"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Tam Quốc diễn nghĩa"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Thần Điêu Đại Hiệp"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Hồng lâu mộng"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa917dd49bc0406a86daca7"
+  },
+  "QuestionId": "00016",
+  "Question": "Ai là người phát minh ra bóng đèn đầu tiên?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Thomas Edison"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Albert Einstein"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Trần Dần"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Joseph Swan"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9188749bc0406a86daca8"
+  },
+  "QuestionId": "00017",
+  "Question": "Khu vực nằm giữa mép dưới váy vải và mép trên tất chân gọi là gì?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Vùng tuyệt đối"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Vùng ... bậy nha"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Vùng da"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Làm gì có tên"
+    }
+  ],
+  "Answer": 1,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa9191649bc0406a86daca9"
+  },
+  "QuestionId": "00018",
+  "Question": "Chuột Mickey đầu tiên được đặt tên là",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Mickey"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Goofy"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Disney"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Mortimer"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa919d849bc0430ac4eeaff"
+  },
+  "QuestionId": "00019",
+  "Question": "Tên khai sinh của Bác Hồ là gì?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Nguyễn Sinh Cung"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Nguyễn Tất Thành"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Nguyễn Đắc Toàn"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Nguyễn Văn Hoàng"
+    }
+  ],
+  "Answer": 1,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fa91a3149bc0430ac4eeb00"
+  },
+  "QuestionId": "00020",
+  "Question": "Trong bàn phím máy tính, các phím nào là phím gai?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "A, B"
+    },
+    {
+      "OptionId": 2,
+      "Option": "X, Z "
+    },
+    {
+      "OptionId": 3,
+      "Option": "F, J"
+    },
+    {
+      "OptionId": 4,
+      "Option": "K, L"
+    }
+  ],
+  "Answer": 3,
   "Status": 0
 }]

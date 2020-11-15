@@ -3,10 +3,8 @@ package GUI;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
-import java.awt.Panel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -65,19 +63,6 @@ public class Register extends MyFrame {
 	private JLabel errorRePassword;
 	private JLabel errorEmail;
 	private JLabel errorBirthdate;
-	
-	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Register frame = new Register();
-//					
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-	}
 
 	public Register(Client client) {
 		super(client);

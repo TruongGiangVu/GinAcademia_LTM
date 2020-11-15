@@ -8,7 +8,7 @@ import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class MyLabel extends JLabel{
-	public String theme = "";
+	public int theme = -1;
 	public MyLabel() {
 		super();
 		this.setBorder(new EmptyBorder(10,10,10,10));

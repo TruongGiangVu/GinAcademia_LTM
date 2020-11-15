@@ -28,7 +28,6 @@ import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
 
 import Socket.Client;
 import Socket.Request.SocketRequest;
@@ -119,7 +118,6 @@ public class Profile extends MyPanel implements ActionListener {
 		lblNgySinh.setBounds(20, 70, 65, 25);
 		panelInfo.add(lblNgySinh);
 
-		
 		UtilDateModel model = new UtilDateModel();
 		Properties p = new Properties();
 		p.put("text.today", "Today");
@@ -140,30 +138,30 @@ public class Profile extends MyPanel implements ActionListener {
 		lblGiiTnh.setForeground(Color.BLACK);
 		lblGiiTnh.setBounds(391, 505, 103, 25);
 		panelInfo.add(lblGiiTnh);
-		
+
 		lblBirth = new JLabel(this.player.getBirthdateString());
 		lblBirth.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblBirth.setBounds(100, 70, 170, 25);
 		panelInfo.add(lblBirth);
-		
-				btnEdit = new JButton("Chỉnh sửa");
-				btnEdit.setBounds(395, 125, 120, 23);
-				panelInfo.add(btnEdit);
-				
-						btnCancel = new JButton("Hủy");
-						btnCancel.setBounds(460, 125, 55, 23);
-						panelInfo.add(btnCancel);
-						
-								btnUpdate = new JButton("Cập nhật");
-								btnUpdate.setBounds(325, 125, 120, 23);
-								panelInfo.add(btnUpdate);
-								this.btnUpdate.setVisible(false);
-								btnUpdate.addActionListener(this);
-						
-								this.btnCancel.setVisible(false);
-								btnCancel.addActionListener(this);
-				
-						btnEdit.addActionListener(this);
+
+		btnEdit = new JButton("Chỉnh sửa");
+		btnEdit.setBounds(395, 125, 120, 23);
+		panelInfo.add(btnEdit);
+
+		btnCancel = new JButton("Hủy");
+		btnCancel.setBounds(460, 125, 55, 23);
+		panelInfo.add(btnCancel);
+
+		btnUpdate = new JButton("Cập nhật");
+		btnUpdate.setBounds(325, 125, 120, 23);
+		panelInfo.add(btnUpdate);
+		this.btnUpdate.setVisible(false);
+		btnUpdate.addActionListener(this);
+
+		this.btnCancel.setVisible(false);
+		btnCancel.addActionListener(this);
+
+		btnEdit.addActionListener(this);
 
 		panelGame = new JPanel();
 		panelGame.setBackground(Color.WHITE);
@@ -300,7 +298,8 @@ public class Profile extends MyPanel implements ActionListener {
 				JOptionPane.showMessageDialog(this, response.getMessage());
 			}
 		} else if (source == btnLogout) { // logout account
-			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to disconnect
+			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to
+																									// disconnect
 			this.client.close(); // disconnect to server
 			// open login frame
 			Login login = new Login(); // create new socket for new login

@@ -7,9 +7,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 
-import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
 
 import Module.MenuButton;

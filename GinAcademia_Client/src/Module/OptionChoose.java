@@ -7,6 +7,7 @@ public class OptionChoose {
 	private Color WrongChoose = new Color(210, 70, 69);
 	private Color RightChoose = new Color(143, 203, 43);
 	private Color NotChoose = new Color(93, 98, 189);
+	private Color EnemyChoose = new Color(210, 110, 18);
 
 	public OptionChoose() {
 	}
@@ -20,6 +21,8 @@ public class OptionChoose {
 			ans = this.RightChoose;
 		} else if (status.equals("not")) {
 			ans = this.NotChoose;
+		} else if (status.equals("enemy")) {
+			ans = this.EnemyChoose;
 		} else {
 			ans = new Color(0, 0, 0);
 		}

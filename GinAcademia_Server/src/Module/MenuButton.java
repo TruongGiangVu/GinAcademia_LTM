@@ -8,7 +8,6 @@ import java.awt.Rectangle;
 
 import javax.swing.AbstractButton;
 import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
 @SuppressWarnings("serial")
