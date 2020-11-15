@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("serial")
 public class Player implements Serializable {
 	@SerializedName("PlayerId")
 	private String PlayerId = "";

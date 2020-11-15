@@ -1,6 +1,8 @@
 package Socket.Request;
 
 import Model.Player;
+
+@SuppressWarnings("serial")
 public class SocketRequestPlayer extends SocketRequest {
 	public Player player;
 	public SocketRequestPlayer(SocketRequest.Action action,Player player) {

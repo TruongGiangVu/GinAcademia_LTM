@@ -4,7 +4,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import Model.Player;
 import Socket.Request.*;
@@ -12,63 +11,69 @@ import Socket.Response.SocketResponse;
 import Socket.Response.*;
 import BUS.PlayerBUS;
 
+// a client Thread for connect to just 1 player
 public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
-	ArrayList<ClientHandler> clients;
+	ContestRoom contestRoom = null;
 	ObjectInputStream receiver;
 	ObjectOutputStream sender;
 	PlayerBUS bus = new PlayerBUS();
 	boolean isLoggedIn = false;
 	Player player = null;
 
-	public ClientHandler(int id,Socket socket, ArrayList<ClientHandler> clients) {
-		// TODO Auto-generated constructor stub
+	public ClientHandler(int id, Socket socket) {
 		try {
 			this.id = id;
-			this.clients = new ArrayList<ClientHandler>();
 			this.socket = socket;
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-//		this.runCommand();
 		try {
 			System.out.println(socket.getInetAddress() + " " + socket.getPort() + " accept");
 			while (true) {
+				// get request from client
 				SocketRequest requestRaw = receiveRequest();
-				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) {
-					if (this.performValidateClient(requestRaw)) {
-						if(this.player.getStatus() == 1) {
+
+				// check request
+				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) { // if client request login
+					if (this.isValidateClient(requestRaw)) { // check data, and get this.player
+						if (this.player.getStatus() == 1) { // if client is blocked
 							sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 									"Tài khoản này đã bị khóa!"));
+						} else if (this.player.getStatus() == 0) {
+							if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
+								sendResponse(
+										new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+												"Tài khoản này hiện đang online ở một thiết bị khác!"));
+							} else { // login OK
+								isLoggedIn = true;
+								sendResponse(new SocketResponsePlayer(this.player));
+							}
 						}
-						else if(this.player.getStatus() == 0){
-							isLoggedIn = true;
-							sendResponse(new SocketResponsePlayer(this.player));
-						}
-					} else {
+					} else { // data wrong
 						sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 								"Tài khoản hoặc mật khẩu không đúng."));
 					}
-				}
-				else if(requestRaw.getAction().equals(SocketRequest.Action.REGISTER)) {
-					
-				}
-				else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) {
+				} else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
+					isLoggedIn = false;
+					// remove player
+					Server.clients.remove(Server.getIndexOf(this.id));
 					this.close();
 					break;
+				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) {
+//					new RequestProcess(this, requestRaw).init();
+//					System.out.println("contest request");
+					this.contest(requestRaw);
 				} else {
-					// code here
-					System.out.println("update");
-					new RequestProcess(this,requestRaw).init();
+					// if not login or disconnect, create new Thread and solve it, then delete this
+					new RequestProcess(this, requestRaw).init();
 				}
 			}
 			this.close();
@@ -76,7 +81,6 @@ public class ClientHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("Client thoat ngu vl");
 		}
@@ -93,7 +97,6 @@ public class ClientHandler implements Runnable {
 			sender.writeUTF(request);
 			sender.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -108,22 +111,43 @@ public class ClientHandler implements Runnable {
 
 	protected SocketRequest receiveRequest() throws IOException, ClassNotFoundException {
 		SocketRequest request = null;
-		
 		request = (SocketRequest) receiver.readObject();
+		if (request == null) {
+			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"));
+		}
 		return request;
 	}
 
-	private boolean performValidateClient(SocketRequest requestRaw) {
+	private boolean isValidateClient(SocketRequest requestRaw) { // check data
 		boolean isValidated = false;
 		SocketRequestLogin request = (SocketRequestLogin) requestRaw;
 		if (bus.loginCheck(request.username, request.password)) {
+			player = bus.loginCheckPlayer(request.username, request.password); // get player
 			isValidated = true;
-			player = bus.loginCheckPlayer(request.username, request.password);
 		}
 		return isValidated;
 	}
 
-	public void runCommand() {
+	private void contest(SocketRequest requestRaw) {
+		if (this.isLoggedIn == false) { // check off player
+			this.contestRoom.removePlayer(player);
+			this.contestRoom = null;
+			return;
+		}
+		if (this.contestRoom == null) { // doesn't have room -> join room
+			this.contestRoom = Server.contestRoomManager.findingAvailableRoom();
+			this.contestRoom.joinGame(player, this);
+		} else if (requestRaw.getMessage().equals("answer")) { // has room, player answer Question
+			this.contestRoom.getAnswer(requestRaw);
+		}
+
+		if (this.contestRoom.isEndContest) { // finish room, stop game
+			Server.contestRoomManager.finishRoom(this.contestRoom.RoomId); // delete this room
+			this.contestRoom = null;
+		}
+	}
+
+	public void runCommand() {// write for fun, just to test
 		try {
 			System.out.println(socket.getInetAddress() + " " + socket.getPort() + " accept");
 			String response = "";

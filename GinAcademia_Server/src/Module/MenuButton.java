@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Rectangle;
 
-import javax.swing.JButton;
+import javax.swing.AbstractButton;
 import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
 import javax.swing.plaf.metal.MetalToggleButtonUI;
 
+@SuppressWarnings("serial")
 public class MenuButton extends JToggleButton{
 	
 	public MenuButton() {
@@ -22,13 +21,27 @@ public class MenuButton extends JToggleButton{
 		this.init();
 	}
 	protected void init() {
-		this.setHorizontalAlignment(SwingConstants.LEFT);
 //		this.setContentAreaFilled(false);
 		
 		this.setUI(new MetalToggleButtonUI() {
 		    @Override
 		    protected Color getSelectColor() {
 		        return new Color(8, 87, 40).brighter();
+		    }
+		    
+		    @Override
+		    protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
+		    	Color fg;
+		    	if(isSelected() || getModel().isArmed() || getModel().isRollover()) {
+		    		fg = Color.WHITE;
+		    	}
+		    		
+		    	else {
+		    		fg = Color.BLACK;
+		    	}
+		    	
+		    	setForeground(fg);
+		    	super.paintText(g, b, textRect, text);
 		    }
 		});
 //		this.setForeground(Color.black);
@@ -37,21 +50,8 @@ public class MenuButton extends JToggleButton{
 		this.setBorder(null);
 		this.setFocusable(false);
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//		this.setVerticalAlignment();
 		
 	}
-	@Override
-    public void paintComponent(Graphics g)
-    {
-        
-        Color fg;
-        if (isSelected()){
-            
-            fg = Color.WHITE;
-        } else {
-            fg = Color.BLACK;
-        }
-        setForeground(fg);
-        super.paintComponent(g);
-    }
 	
 }

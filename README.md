@@ -2,7 +2,7 @@
 
 ## ĐỀ TÀI 12: ỨNG DỤNG TRANH TÀI KIẾN THỨC
 
-Phiên bản hiện tại(Current Version): 3.2
+Phiên bản hiện tại(Current Version): 3.3.2
 
 Đồ án môn Lập trình mạng
 

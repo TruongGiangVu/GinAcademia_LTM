@@ -1,11 +1,13 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
-public class Question {
+@SuppressWarnings("serial")
+public class Question implements Serializable{
 	@SerializedName("QuestionId")
 	private String QuestionId = "";
 	@SerializedName("Question")

@@ -17,13 +17,14 @@
   "CurrentLoseSequence": 0,
   "IQPoint": 90,
   "Image": "",
-  "Status": 0
+  "Status": 0,
+  "player_status": 1
 },{
   "_id": {
     "$oid": "5f8fb4b9875b212dd019cda3"
   },
   "PlayerId": "00002",
-  "Name": "Đỗ Trung Hiếu",
+  "Name": "Đỗ Trung Hiếu1",
   "Username": "user2",
   "Password": "12345",
   "Email": "abc@gmail.com",
@@ -37,7 +38,8 @@
   "CurrentLoseSequence": 0,
   "IQPoint": 0,
   "Image": "",
-  "Status": 0
+  "Status": 0,
+  "player_status": 1
 },{
   "_id": {
     "$oid": "5f8fb4d5875b2115006ccae4"
@@ -77,5 +79,5 @@
   "CurrentLoseSequence": 0,
   "IQPoint": 0,
   "Image": "",
-  "Status": 0
+  "Status": 1
 }]

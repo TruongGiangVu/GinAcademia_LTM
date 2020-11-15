@@ -1,25 +1,29 @@
 package Module;
-import java.awt.Dimension;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+
+import Socket.Client;
+@SuppressWarnings("serial")
 public class ImagePanel extends MyPanel{
 	private ImageIcon img;
-	public ImagePanel() {
+	public ImagePanel(Client client) {
+		super(client);
 		Image temp = new ImageIcon("./img/background.jpg").getImage().getScaledInstance(600, 600, java.awt.Image.SCALE_AREA_AVERAGING);
 		this.img = new ImageIcon(temp);
 		setLayout(null);
 	}
-	public ImagePanel(ImageIcon img) {
+	public ImagePanel(Client client,ImageIcon img) {
+		super(client);
 //		this(new ImageIcon(img).getImage());
 	
 		this.img = img;
 		setLayout(null);
 		
 	}
-	public ImagePanel(Image img,int width, int height) {
-		
+	public ImagePanel(Client client,Image img,int width, int height) {
+		super(client);
 		this.img = new ImageIcon(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH));
 		
 //		Dimension size = new Dimension(img.getWidth(null),img.getHeight(null));

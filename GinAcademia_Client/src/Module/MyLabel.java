@@ -1,16 +1,27 @@
 package Module;
 
-import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Cursor;
 
+import javax.swing.JLabel;
+import javax.swing.border.EmptyBorder;
+
+@SuppressWarnings("serial")
 public class MyLabel extends JLabel{
-	public String theme = "";
+	public int theme = -1;
 	public MyLabel() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.setBorder(new EmptyBorder(10,10,10,10));
+		
+		this.setBackground(Color.WHITE);
+		this.setOpaque(true);
+
+		this.setForeground(Color.BLACK);
+		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//		this.setUI(new );
 	}
 	public MyLabel(String text) {
 		super(text);
-		// TODO Auto-generated constructor stub
 	}
 	
 

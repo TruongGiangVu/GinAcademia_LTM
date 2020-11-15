@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Model.Player;
 
+@SuppressWarnings("serial")
 public class SocketResponseRank extends SocketResponse {
 	ArrayList<Player> arr;
 	public SocketResponseRank(ArrayList<Player> arr) {

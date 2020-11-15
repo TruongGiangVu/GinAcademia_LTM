@@ -37,9 +37,11 @@ public class Client {
 	}
 
 	public void init() {
+		
 		try {
 			this.socket = new Socket(host, port);
-			System.out.println("Socket client");
+			
+			System.out.println("Socket client");	
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 			System.out.println("Socket client");
@@ -48,7 +50,6 @@ public class Client {
 //			this.runCommand();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -98,10 +99,12 @@ public class Client {
 
 	public void sendRequest(SocketRequest request) {
 		try {
-			System.out.println("send Ob");
+			System.out.println("send Ob" + request.getAction());
+			
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {
+			System.out.println("");
 			e.printStackTrace();
 		}
 	}
@@ -155,4 +158,9 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+	
 }

@@ -1,9 +1,9 @@
 
-
 import javax.swing.UIManager;
 
 import Socket.*;
 import GUI.*;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -17,6 +17,7 @@ public class Main {
 //		frame.setVisible(true);
 		Server server = new Server();
 		server.hashCode();
+		
 	}
 
 }
