@@ -36,6 +36,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	private JLabel lblNewLabel;
 
 	public QuestionPanel() {
+		setBackground(Color.WHITE);
 		this.setSize(600, 600);
 		setLayout(null);
 		this.arr = bus.ReadAll();
@@ -57,37 +58,38 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
 		panelTable.add(scrollPane);
 
-		btnAdd = new JButton("Thêm");
-		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 12));
+		btnAdd = new JButton("+");
+		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 16));
 		btnAdd.setBackground(new Color(0, 153, 0));
 		btnAdd.setForeground(Color.WHITE);
-		btnAdd.setBounds(30, 70, 101, 30);
+		btnAdd.setBounds(30, 70, 50, 30);
 		add(btnAdd);
 
 		btnAdd.addActionListener(this);
 
-		btnView = new JButton("Chi tiết");
-		btnView.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnView.setForeground(Color.WHITE);
-		btnView.setBackground(Color.BLUE);
+		btnView = new JButton("i");
+		btnView.setFont(new Font(".VnAristote", Font.BOLD, 20));
+		btnView.setForeground(Color.BLACK);
+		btnView.setBorder(null);
+		btnView.setBackground(null);
 		btnView.addActionListener(this);
-		btnView.setBounds(470, 115, 100, 25);
+		btnView.setBounds(520, 115, 50, 25);
 		add(btnView);
 
 		txtSearch = new JTextField();
-		txtSearch.setBounds(30, 115, 150, 25);
+		txtSearch.setBounds(30, 115, 265, 25);
 		add(txtSearch);
 		txtSearch.setColumns(10);
 
 		btnSearch = new JButton("Tìm kiếm");
-		btnSearch.setBounds(195, 115, 90, 23);
+		btnSearch.setBounds(305, 115, 90, 25);
 		btnSearch.addActionListener(this);
 		add(btnSearch);
 		
-		lblNewLabel = new JLabel("Quản lý câu hỏi");
+		lblNewLabel = new JLabel("Danh sách câu hỏi");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setBounds(30, 15, 205, 40);
+		lblNewLabel.setBounds(30, 15, 365, 40);
 		add(lblNewLabel);
 	}
 

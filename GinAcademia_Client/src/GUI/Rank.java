@@ -1,7 +1,9 @@
 package GUI;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -20,6 +22,7 @@ import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponseRank;
 import javax.swing.JTextField;
+import javax.swing.JButton;
 
 @SuppressWarnings("serial")
 public class Rank extends MyPanel {
@@ -37,6 +40,7 @@ public class Rank extends MyPanel {
 	private ArrayList<Player> listplayer;
 	private RankTableModel tableModel;
 	private JTextField txtSearch;
+	private JButton btnNewButton;
 
 	public Rank(Client client, int status) {
 		super(client);
@@ -65,6 +69,48 @@ public class Rank extends MyPanel {
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
 		listplayer = response.getList();
+<<<<<<< HEAD
+=======
+		
+		this.initTable();
+
+//        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+//        sorter.toggleSortOrder(0);
+//        sorter.addRowSorterListener(new RowSorterListener() {
+//
+//			@Override
+//			public void sorterChanged(RowSorterEvent e) {
+//				// TODO Auto-generated method stub
+//				int indexOfNoColumn = 0;
+//				if(Rank.this.orderRank == 0) {
+//					for (int i = 0; i < table.getRowCount(); i++) {
+//			            table.setValueAt(i + 1, i, indexOfNoColumn);
+//			        }
+//				}
+//				else
+//				{
+//					int n = table.getRowCount();
+//					for (int i = 0; i < n; i++) {
+//			            table.setValueAt(n-i, i, indexOfNoColumn);
+//			        }
+//				}	
+//				Rank.this.orderRank = 1-Rank.this.orderRank;
+//			}
+//        	
+//        });
+//        table.setRowSorter(sorter);
+
+		panelTable = new JPanel();
+		panelTable.setBounds(30, 134, 540, 400);
+		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
+		panelTable.setBackground(Color.WHITE);
+		JScrollPane scrollPane = new JScrollPane(table);
+		panelTable.add(scrollPane);
+
+		add(panelTable);
+		
+		this.initComponent();
+>>>>>>> 1ec9bb464e0faf414d8b61746dd066f6eca1da25
 	}
 
 	private void initTable() {
@@ -112,12 +158,24 @@ public class Rank extends MyPanel {
 
 		JLabel lblSearch = new JLabel("Tìm kiếm: ");
 		lblSearch.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblSearch.setBounds(276, 80, 70, 30);
+		lblSearch.setBounds(240, 80, 70, 30);
 		add(lblSearch);
 
 		txtSearch = new JTextField();
-		txtSearch.setBounds(356, 80, 214, 30);
+		txtSearch.setBounds(315, 80, 214, 30);
 		add(txtSearch);
 		txtSearch.setColumns(10);
+		
+		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH);
+//		Icon icon = new ImageIcon("./img/search_icon.png");
+		
+		btnNewButton = new JButton();
+		btnNewButton.setBounds(539, 80, 31, 30);
+		btnNewButton.setBorder(null);
+		btnNewButton.setOpaque(false);
+		btnNewButton.setBackground(null);
+		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnNewButton.setIcon(new ImageIcon(scaled));
+		add(btnNewButton);
 	}
 }

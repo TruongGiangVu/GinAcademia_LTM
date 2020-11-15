@@ -72,17 +72,19 @@ public class MainFrame extends JFrame {
 		panelButton.add(btnPlayer);
 		
 //		panelContent = new JPanel();
-		panelContent = new QuestionPanel();
+//		panelContent = new QuestionPanel();
+		panelContent = new PlayerManagement();
 		panelContent.setBounds(200, 0, 600, 600);
 		panelContent.setBackground(Color.WHITE);
-//		panelContent.setBorder(new MatteBorder(0,1,0,0, Color.BLACK));
+		panelContent.setBorder(new MatteBorder(2,2,0,0, Color.GRAY));
 		contentPane.add(panelContent);
 		
 		lblNewLabel = new JLabel("MENU");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setBounds(10, 15, 180, 40);
+		lblNewLabel.setBounds(0, 0, 201, 55);
+		lblNewLabel.setBorder(new MatteBorder(2,0,2,0,Color.GRAY));
 		contentPane.add(lblNewLabel);
 	}
 }
