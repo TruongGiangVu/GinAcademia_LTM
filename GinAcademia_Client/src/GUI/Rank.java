@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -69,36 +70,8 @@ public class Rank extends MyPanel {
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
 		listplayer = response.getList();
-<<<<<<< HEAD
-=======
 		
 		this.initTable();
-
-//        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
-//        sorter.toggleSortOrder(0);
-//        sorter.addRowSorterListener(new RowSorterListener() {
-//
-//			@Override
-//			public void sorterChanged(RowSorterEvent e) {
-//				// TODO Auto-generated method stub
-//				int indexOfNoColumn = 0;
-//				if(Rank.this.orderRank == 0) {
-//					for (int i = 0; i < table.getRowCount(); i++) {
-//			            table.setValueAt(i + 1, i, indexOfNoColumn);
-//			        }
-//				}
-//				else
-//				{
-//					int n = table.getRowCount();
-//					for (int i = 0; i < n; i++) {
-//			            table.setValueAt(n-i, i, indexOfNoColumn);
-//			        }
-//				}	
-//				Rank.this.orderRank = 1-Rank.this.orderRank;
-//			}
-//        	
-//        });
-//        table.setRowSorter(sorter);
 
 		panelTable = new JPanel();
 		panelTable.setBounds(30, 134, 540, 400);
@@ -110,7 +83,6 @@ public class Rank extends MyPanel {
 		add(panelTable);
 		
 		this.initComponent();
->>>>>>> 1ec9bb464e0faf414d8b61746dd066f6eca1da25
 	}
 
 	private void initTable() {
