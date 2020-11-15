@@ -16,8 +16,8 @@ public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
 	ContestRoom contestRoom = null;
-	ObjectInputStream receiver;
-	ObjectOutputStream sender;
+	ObjectInputStream receiver = null;
+	ObjectOutputStream sender = null;
 	PlayerBUS bus = new PlayerBUS();
 	boolean isLoggedIn = false;
 	Player player = null;
@@ -40,7 +40,11 @@ public class ClientHandler implements Runnable {
 			while (true) {
 				// get request from client
 				SocketRequest requestRaw = receiveRequest();
-
+				// check if client off super idiot
+				if(!this.socket.isConnected() || this.socket.isClosed()) {
+					this.close();
+					return;
+				}
 				// check request
 				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) { // if client request login
 					if (this.isValidateClient(requestRaw)) { // check data, and get this.player
@@ -64,12 +68,15 @@ public class ClientHandler implements Runnable {
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
 					isLoggedIn = false;
 					// remove player
+					if(this.contestRoom != null) {
+						this.contestRoom.removePlayer(player);
+						this.contestRoom = null;
+					}
 					Server.clients.remove(Server.getIndexOf(this.id));
 					this.close();
 					break;
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) {
-//					new RequestProcess(this, requestRaw).init();
-//					System.out.println("contest request");
+					// send to contest
 					this.contest(requestRaw);
 				} else {
 					// if not login or disconnect, create new Thread and solve it, then delete this
@@ -78,24 +85,18 @@ public class ClientHandler implements Runnable {
 			}
 			this.close();
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			this.close();
 			System.out.println("Client thoat ngu vl");
 		}
 	}
 
-	private void close() throws IOException {
-		this.sender.close();
-		this.receiver.close();
-		this.socket.close();
-	}
-
-	private void sendResponse(String request) {
+	private void close() {
 		try {
-			sender.writeUTF(request);
-			sender.flush();
+			this.sender.close();
+			this.receiver.close();
+			this.socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -105,16 +106,21 @@ public class ClientHandler implements Runnable {
 		try {
 			sender.writeObject(response);
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.close();
 		}
 	}
 
-	protected SocketRequest receiveRequest() throws IOException, ClassNotFoundException {
+	protected SocketRequest receiveRequest() {
 		SocketRequest request = null;
-		request = (SocketRequest) receiver.readObject();
-		if (request == null) {
-			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"));
+		try {
+			request = (SocketRequest) receiver.readObject();
+			if (request == null) {
+				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"));
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			this.close();
 		}
+
 		return request;
 	}
 
@@ -144,38 +150,6 @@ public class ClientHandler implements Runnable {
 		if (this.contestRoom.isEndContest) { // finish room, stop game
 			Server.contestRoomManager.finishRoom(this.contestRoom.RoomId); // delete this room
 			this.contestRoom = null;
-		}
-	}
-
-	public void runCommand() {// write for fun, just to test
-		try {
-			System.out.println(socket.getInetAddress() + " " + socket.getPort() + " accept");
-			String response = "";
-			while (true) {
-				// code
-				String request = receiver.readUTF();
-				System.out.println(socket.getInetAddress() + " " + socket.getPort() + ": " + request);
-				if (request.equals("exit")) {
-					System.out.println(socket.getInetAddress() + " " + socket.getPort() + ": has died.");
-					break;
-				} else {
-					String[] split = request.split(" ");
-					switch (split[0]) {
-					case "player":
-						Player p = bus.getPlayerById(split[1]);
-						response = p.toJson();
-						break;
-					default:
-						response = request;
-					}
-				}
-				this.sendResponse(response);
-
-			}
-			this.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

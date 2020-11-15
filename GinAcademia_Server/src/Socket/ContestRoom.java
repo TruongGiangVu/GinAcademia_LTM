@@ -55,11 +55,11 @@ public class ContestRoom {
 			// start contest
 			this.startContest();
 		}
-		System.out.println(this.players.size());
+		System.out.println("Num player:" +this.players.size());
 	}
 
 	public void removePlayer(Player player) {
-		int index = this.players.indexOf(player);
+		int index = this.indexOfPlayer(player);
 		if (index >= 0) {
 			this.playerBus.updateLose(player);
 			this.players.remove(index);
@@ -68,6 +68,7 @@ public class ContestRoom {
 			int num = this.config.getNumPlayer();
 			this.config.setNumPlayer(num - 1);
 		}
+		System.out.println("Num player:" +this.players.size());
 	}
 
 	public boolean isRoomAvailable() {
