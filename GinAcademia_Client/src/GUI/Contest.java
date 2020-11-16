@@ -40,7 +40,7 @@ public class Contest extends MyPanel implements MouseListener {
 	private MyLabel txtC;
 	private MyLabel txtD;
 	private ArrayList<MyLabel> arrTxt = new ArrayList<MyLabel>();
-	MainFrame parent;
+	private MainFrame parent;
 
 	private OptionChoose optionColor = new OptionChoose();
 
@@ -71,8 +71,8 @@ public class Contest extends MyPanel implements MouseListener {
 		this.initQuestion();
 		this.initHeader();
 
-		parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
-		parent.setActiveMenuButton(false);
+//		parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+//		parent.setActiveMenuButton(false);
 		this.initContest();
 	}
 
@@ -239,7 +239,7 @@ public class Contest extends MyPanel implements MouseListener {
 		}
 	}
 
-	private void showDialog(String message) { // dialog enf game
+	private void showDialog(String message) { // dialog end game
 		String[] options = { "Tiếp tục", "Dừng chơi" };
 		int result = JOptionPane.showOptionDialog(this, message, "Bạn có muốn chơi tiếp không?",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom icon
@@ -247,14 +247,14 @@ public class Contest extends MyPanel implements MouseListener {
 				options[0] // default button
 		);
 		if (result == JOptionPane.YES_OPTION) {
-			parent.clickStart();
+//			parent.clickStart();
 		} else if (result == JOptionPane.NO_OPTION) {
-			parent.setActiveMenuButton(true);
-			parent.clickReturenHome();
+//			parent.setActiveMenuButton(true);
+//			parent.clickReturenHome();
 
 		} else {
-			parent.setActiveMenuButton(true);
-			parent.clickReturenHome();
+//			parent.setActiveMenuButton(true);
+//			parent.clickReturenHome();
 		}
 	}
 
