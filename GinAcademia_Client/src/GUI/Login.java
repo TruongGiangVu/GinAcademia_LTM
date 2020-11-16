@@ -149,7 +149,7 @@ public class Login extends JFrame {
 		});
 		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
 		label_1.setForeground(new Color(8, 87, 40));
-		label_1.setBounds(540, 327, 94, 14);
+		label_1.setBounds(535, 305, 94, 14);
 		contentPane.add(label_1);
 
 		btnNewButton = new JButton("Đăng nhập");
