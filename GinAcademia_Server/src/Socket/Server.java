@@ -71,7 +71,6 @@ public class Server {
 
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
-
 		int n = clients.size();
 		System.out.println("Size clients:" + n);
 		if (n <= 1)
@@ -89,6 +88,12 @@ public class Server {
 			}
 		System.out.println("is Exist: " + isExist);
 		return isExist;
+	}
+	
+	public static void signOutPlayer(int id) {
+		clients.remove(getIndexOf(id));
+		int n = clients.size();
+		System.out.println("Size clients:" + n);
 	}
 
 	public static int getIndexOf(int id) {

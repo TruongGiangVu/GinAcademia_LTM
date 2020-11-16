@@ -42,38 +42,13 @@ public class ClientHandler implements Runnable {
 				SocketRequest requestRaw = receiveRequest();
 				// check if client off super idiot
 				if(!this.socket.isConnected() || this.socket.isClosed()) {
-					this.close();
-					return;
+					break;
 				}
 				// check request
 				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) { // if client request login
-					if (this.isValidateClient(requestRaw)) { // check data, and get this.player
-						if (this.player.getStatus() == 1) { // if client is blocked
-							sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-									"Tài khoản này đã bị khóa!"));
-						} else if (this.player.getStatus() == 0) {
-							if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
-								sendResponse(
-										new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-												"Tài khoản này hiện đang online ở một thiết bị khác!"));
-							} else { // login OK
-								isLoggedIn = true;
-								sendResponse(new SocketResponsePlayer(this.player));
-							}
-						}
-					} else { // data wrong
-						sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-								"Tài khoản hoặc mật khẩu không đúng."));
-					}
+					this.loginPlayerProcess(requestRaw);
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
-					isLoggedIn = false;
-					// remove player
-					if(this.contestRoom != null) {
-						this.contestRoom.removePlayer(player);
-						this.contestRoom = null;
-					}
-					Server.clients.remove(Server.getIndexOf(this.id));
-					this.close();
+					this.disconnectProcess();
 					break;
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) {
 					// send to contest
@@ -122,6 +97,40 @@ public class ClientHandler implements Runnable {
 		}
 
 		return request;
+	}
+	private void loginPlayerProcess(SocketRequest requestRaw) {
+		if (this.isValidateClient(requestRaw)) { // check data, and get this.player
+			if (this.player.getStatus() == 1) { // if client is blocked
+				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+						"Tài khoản này đã bị khóa!"));
+			} else if (this.player.getStatus() == 0) {
+				if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
+					sendResponse(
+							new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+									"Tài khoản này hiện đang online ở một thiết bị khác!"));
+				} else { // login OK
+					isLoggedIn = true;
+					sendResponse(new SocketResponsePlayer(this.player));
+				}
+			}
+		} else { // data wrong
+			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+					"Tài khoản hoặc mật khẩu không đúng."));
+		}
+	}
+	private void disconnectProcess() {
+		isLoggedIn = false;
+		// remove player
+		if(this.contestRoom != null) {
+			this.contestRoom.removePlayer(player);
+			if(this.contestRoom.amountOfPlayerInGame() == 0) {
+				Server.contestRoomManager.finishRoom(this.contestRoom.RoomId);
+			}
+			this.contestRoom = null;
+		}
+		// sign out off server by id of clientHandler
+		Server.signOutPlayer(this.id); 
+		this.close();
 	}
 
 	private boolean isValidateClient(SocketRequest requestRaw) { // check data

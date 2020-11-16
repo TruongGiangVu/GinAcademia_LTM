@@ -147,7 +147,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		pnRank = new Rank(client,0);
 		panelContent.add(pnRank,"rank");
 		
-		pnContest = new Contest(client,0);
+		pnContest = new Contest(this,client,0);
 		pnContest.setClientSocket(client);
 		panelContent.add(pnContest,"contest");
 		
@@ -240,7 +240,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 	}
 	public void clickStart() {
 		deck.removeLayoutComponent(pnContest);
-		this.pnContest= new Contest(client,1);
+		this.pnContest= new Contest(this,client,1);
 		panelContent.add(pnContest,"contest");
 		deck.show(panelContent, "contest");
 	}
