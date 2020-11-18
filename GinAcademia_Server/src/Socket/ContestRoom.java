@@ -125,6 +125,9 @@ public class ContestRoom {
 		else
 			return false;
 	}
+	public int amountOfPlayerInGame() {
+		return this.players.size();
+	}
 
 	public int amountOfPlayerInGame() {
 		return this.players.size();

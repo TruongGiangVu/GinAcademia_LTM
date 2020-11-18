@@ -28,6 +28,7 @@ import Module.MyRegEx;
 import Socket.Client;
 import Module.ImagePanel;
 
+
 @SuppressWarnings("serial")
 public class Login extends JFrame {
 	private Client client;
@@ -235,7 +236,7 @@ public class Login extends JFrame {
 	public void loginPlayer() {
 		MainFrame frame;
 		if (this.client.getSocket() == null) {
-			JOptionPane.showMessageDialog(this, "Khong the ket noi toi may chu");
+			JOptionPane.showMessageDialog(this, "Khổng thể kết nối tới máy chủ");
 			return;
 		}
 		if (this.checkData()) {

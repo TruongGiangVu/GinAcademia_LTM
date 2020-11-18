@@ -168,7 +168,6 @@ public class ClientHandler implements Runnable {
 			this.contestRoom = null;
 		}
 	}
-// deo hieu, thay t nhan nhan r , ahihi
 	private void cancelContest() {
 		this.isInGame = false;
 		this.contestRoom.leaveRoom(this);
@@ -180,4 +179,7 @@ public class ClientHandler implements Runnable {
 				"cancelGame"));
 	}
 
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
 }

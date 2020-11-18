@@ -74,7 +74,6 @@ public class Contest extends MyPanel implements MouseListener {
 		this.setSize(600, 600);
 		this.setBackground(Color.WHITE);
 
-		this.initQuestion();
 		this.initHeader();
 
 		parent.setActiveMenuButton(false);
@@ -133,11 +132,11 @@ public class Contest extends MyPanel implements MouseListener {
 		lblYourname.setBounds(40, 23, 188, 35);
 		add(lblYourname);
 
-		lblEnemyname = new JLabel("abc");
+		lblEnemyname = new JLabel("");
 		lblEnemyname.setBounds(402, 23, 188, 35);
 		add(lblEnemyname);
 
-		lblEnemyPoint = new JLabel("0");
+		lblEnemyPoint = new JLabel("");
 		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblEnemyPoint.setBounds(412, 55, 98, 22);
 		add(lblEnemyPoint);
@@ -170,7 +169,6 @@ public class Contest extends MyPanel implements MouseListener {
 		this.txtC.setEnabled(en);
 		this.txtD.setEnabled(en);
 	}
-
 	public void initContest() {
 		System.out.println("Start contest");
 //		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
@@ -182,6 +180,7 @@ public class Contest extends MyPanel implements MouseListener {
 				this.initNamePlayer(responseContest);
 			}
 		}
+		this.initQuestion();
 		SocketResponse responseQuestion = client.getResponse(); // get first question
 		if (responseQuestion.getAction().equals(SocketResponse.Action.CONTEST)) {
 			if (responseQuestion.getMessage().equals("question")) {
@@ -277,6 +276,7 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	private void initNamePlayer(SocketResponse response) { // update name init
+//		Socket nhận phản hồi answer từ server trả về
 		SocketResponseContest contest = (SocketResponseContest) response;
 		int n = contest.players.size();
 		for (int i = 0; i < n; ++i) {
@@ -284,7 +284,7 @@ public class Contest extends MyPanel implements MouseListener {
 				this.lblEnemyname.setText(contest.players.get(i).getName());
 		}
 	}
-
+//	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
 		System.out.println("update Point");
 		int n = points.size();

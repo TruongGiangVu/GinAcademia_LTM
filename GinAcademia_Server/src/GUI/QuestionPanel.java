@@ -94,29 +94,38 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	}
 
 	public void RefreshTableData() {
-		tableModel = new DefaultTableModel();
-		tableModel.setColumnIdentifiers(new Object[] { "Id", "Câu hỏi", "Câu A", "Câu B", "Câu C", "Câu D", "Đáp án" });
+		this.RemoveTableData();
+//		tableModel.removeRow();
+//		tableModel.remove
 		int n = arr.size();
 //	    Object[][] rows = new Object[n][8];
 		for (int i = 0; i < n; i++) {
 			Object[] row = { arr.get(i).getId(), arr.get(i).getQuestion(), arr.get(i).getOptions().get(0).Option,
 					arr.get(i).getOptions().get(1).Option, arr.get(i).getOptions().get(2).Option,
 					arr.get(i).getOptions().get(3).Option, arr.get(i).getAnswerString() };
-			tableModel.addRow(row);
+			this.tableModel.addRow(row);
 		}
-		table.setModel(tableModel);
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		table.getColumnModel().getColumn(2).setPreferredWidth(30);
-		table.getColumnModel().getColumn(3).setPreferredWidth(30);
-		table.getColumnModel().getColumn(4).setPreferredWidth(30);
-		table.getColumnModel().getColumn(5).setPreferredWidth(30);
-		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		this.SetTableData();
 	}
-
+	public void AddData() {
+		int n = arr.size() - 1;
+		Object[] row = {arr.get(n).getId(), arr.get(n).getQuestion(), arr.get(n).getOptions().get(0).Option,
+				arr.get(n).getOptions().get(1).Option, arr.get(n).getOptions().get(2).Option,
+				arr.get(n).getOptions().get(3).Option, arr.get(n).getAnswerString() };
+		this.tableModel.addRow(row);
+		this.tableModel.fireTableDataChanged();
+	}
+	public void UpdateData(int i, Question p) {
+		Object[] row = {arr.get(i).getId(), arr.get(i).getQuestion(), arr.get(i).getOptions().get(0).Option,
+				arr.get(i).getOptions().get(1).Option, arr.get(i).getOptions().get(2).Option,
+				arr.get(i).getOptions().get(3).Option, arr.get(i).getAnswerString() };
+		for(int j = 0; j < this.tableModel.getColumnCount();j++) {
+			this.tableModel.setValueAt(row[j], i, j);
+		}
+		this.tableModel.fireTableDataChanged();
+	}
 	public void RefreshTableData(ArrayList<Question> arrl) {
-		tableModel = new DefaultTableModel();
-		tableModel.setColumnIdentifiers(new Object[] { "Id", "Câu hỏi", "Câu A", "Câu B", "Câu C", "Câu D", "Đáp án" });
+		this.RemoveTableData();
 		int n = arrl.size();
 		for (int i = 0; i < n; i++) {
 			Object[] row = { arrl.get(i).getId(), arrl.get(i).getQuestion(), arrl.get(i).getOptions().get(0).Option,
@@ -124,16 +133,23 @@ public class QuestionPanel extends JPanel implements ActionListener {
 					arrl.get(i).getOptions().get(3).Option, arrl.get(i).getAnswerString() };
 			tableModel.addRow(row);
 		}
-		table.setModel(tableModel);
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		table.getColumnModel().getColumn(2).setPreferredWidth(30);
-		table.getColumnModel().getColumn(3).setPreferredWidth(30);
-		table.getColumnModel().getColumn(4).setPreferredWidth(30);
-		table.getColumnModel().getColumn(5).setPreferredWidth(30);
-		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		this.SetTableData();
 	}
-
+	public void RemoveTableData() {
+		this.tableModel = (DefaultTableModel) this.table.getModel();
+		this.tableModel.setRowCount(0);
+	}
+	public void SetTableData() {
+		
+		this.table.setModel(this.tableModel);
+		this.table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		this.table.getColumnModel().getColumn(1).setPreferredWidth(150);
+		this.table.getColumnModel().getColumn(2).setPreferredWidth(30);
+		this.table.getColumnModel().getColumn(3).setPreferredWidth(30);
+		this.table.getColumnModel().getColumn(4).setPreferredWidth(30);
+		this.table.getColumnModel().getColumn(5).setPreferredWidth(30);
+		this.table.getColumnModel().getColumn(6).setPreferredWidth(20);
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JButton source = (JButton) e.getSource();
@@ -154,7 +170,8 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		if (p != null) {
 			bus.insert(p);
 			arr.add(p);
-			this.RefreshTableData();
+			this.AddData();
+//			this.RefreshTableData();
 		}
 	}
 
@@ -170,7 +187,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 			if (p != null) {
 				bus.update(p);
 				arr.set(i, p);
-				this.RefreshTableData();
+				this.UpdateData(i, p);
 			}
 		} else {
 			JOptionPane.showMessageDialog(this, "Xin hãy chọn câu hỏi bạn muốn xem!");

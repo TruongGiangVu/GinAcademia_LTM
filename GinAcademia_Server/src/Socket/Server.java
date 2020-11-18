@@ -11,6 +11,7 @@ import Model.GameConfig;
 
 public class Server {
 	public static ArrayList<ClientHandler> clients;
+	
 //	private ExecutorService pool;
 	public static ContestRoomManager contestRoomManager;
 	private ExecutorService pool;
@@ -67,16 +68,15 @@ public class Server {
 		}
 		pool.shutdown();
 	}
-
+	
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
 		int n = clients.size();
-		System.out.println("Size clients:" + n);
-		if (n <= 1)
+		System.out.println("Username:" + username);
+		if (n < 1)
 			isExist = false;
 		else
 			for (int i = 0; i < n; ++i) {
-				System.out.print(i+" ");
 				if(clients.get(i).isLoggedIn) {
 					if (username.equals(clients.get(i).player.getUsername())) {
 						
