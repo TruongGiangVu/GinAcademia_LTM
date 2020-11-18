@@ -11,13 +11,13 @@ import java.awt.Component;
 import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
-public class PlayerManagement extends JPanel {
+public class PlayerPanel extends JPanel {
 	private JTextField textField;
 
 	/**
 	 * Create the panel.
 	 */
-	public PlayerManagement() {
+	public PlayerPanel() {
 		setBackground(Color.WHITE);
 		setLayout(null);
 		
@@ -42,9 +42,9 @@ public class PlayerManagement extends JPanel {
 		btnSearch.setBounds(305, 115, 90, 25);
 		add(btnSearch);
 		
-		JButton btnI = new JButton("i");
-		btnI.setForeground(Color.BLACK);
-		btnI.setFont(new Font(".VnAristote", Font.BOLD, 20));
+		JButton btnI = new JButton("X");
+		btnI.setForeground(new Color(255, 0, 0));
+		btnI.setFont(new Font("SansSerif", Font.BOLD, 15));
 		btnI.setBorder(null);
 		btnI.setBackground(null);
 		btnI.setBounds(520, 115, 50, 25);

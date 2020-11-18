@@ -244,7 +244,7 @@ public class MainFrame extends MyFrame implements MouseListener,ActionListener{
 		panelContent.add(pnContest,"contest");
 		deck.show(panelContent, "contest");
 	}
-	public void clickReturenHome() {
+	public void clickReturnHome() {
 		deck.removeLayoutComponent(pnHome);
 		this.pnHome = new Home(client,this.img);
 		panelContent.add(pnHome,"home");

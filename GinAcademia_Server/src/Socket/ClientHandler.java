@@ -142,8 +142,17 @@ public class ClientHandler implements Runnable {
 		}
 		if (this.contestRoom == null) { // doesn't have room -> join room
 			this.contestRoom = Server.contestRoomManager.findingAvailableRoom();
+
+			this.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+										"new"));
+			
+
 			this.contestRoom.joinGame(player, this);
+				
+			
 		} else if (requestRaw.getMessage().equals("answer")) { // has room, player answer Question
+			this.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+					"old"));
 			this.contestRoom.getAnswer(requestRaw);
 		}
 
@@ -152,5 +161,7 @@ public class ClientHandler implements Runnable {
 			this.contestRoom = null;
 		}
 	}
-
+	public boolean isLoggedIn() {
+		return isLoggedIn;
+	}
 }
