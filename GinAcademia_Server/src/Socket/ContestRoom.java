@@ -18,6 +18,7 @@ import BUS.PlayerBUS;
 
 public class ContestRoom {
 	public int RoomId = -1;
+	private boolean isClocked = false;
 	public GameConfig config;
 	public QuestionBUS questionBus = new QuestionBUS();
 	public PlayerBUS playerBus = new PlayerBUS();
@@ -41,7 +42,13 @@ public class ContestRoom {
 		this.questions = questionBus.ReadContest(this.config.getNumQuestion());
 	}
 
+	public boolean isClocked() {
+		return isClocked;
+	}
+
 	public void joinGame(Player player, ClientHandler client) {
+		if (this.isClocked)
+			return;
 		if (this.players.size() < this.config.getNumPlayer()) {
 			this.players.add(player);
 			this.clients.add(client);
@@ -49,13 +56,14 @@ public class ContestRoom {
 			this.answers.add(0);
 		}
 		if (this.players.size() == this.config.getNumPlayer()) {
+			this.isClocked = true;
 			System.out.println("start contest");
 			this.sendStartContest(); // announce to all players about starting game
 
 			// start contest
 			this.startContest();
 		}
-		System.out.println("Num player:" +this.players.size());
+		System.out.println("Num player:" + this.players.size());
 	}
 
 	public void removePlayer(Player player) {
@@ -68,15 +76,22 @@ public class ContestRoom {
 			int num = this.config.getNumPlayer();
 			this.config.setNumPlayer(num - 1);
 		}
-		System.out.println("Num player:" +this.players.size());
+		if (this.players.size() == 0)
+			System.out.println("Num player:" + this.players.size());
 	}
 
 	public boolean isRoomAvailable() {
+		if (this.isClocked)
+			return false;
 		if (this.players.size() < this.config.getNumPlayer())
 			return true;
 		else
 			return false;
 	}
+	public int amountOfPlayerInGame() {
+		return this.players.size();
+	}
+
 	public int amountOfPlayerInGame() {
 		return this.players.size();
 	}
@@ -240,7 +255,8 @@ public class ContestRoom {
 					new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thua!"));
 		}
 
-		this.isEndContest = true; // to delete this game room
+		this.isEndContest = true; // for deleting this game room
+		Server.contestRoomManager.finishRoom(RoomId);
 	}
 
 }

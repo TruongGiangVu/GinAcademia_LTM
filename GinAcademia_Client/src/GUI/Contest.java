@@ -56,9 +56,10 @@ public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblEnemyPoint;
 	private JLabel lblYourname;
 
-	public Contest(Client client, int status) {
+	public Contest(MainFrame parent,Client client, int status) {
 		super(client);
 		this.player = client.getPlayer();
+		this.parent = parent;
 		if (status == 1)
 			init();
 	}
@@ -69,9 +70,9 @@ public class Contest extends MyPanel implements MouseListener {
 		this.setBackground(Color.WHITE);
 
 		this.initHeader();
+
 		
-//		parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
-//		parent.setActiveMenuButton(false);
+		parent.setActiveMenuButton(false);
 		this.initContest();
 	}
 
@@ -249,14 +250,14 @@ public class Contest extends MyPanel implements MouseListener {
 				options[0] // default button
 		);
 		if (result == JOptionPane.YES_OPTION) {
-//			parent.clickStart();
+			parent.clickStart();
 		} else if (result == JOptionPane.NO_OPTION) {
-//			parent.setActiveMenuButton(true);
-//			parent.clickReturenHome();
+			parent.setActiveMenuButton(true);
+			parent.clickReturenHome();
 
 		} else {
-//			parent.setActiveMenuButton(true);
-//			parent.clickReturenHome();
+			parent.setActiveMenuButton(true);
+			parent.clickReturenHome();
 		}
 	}
 
