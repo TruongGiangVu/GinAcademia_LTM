@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import Model.Player;
 import Socket.Request.SocketRequest;
@@ -18,9 +20,8 @@ public class Client {
 	int port = 5000;
 
 	Socket socket;
-	ObjectInputStream receiver;
-	ObjectOutputStream sender;
-	BufferedReader stdIn = null;
+	public ObjectInputStream receiver;
+	public ObjectOutputStream sender;
 
 	public boolean isLogin = false;
 	public Player player = null;
@@ -37,18 +38,10 @@ public class Client {
 	}
 
 	public void init() {
-		
 		try {
 			this.socket = new Socket(host, port);
-			
-			System.out.println("Socket client");	
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
-			System.out.println("Socket client");
-//			stdIn = new BufferedReader(new InputStreamReader(System.in));
-
-//			this.runCommand();
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -82,29 +75,16 @@ public class Client {
 			this.receiver.close();
 			this.socket.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void sendRequest(String str) {
-		try {
-			System.out.println("send str");
-			sender.writeUTF(str);
-			sender.flush();
-		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void sendRequest(SocketRequest request) {
 		try {
-			System.out.println("send Ob" + request.getAction());
-			
 			sender.writeObject(request);
 			sender.flush();
 		} catch (IOException e) {
-			System.out.println("");
+			System.out.println("loi");
 			e.printStackTrace();
 		}
 	}
@@ -116,8 +96,11 @@ public class Client {
 	public SocketResponse getResponse() {
 		SocketResponse response = null;
 		try {
-			System.out.println("get Ob");
-			response = (SocketResponse) this.receiver.readObject();
+//			response = (SocketResponse) this.receiver.readObject();
+			Object object = this.receiver.readObject();
+			System.out.println("a: "+object.getClass()); 
+			System.out.println("b:"+object.toString()); 
+			response = (SocketResponse)object;
 			this.message = response.getMessage();
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
@@ -125,42 +108,7 @@ public class Client {
 		return response;
 	}
 
-	// test
-	public void runCommand() {
-		try {
-			System.out.println("Connect successfully:");
-			String response = "";
-			while (true) {
-				System.out.print("Input: ");
-				String request = stdIn.readLine();
-				sender.writeUTF(request);
-				sender.flush();
-				if (request.equals("exit")) {
-					System.out.println("Stop connection:");
-					break;
-				} else {
-					response = this.receiver.readUTF();
-					String[] split = request.split(" ");
-					switch (split[0]) {
-					case "player":
-//						Player p = gson.fromJson(response, Player.class);
-						Player p = new Player().ToObject(response);
-						response = p.toString();
-						break;
-					default:
-						response = request;
-					}
-				}
-				System.out.println("GET: " + response);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public Socket getSocket() {
 		return socket;
 	}
-	
 }

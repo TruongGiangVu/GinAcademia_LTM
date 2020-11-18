@@ -27,7 +27,7 @@ public class Server {
 			pool = Executors.newCachedThreadPool();
 			contestRoomManager = new ContestRoomManager(this.config);
 			clients = new ArrayList<ClientHandler>();
-			server = new ServerSocket(1234);
+			server = new ServerSocket(5000);
 			System.out.println("Waiting client connect ....");
 
 			this.running();
@@ -36,7 +36,6 @@ public class Server {
 			this.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Client off ngu vl");
 //			e.printStackTrace();
 		}

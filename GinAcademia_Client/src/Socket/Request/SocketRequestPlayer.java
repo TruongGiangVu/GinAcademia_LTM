@@ -2,8 +2,8 @@ package Socket.Request;
 
 import Model.Player;
 
-@SuppressWarnings("serial")
 public class SocketRequestPlayer extends SocketRequest {
+	private static final long serialVersionUID = 1L;
 	public Player player;
 	public SocketRequestPlayer(SocketRequest.Action action,Player player) {
 		// TODO Auto-generated constructor stub

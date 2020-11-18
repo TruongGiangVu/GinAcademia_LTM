@@ -26,6 +26,7 @@ public class ContestRoom {
 	public int currentQ = 0;
 	public Player winner = null;
 	public int countAns = 0;
+	public int accept = 0;
 
 	public boolean isEndContest = false;
 
@@ -46,16 +47,33 @@ public class ContestRoom {
 		return isClocked;
 	}
 
-	public void joinGame(Player player, ClientHandler client) {
+	public void joinGame(ClientHandler client) {
+		System.out.println(client.player.getId() +" join Game "+ RoomId);
 		if (this.isClocked)
 			return;
 		if (this.players.size() < this.config.getNumPlayer()) {
-			this.players.add(player);
+			this.players.add(client.player);
 			this.clients.add(client);
 			this.points.add(0);
 			this.answers.add(0);
 		}
 		if (this.players.size() == this.config.getNumPlayer()) {
+			int n = this.clients.size();
+			for (int i = 0; i < n; ++i) {
+				this.clients.get(i).isInGame = true; 
+				System.out.println(this.clients.get(i).player.getId() +" ");
+			}
+
+			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"));
+
+			
+
+			try { // delay 1s for client open ContestPanel
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
 			this.isClocked = true;
 			System.out.println("start contest");
 			this.sendStartContest(); // announce to all players about starting game
@@ -63,21 +81,40 @@ public class ContestRoom {
 			// start contest
 			this.startContest();
 		}
-		System.out.println("Num player:" + this.players.size());
+		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
+		int n = this.clients.size();
+		for (int i = 0; i < n; ++i) {
+			System.out.println(this.clients.get(i).player.getId() +" in Game");
+		}
 	}
 
-	public void removePlayer(Player player) {
-		int index = this.indexOfPlayer(player);
+	public void leaveRoom(ClientHandler client) {
+		System.out.println(client.player.getId() +" leave Game "+ RoomId);
+		if (this.isClocked)
+			return;
+		int index = this.indexOfPlayer(client.player);
 		if (index >= 0) {
-			this.playerBus.updateLose(player);
+			this.clients.remove(index);
+			this.players.remove(index);
+			this.points.remove(index);
+			this.answers.remove(index);
+		}
+		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
+	}
+
+	public void removePlayer(ClientHandler client) {
+		int index = this.indexOfPlayer(client.player);
+		if (index >= 0) {
+			this.playerBus.updateLose(client.player);
 			this.players.remove(index);
 			this.points.remove(index);
 			this.clients.remove(index);
+			this.answers.remove(index);
 			int num = this.config.getNumPlayer();
 			this.config.setNumPlayer(num - 1);
 		}
-		if (this.players.size() == 0)
-			System.out.println("Num player:" + this.players.size());
+//		if (this.players.size() == 0)
+		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
 	}
 
 	public boolean isRoomAvailable() {
@@ -163,13 +200,11 @@ public class ContestRoom {
 	}
 
 	public void sendQuestionToAll() {
-		System.out.println("send Question");
 		this.countAns = 0;
 		this.sendALL(new SocketResponseQuestion(this.questions.get(this.currentQ)));
 	}
 
-	public void sendStartContest() {
-		System.out.println("send point");
+	private void sendStartContest() {
 		this.sendALL(new SocketResponseContest(this.players, this.points));
 
 		System.out.print("Points: ");
@@ -252,8 +287,18 @@ public class ContestRoom {
 					new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thua!"));
 		}
 
+		this.refreshGameOfClient();
+
 		this.isEndContest = true; // for deleting this game room
 		Server.contestRoomManager.finishRoom(RoomId);
+	}
+
+	private void refreshGameOfClient() {
+		int n = this.clients.size();
+		for (int i = 0; i < n; ++i) {
+			this.clients.get(i).isInGame = false;
+			this.clients.get(i).contestRoom = null;
+		}
 	}
 
 }

@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -56,12 +55,18 @@ public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblEnemyPoint;
 	private JLabel lblYourname;
 
-	public Contest(MainFrame parent,Client client, int status) {
+	public Contest(MainFrame parent,Client client) {
 		super(client);
 		this.player = client.getPlayer();
 		this.parent = parent;
-		if (status == 1)
-			init();
+	}
+	public Contest(MainFrame parent,Client client,int i) {
+		super(client);
+		this.player = client.getPlayer();
+		this.parent = parent;
+		init();
+//		this.initContest(contest, question);
+		this.initContest();
 	}
 
 	public void init() {
@@ -72,9 +77,7 @@ public class Contest extends MyPanel implements MouseListener {
 		this.initQuestion();
 		this.initHeader();
 
-		
 		parent.setActiveMenuButton(false);
-		this.initContest();
 	}
 
 	private void initQuestion() {
@@ -170,7 +173,7 @@ public class Contest extends MyPanel implements MouseListener {
 
 	public void initContest() {
 		System.out.println("Start contest");
-		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
+//		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
 		if (responseContest.getAction().equals(SocketResponse.Action.CONTEST)) {
@@ -186,6 +189,7 @@ public class Contest extends MyPanel implements MouseListener {
 				this.loadQuestion(question.getQuestion());
 			}
 		}
+		
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
@@ -248,7 +252,7 @@ public class Contest extends MyPanel implements MouseListener {
 				options[0] // default button
 		);
 		if (result == JOptionPane.YES_OPTION) {
-			parent.clickStart();
+//			parent.clickStart();
 		} else if (result == JOptionPane.NO_OPTION) {
 			parent.setActiveMenuButton(true);
 			parent.clickReturenHome();

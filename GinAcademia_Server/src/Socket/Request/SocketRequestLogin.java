@@ -1,8 +1,8 @@
 package Socket.Request;
 
-@SuppressWarnings("serial")
 public class SocketRequestLogin extends SocketRequest {
-    public String username;
+	private static final long serialVersionUID = 1L;
+	public String username;
     public String password;
 
     public SocketRequestLogin(String username, String password) {

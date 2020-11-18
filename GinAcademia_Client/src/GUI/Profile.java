@@ -13,10 +13,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -230,6 +232,24 @@ public class Profile extends MyPanel implements ActionListener {
 		this.loadGame();
 		this.activeText(false);
 
+//		SwingWorker sw = new SwingWorker() {
+//
+//			@Override
+//			protected Void doInBackground() throws Exception {
+//				while (true) {
+//					//nhn
+//					String s = client.getResponse();
+//					publish(s);
+//				}
+//			}
+//			@Override
+//            protected void process(List chunks) {
+//				
+//				lblBirth.setText(chunks[chunks.size() -1]);
+//			}
+//			
+//		};
+//		sw.execute();
 	}
 
 	public void activeText(boolean active) { // allow edit text

@@ -43,6 +43,8 @@ public class ContestRoomManager {
 				break;
 			}
 		}
+		System.out.print("RoomId kill: "+ roomId );
+		System.out.print("Num Room: "+ rooms.size() );
 	}
 
 	public ContestRoom findingAvailableRoom() {

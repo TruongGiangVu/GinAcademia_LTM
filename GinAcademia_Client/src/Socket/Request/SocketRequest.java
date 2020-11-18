@@ -2,8 +2,10 @@ package Socket.Request;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class SocketRequest implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 	public static enum Action {
         MESSAGE,
         LOGIN,
@@ -13,7 +15,8 @@ public class SocketRequest implements Serializable{
         RANK,
         UPDATEPROFILE,
         IQTEST,
-        CONTEST
+        CONTEST,
+        CANCELCONTEST
     }
 
     Action action;

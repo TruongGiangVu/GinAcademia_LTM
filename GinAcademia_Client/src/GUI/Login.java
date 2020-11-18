@@ -47,7 +47,7 @@ public class Login extends JFrame {
 
 	public Login() {
 		System.out.println("run...");
-		client = new Client("localhost", 1234);
+		client = new Client("localhost", 5000);
 
 		addMouseListener(new MouseAdapter() {
 			@Override

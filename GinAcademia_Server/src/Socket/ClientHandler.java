@@ -15,12 +15,14 @@ import BUS.PlayerBUS;
 public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
-	ContestRoom contestRoom = null;
+	public ContestRoom contestRoom = null;
 	ObjectInputStream receiver = null;
 	ObjectOutputStream sender = null;
 	PlayerBUS bus = new PlayerBUS();
 	boolean isLoggedIn = false;
 	Player player = null;
+
+	public boolean isInGame = false;
 
 	public ClientHandler(int id, Socket socket) {
 		try {
@@ -41,7 +43,7 @@ public class ClientHandler implements Runnable {
 				// get request from client
 				SocketRequest requestRaw = receiveRequest();
 				// check if client off super idiot
-				if(!this.socket.isConnected() || this.socket.isClosed()) {
+				if (!this.socket.isConnected() || this.socket.isClosed()) {
 					break;
 				}
 				// check request
@@ -50,9 +52,10 @@ public class ClientHandler implements Runnable {
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
 					this.disconnectProcess();
 					break;
-				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) {
-					// send to contest
-					this.contest(requestRaw);
+				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) { // if player join game
+					this.contest(requestRaw); // send to contest, game room
+				} else if (requestRaw.getAction().equals(SocketRequest.Action.CANCELCONTEST)) { // player cancel
+					this.cancelContest();
 				} else {
 					// if not login or disconnect, create new Thread and solve it, then delete this
 					new RequestProcess(this, requestRaw).init();
@@ -62,8 +65,9 @@ public class ClientHandler implements Runnable {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			this.close();
 			System.out.println("Client thoat ngu vl");
+		} finally {
+			this.close();
 		}
 	}
 
@@ -98,16 +102,16 @@ public class ClientHandler implements Runnable {
 
 		return request;
 	}
-	private void loginPlayerProcess(SocketRequest requestRaw) {
+
+	private void loginPlayerProcess(SocketRequest requestRaw) { // for login
 		if (this.isValidateClient(requestRaw)) { // check data, and get this.player
 			if (this.player.getStatus() == 1) { // if client is blocked
 				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 						"Tài khoản này đã bị khóa!"));
 			} else if (this.player.getStatus() == 0) {
 				if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
-					sendResponse(
-							new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-									"Tài khoản này hiện đang online ở một thiết bị khác!"));
+					sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+							"Tài khoản này hiện đang online ở một thiết bị khác!"));
 				} else { // login OK
 					isLoggedIn = true;
 					sendResponse(new SocketResponsePlayer(this.player));
@@ -115,21 +119,22 @@ public class ClientHandler implements Runnable {
 			}
 		} else { // data wrong
 			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản hoặc mật khẩu không đúng."));
+					"Tài khoản hoặc mật khẩu không đúng.")); // vay de t thu cai moi nay noi
 		}
 	}
+
 	private void disconnectProcess() {
 		isLoggedIn = false;
-		// remove player
-		if(this.contestRoom != null) {
-			this.contestRoom.removePlayer(player);
-			if(this.contestRoom.amountOfPlayerInGame() == 0) {
+		// remove player, if player is in Game
+		if (this.contestRoom != null) {
+			this.contestRoom.removePlayer(this);
+			if (this.contestRoom.amountOfPlayerInGame() == 0) {
 				Server.contestRoomManager.finishRoom(this.contestRoom.RoomId);
 			}
 			this.contestRoom = null;
 		}
 		// sign out off server by id of clientHandler
-		Server.signOutPlayer(this.id); 
+		Server.signOutPlayer(this.id);
 		this.close();
 	}
 
@@ -145,21 +150,34 @@ public class ClientHandler implements Runnable {
 
 	private void contest(SocketRequest requestRaw) {
 		if (this.isLoggedIn == false) { // check off player
-			this.contestRoom.removePlayer(player);
+			this.contestRoom.removePlayer(this);
 			this.contestRoom = null;
 			return;
 		}
-		if (this.contestRoom == null) { // doesn't have room -> join room
+		if (this.contestRoom == null && requestRaw.getMessage().equals("join")) { // doesn't have room -> join room
 			this.contestRoom = Server.contestRoomManager.findingAvailableRoom();
-			this.contestRoom.joinGame(player, this);
-		} else if (requestRaw.getMessage().equals("answer")) { // has room, player answer Question
+			this.contestRoom.joinGame(this);
+		}
+		if (this.isInGame == true && requestRaw.getMessage().equals("answer")) { // player answer Question
 			this.contestRoom.getAnswer(requestRaw);
 		}
 
 		if (this.contestRoom.isEndContest) { // finish room, stop game
+			this.isInGame = false;
 			Server.contestRoomManager.finishRoom(this.contestRoom.RoomId); // delete this room
 			this.contestRoom = null;
 		}
+	}
+// deo hieu, thay t nhan nhan r , ahihi
+	private void cancelContest() {
+		this.isInGame = false;
+		this.contestRoom.leaveRoom(this);
+		if (this.contestRoom.amountOfPlayerInGame() == 0) { // delete room if no one is in room
+			Server.contestRoomManager.finishRoom(this.contestRoom.RoomId);
+		}
+		this.contestRoom = null;
+		sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
+				"cancelGame"));
 	}
 
 }
