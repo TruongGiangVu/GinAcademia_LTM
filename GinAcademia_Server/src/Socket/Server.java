@@ -103,4 +103,15 @@ public class Server {
 		}
 		return -1;
 	}
+	
+	public static int countPlayerOnline() {
+		int ans = 0;
+		if(clients == null) return ans;
+		int n = clients.size();
+		for (int i = 0; i < n; ++i) {
+			if(clients.get(i).isLoggedIn)
+				ans++;
+		}
+		return ans ;
+	}
 }

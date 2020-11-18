@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer;
+import java.util.Timer; 
 import java.util.TimerTask;
 
 import Model.Player;
@@ -254,11 +254,11 @@ public class Contest extends MyPanel implements MouseListener {
 //			parent.clickStart();
 		} else if (result == JOptionPane.NO_OPTION) {
 			parent.setActiveMenuButton(true);
-			parent.clickReturenHome();
+			parent.clickReturnHome(); 
 
 		} else {
 			parent.setActiveMenuButton(true);
-			parent.clickReturenHome();
+			parent.clickReturnHome();
 		}
 	}
 

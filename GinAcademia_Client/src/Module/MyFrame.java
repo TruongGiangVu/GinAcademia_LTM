@@ -16,7 +16,7 @@ public class MyFrame extends JFrame {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 				client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout"));
-				client.close();
+
 				System.exit(0);
 			}
 		});

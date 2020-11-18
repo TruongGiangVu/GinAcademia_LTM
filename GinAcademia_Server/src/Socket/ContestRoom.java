@@ -126,11 +126,7 @@ public class ContestRoom {
 			return false;
 	}
 	public int amountOfPlayerInGame() {
-		return this.players.size();
-	}
-
-	public int amountOfPlayerInGame() {
-		return this.players.size();
+		return this.players.size(); // ok roi
 	}
 
 	public void startContest() {

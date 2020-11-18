@@ -39,7 +39,7 @@ public class Home extends JPanel implements MouseListener {
 	JTable tbWinRank;
 	JTable tbWinSQRank;
 	private Timer timer;
-	public final static int INTERVAL = 5000;
+	public final static int INTERVAL = 30000; 
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
@@ -72,7 +72,7 @@ public class Home extends JPanel implements MouseListener {
 		lblNewLabel_2.setBounds(200, 30, 170, 30);
 		add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("0");
+		JLabel lblNewLabel_1_1 = new JLabel(Server.countPlayerOnline()+ ""); 
 		lblNewLabel_1_1.setBounds(380, 30, 30, 30);
 		add(lblNewLabel_1_1);
 		
@@ -114,7 +114,7 @@ public class Home extends JPanel implements MouseListener {
 
 			   //Refresh the panel
 			       LoadPlayerOnline();
-			       System.out.println("Refresh table");
+			       lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); // cho t ti time ,t tao ham cho
 //			       if (Server.clients == null || Server.clients.size() == 0) {
 //			    	   timer.stop();
 //				       System.out.println("Stop refresh");

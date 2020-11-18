@@ -18,6 +18,6 @@ public class Main {
 		Server server = new Server();
 		server.hashCode();
 		
-	}// a con ve giao din khi dang contest thif t van chua sua, tu tu test cai t moi lam nay,
+	}
 
 }
