@@ -18,17 +18,23 @@ public class Server {
 	int numThread = 2;
 	int id = 1;
 
-	GameConfig config;
+	static GameConfig config;
 
 	public ServerSocket server;
 
 	public Server() {
+		init(5000);
+	}
+	public Server(int port) {
+		init(port);
+	}
+	private void init(int port) {
 		try {
 			config = new GameConfig();
 			pool = Executors.newCachedThreadPool();
-			contestRoomManager = new ContestRoomManager(this.config);
+			contestRoomManager = new ContestRoomManager(config);
 			clients = new ArrayList<ClientHandler>();
-			server = new ServerSocket(5000);
+			server = new ServerSocket(port);
 			System.out.println("Waiting client connect ....");
 
 			this.running();
@@ -112,4 +118,12 @@ public class Server {
 		}
 		return ans ;
 	}
+	//Server.config
+	public static GameConfig getConfig() {
+		return config;
+	}
+	public static void setConfig(GameConfig configNew) {
+		config = configNew;
+	}
+	
 }

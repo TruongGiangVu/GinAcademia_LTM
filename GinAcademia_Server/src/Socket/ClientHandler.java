@@ -122,10 +122,10 @@ public class ClientHandler implements Runnable {
 			}
 		} else { // data wrong
 			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản hoặc mật khẩu không đúng."),false); // vay de t thu cai moi nay noi
+					"Tài khoản hoặc mật khẩu không đúng."),false); 
 		}
 	}
-
+ 
 	private void disconnectProcess() {
 		isLoggedIn = false;
 		// remove player, if player is in Game

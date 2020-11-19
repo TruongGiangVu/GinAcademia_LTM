@@ -1,6 +1,5 @@
 package GUI;
 
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Color;
@@ -11,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Timer; 
+import java.util.Timer;
 import java.util.TimerTask;
 
 import Model.Player;
@@ -55,12 +54,18 @@ public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblEnemyPoint;
 	private JLabel lblYourname;
 
-	public Contest(MainFrame parent,Client client) {
+	private Thread thread;
+
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public Contest(MainFrame parent, Client client) {
 		super(client);
 		this.player = client.getPlayer();
 		this.parent = parent;
 	}
-	public Contest(MainFrame parent,Client client,int i) {
+
+	public Contest(MainFrame parent, Client client, int i) {
 		super(client);
 		this.player = client.getPlayer();
 		this.parent = parent;
@@ -160,7 +165,6 @@ public class Contest extends MyPanel implements MouseListener {
 			this.arrTxt.get(i).setText(symbol.get(i) + " " + q.getOptions().get(i).Option);
 			this.arrTxt.get(i).theme = q.getOptions().get(i).OptionId;
 		}
-		this.setEnableOption(true);
 	}
 
 	private void setEnableOption(boolean en) {
@@ -169,6 +173,7 @@ public class Contest extends MyPanel implements MouseListener {
 		this.txtC.setEnabled(en);
 		this.txtD.setEnabled(en);
 	}
+
 	public void initContest() {
 		System.out.println("Start contest");
 //		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
@@ -188,7 +193,7 @@ public class Contest extends MyPanel implements MouseListener {
 				this.loadQuestion(question.getQuestion());
 			}
 		}
-		
+
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
@@ -203,7 +208,9 @@ public class Contest extends MyPanel implements MouseListener {
 		public void run() {
 			lblTime.setText(this.countdown + "");
 			if (this.countdown == 0 && isAnswer == false) {
-				endTurn();
+//				endTurn();
+				thread = new Thread(new ContestGame());
+				thread.start();
 			}
 			this.countdown--;
 		}
@@ -219,26 +226,54 @@ public class Contest extends MyPanel implements MouseListener {
 			this.index = this.indexOfPlayer(responseGameRoom.players, this.player); // get index player
 			this.displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer); // display answer, both player
 			this.updateHeader(index, responseGameRoom.points); // update point
+	class ContestGame implements Runnable {
+		public ContestGame() {
+		}
 
-			// delay 2s
+		@Override
+		public void run() {
+			System.out.println("End turn \n");
 			try {
-				Thread.sleep(2000);
+				SocketResponse responseServer = (SocketResponse) client.getResponse();
+				if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
+					timer.cancel();
+					SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
+					index = indexOfPlayer(responseGameRoom.players, player); // get index player
+					displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer);
+					setEnableOption(false);
+					System.out.print("Points: ");
+					for (int p : responseGameRoom.points) {
+						System.out.print(p + " ");
+					}
+					System.out.println();
+					
+					updateHeader(index, responseGameRoom.points); // update point
+
+					// delay 2s
+					Thread.sleep(2000);
+
+					if (stt <= 5) { // if has next question
+						isAnswer = false;
+						setEnableOption(true);
+						clearColorOption();
+						loadQuestion(responseGameRoom.question);
+						
+					} else { // if over
+						SocketResponse responseEnd = client.getResponse();
+						showDialog(responseEnd.getMessage());
+					}
+
+					timer = new Timer();
+					timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
+					Thread.currentThread().interrupt();
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				Thread.currentThread().interrupt();
 			}
-
-			if (this.stt <= 5) { // if has next question
-				this.isAnswer = false;
-				this.clearColorOption();
-				this.loadQuestion(responseGameRoom.question);
-				this.setEnableOption(true);
-			} else { // if over
-				SocketResponse responseEnd = client.getResponse();
-				this.showDialog(responseEnd.getMessage());
-			}
-
-			timer = new Timer();
-			timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 		}
 	}
 
@@ -253,7 +288,7 @@ public class Contest extends MyPanel implements MouseListener {
 //			parent.clickStart();
 		} else if (result == JOptionPane.NO_OPTION) {
 			parent.setActiveMenuButton(true);
-			parent.clickReturnHome(); 
+			parent.clickReturnHome();
 
 		} else {
 			parent.setActiveMenuButton(true);
@@ -275,7 +310,6 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	private void initNamePlayer(SocketResponse response) { // update name init
-//		Socket nhận phản hồi answer từ server trả về
 		SocketResponseContest contest = (SocketResponseContest) response;
 		int n = contest.players.size();
 		for (int i = 0; i < n; ++i) {
@@ -283,6 +317,7 @@ public class Contest extends MyPanel implements MouseListener {
 				this.lblEnemyname.setText(contest.players.get(i).getName());
 		}
 	}
+
 //	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
 		System.out.println("update Point");
@@ -292,12 +327,6 @@ public class Contest extends MyPanel implements MouseListener {
 			if (i != index)
 				this.lblEnemyPoint.setText(points.get(i) + "");
 		}
-
-		System.out.print("Points: ");
-		for (int p : points) {
-			System.out.print(p + " ");
-		}
-		System.out.println();
 	}
 
 	private void displayAnswer(ArrayList<Integer> answers, int rightAnswer) {
@@ -314,10 +343,12 @@ public class Contest extends MyPanel implements MouseListener {
 		// display
 		int choose = answers.get(enemy);
 		System.out.println("enemy answer: " + choose);
+		if (choose == 0)
+			return;
 		int n = arrTxt.size();
 		for (int i = 0; i < n; ++i) {
 			if (choose == this.arrTxt.get(i).theme) {
-				this.arrTxt.get(index).setBackground(this.optionColor.getColor("enemy"));
+				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
 				break;
 			}
 		}
@@ -328,7 +359,7 @@ public class Contest extends MyPanel implements MouseListener {
 		System.out.println("right answer: " + right);
 		for (int i = 0; i < n; ++i) {
 			if (right == this.arrTxt.get(i).theme) {
-				this.arrTxt.get(index).setBackground(this.optionColor.getColor("right"));
+				this.arrTxt.get(i).setBackground(this.optionColor.getColor("right"));
 				break;
 			}
 		}
@@ -345,18 +376,27 @@ public class Contest extends MyPanel implements MouseListener {
 				new SocketRequestAnswer(this.player, source.theme, Integer.valueOf(this.lblTime.getText()) * 1000));
 		this.setEnableOption(false);
 		source.setBackground(this.optionColor.getColor("choose"));
-		this.endTurn();
+//		this.endTurn();
+		thread = new Thread(new ContestGame());
+		thread.start();
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
+
 		MyLabel source = (MyLabel) arg0.getSource();
+		if (!source.isEnabled()) { // skip if label not enabled
+			return;
+		}
 		source.setBackground(new Color(204, 204, 204));
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		MyLabel source = (MyLabel) arg0.getSource();
+		if (!source.isEnabled()) { // skip if label not enabled
+			return;
+		}
 		source.setBackground(Color.WHITE);
 	}
 

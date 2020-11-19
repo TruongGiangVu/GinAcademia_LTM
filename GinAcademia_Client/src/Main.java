@@ -15,7 +15,7 @@ public class Main {
             e.printStackTrace();
         }
 		
-		Login login = new Login();
+		Login login = new Login("localhost",5000);
 		login.hashCode();
 //		clientSocketConnect.
 		

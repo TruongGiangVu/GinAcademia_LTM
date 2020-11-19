@@ -48,7 +48,6 @@ public class ContestRoom {
 	}
 
 	public void joinGame(ClientHandler client) {
-		System.out.println(client.player.getId() +" join Game "+ RoomId + " ");
 		if (this.isClocked)
 			return;
 		if (this.players.size() < this.config.getNumPlayer()) {
@@ -61,13 +60,11 @@ public class ContestRoom {
 		if (this.players.size() == this.config.getNumPlayer()) {
 			int n = this.clients.size();
 			for (int i = 0; i < n; ++i) {
-				this.clients.get(i).isInGame = true; 
-				System.out.println(this.clients.get(i).player.getId() +" ");
+				this.clients.get(i).isInGame = true;
+				System.out.println(this.clients.get(i).player.getId() + " ");
 			}
 
 			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"),false);
-
-			
 
 			try { // delay 1s for client open ContestPanel
 				Thread.sleep(2000);
@@ -86,7 +83,7 @@ public class ContestRoom {
 	}
 
 	public void leaveRoom(ClientHandler client) {
-		System.out.println(client.player.getId() +" leave Game "+ RoomId);
+		System.out.println(client.player.getId() + " leave Game " + RoomId);
 		if (this.isClocked)
 			return;
 		int index = this.indexOfPlayer(client.player);
@@ -122,6 +119,7 @@ public class ContestRoom {
 		else
 			return false;
 	}
+
 	public int amountOfPlayerInGame() {
 		return this.players.size(); // ok roi
 	}
@@ -221,6 +219,7 @@ public class ContestRoom {
 		}
 		int time = request.getTime();
 
+		System.out.print(request.player.getId() + " " + request.getAns());
 		this.updatePoint(index, ans, time);
 
 	}

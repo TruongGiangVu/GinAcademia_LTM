@@ -1,12 +1,9 @@
 package Socket;
 
-import java.io.BufferedReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import Model.Player;
 import Socket.Request.SocketRequest;
