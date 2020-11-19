@@ -13,12 +13,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Properties;
 
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
@@ -44,6 +42,7 @@ public class Profile extends MyPanel implements ActionListener {
 	private JLabel lblNewLabel_1;
 	private JTextField txtEmail;
 	private JComboBox<String> txtGender;
+	private JLabel lblGender;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNgySinh;
 	private JLabel lblBirth;
@@ -157,6 +156,10 @@ public class Profile extends MyPanel implements ActionListener {
 		btnUpdate = new JButton("Cập nhật");
 		btnUpdate.setBounds(325, 125, 120, 23);
 		panelInfo.add(btnUpdate);
+		
+		lblGender = new JLabel("New label");
+		lblGender.setBounds(345, 72, 75, 25);
+		panelInfo.add(lblGender);
 		this.btnUpdate.setVisible(false);
 		btnUpdate.addActionListener(this);
 
@@ -253,12 +256,14 @@ public class Profile extends MyPanel implements ActionListener {
 	}
 
 	public void activeText(boolean active) { // allow edit text
-		this.txtName.setEnabled(active);
-		this.txtGender.setEnabled(active);
-		this.txtEmail.setEnabled(active);
+		this.txtName.setEditable(active);
+		
+		this.lblGender.setVisible(!active);
+		this.txtGender.setVisible(active);
+		this.txtEmail.setEditable(active);
+		
 		this.lblBirth.setVisible(!active);
 		this.datePicker.setVisible(active);
-
 	}
 
 	public void loadInfo() { // load player profile information, can update
@@ -267,6 +272,7 @@ public class Profile extends MyPanel implements ActionListener {
 		this.datePicker.getJFormattedTextField().setText(this.player.getBirthdateString());
 		this.txtGender.setSelectedIndex(this.player.getGenderInt());
 		this.lblBirth.setText(this.player.getBirthdateString());
+		this.lblGender.setText(this.player.getGenderString());
 	}
 
 	public void updateData() { // update info on GUI

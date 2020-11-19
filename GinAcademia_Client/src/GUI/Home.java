@@ -1,8 +1,6 @@
 package GUI;
 
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -14,7 +12,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
 import java.util.Timer;
 
 import Model.Question;
@@ -24,12 +21,8 @@ import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
 
-;
-
 @SuppressWarnings("serial")
 public class Home extends ImagePanel implements ActionListener {
-	private ExecutorService pool;
-
 	private JButton btnStart;
 	public JLabel lblTime;
 	public JButton btnCancel;
@@ -74,13 +67,14 @@ public class Home extends ImagePanel implements ActionListener {
 		btnStart.setBounds(205, 330, 200, 60);
 		add(btnStart);
 
-		lblTime = new JLabel("New label");
+		lblTime = new JLabel("-1");
+		lblTime.setForeground(Color.WHITE);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 15));
+		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 24));
 		lblTime.setBounds(250, 350, 100, 80);
 		add(lblTime);
 
-		btnCancel = new JButton("Cancel");
+		btnCancel = new JButton("Hủy");
 		btnCancel.setBounds(250, 440, 100, 25);
 		add(btnCancel);
 
@@ -114,7 +108,7 @@ public class Home extends ImagePanel implements ActionListener {
 		int time = 0;
 
 		public WaitTask() {
-			waitGame = true;
+			lblTime.setText("0");
 		}
 
 		@Override
@@ -161,12 +155,11 @@ public class Home extends ImagePanel implements ActionListener {
 					break;
 				}
 			}
-			System.out.println("Thread stop by end while loop");
 		}
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) { // a` 1
+	public void actionPerformed(ActionEvent arg0) {
 		JButton source = (JButton) arg0.getSource();
 		if (source == btnStart) {
 			waitGame = true;
@@ -179,21 +172,17 @@ public class Home extends ImagePanel implements ActionListener {
 			this.waittingContest();
 			thread = new Thread(new GetMessage());
 			thread.start();
-//			thread = new WaitGame();
-//			thread.start();
 
 			System.out.println("Contest join waiting .....");
 
 		} else if (source == btnCancel) {
 			System.out.println("cancel button");
 			if (waitGame) {
-//				waitGame = false;
 				client.sendRequest(new SocketRequest(SocketRequest.Action.CANCELCONTEST, "cancel")); 
 				// stop, kill timer and thread
 				waitTask.cancel(); 
 				timer.cancel();
-				timer.purge();
-//				thread.interrupt();
+				timer.purge();;
 				// change on GUI
 				this.displayWaitingGame(false);
 				lblTime.setText("0");

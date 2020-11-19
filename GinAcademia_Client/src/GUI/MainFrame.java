@@ -19,13 +19,11 @@ import java.awt.GridLayout;
 import java.awt.Image;
 
 import Model.Player;
-import Model.Question;
 import Module.MenuButton;
 import Module.ImagePanel;
 import Module.MyFrame;
 import Module.MyPanel;
 import Socket.Client;
-import Socket.Response.SocketResponseContest;
 
 import javax.swing.border.MatteBorder;
 import javax.swing.ButtonGroup;

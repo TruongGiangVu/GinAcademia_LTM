@@ -48,7 +48,7 @@ public class ContestRoom {
 	}
 
 	public void joinGame(ClientHandler client) {
-		System.out.println(client.player.getId() +" join Game "+ RoomId);
+		System.out.println(client.player.getId() + " join Game " + RoomId);
 		if (this.isClocked)
 			return;
 		if (this.players.size() < this.config.getNumPlayer()) {
@@ -60,13 +60,11 @@ public class ContestRoom {
 		if (this.players.size() == this.config.getNumPlayer()) {
 			int n = this.clients.size();
 			for (int i = 0; i < n; ++i) {
-				this.clients.get(i).isInGame = true; 
-				System.out.println(this.clients.get(i).player.getId() +" ");
+				this.clients.get(i).isInGame = true;
+				System.out.println(this.clients.get(i).player.getId() + " ");
 			}
 
 			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"));
-
-			
 
 			try { // delay 1s for client open ContestPanel
 				Thread.sleep(2000);
@@ -84,12 +82,12 @@ public class ContestRoom {
 		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
 		int n = this.clients.size();
 		for (int i = 0; i < n; ++i) {
-			System.out.println(this.clients.get(i).player.getId() +" in Game");
+			System.out.println(this.clients.get(i).player.getId() + " in Game");
 		}
 	}
 
 	public void leaveRoom(ClientHandler client) {
-		System.out.println(client.player.getId() +" leave Game "+ RoomId);
+		System.out.println(client.player.getId() + " leave Game " + RoomId);
 		if (this.isClocked)
 			return;
 		int index = this.indexOfPlayer(client.player);
@@ -125,6 +123,7 @@ public class ContestRoom {
 		else
 			return false;
 	}
+
 	public int amountOfPlayerInGame() {
 		return this.players.size(); // ok roi
 	}
@@ -155,7 +154,6 @@ public class ContestRoom {
 
 	public void endTurn() {
 		try {
-
 			System.out.println("\nEnd turn" + this.currentQ);
 			contestTimer.cancel(); // cancel current timer
 
@@ -166,7 +164,8 @@ public class ContestRoom {
 			// send to all, point, answer, next question
 			this.sendALL(new SocketResponseGameRoom(this.players, this.points, this.answers,
 					this.questions.get(this.currentQ).getAnswer(), this.questions.get(this.currentQ + next)));
-
+			// refresh answer
+			this.refreshAnswer();
 			// check point
 			System.out.print("Points: ");
 			for (int p : points) {
@@ -184,6 +183,7 @@ public class ContestRoom {
 			// create new timer for next question
 			System.out.println("Running ...");
 			this.countAns = 0;
+			
 			contestTimer = new Timer();
 			contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 		} catch (InterruptedException e) {
@@ -235,6 +235,7 @@ public class ContestRoom {
 		}
 		int time = request.getTime();
 
+		System.out.print(request.player.getId() + " " + request.getAns());
 		this.updatePoint(index, ans, time);
 
 	}
@@ -247,7 +248,7 @@ public class ContestRoom {
 		}
 		this.points.set(index, res);
 		this.countAns++;
-		System.out.println(this.players.get(index) + ":" + this.points.get(index));
+		System.out.println(":" + this.points.get(index));
 	}
 
 	public void refreshAnswer() { // refresh to No (0) answer

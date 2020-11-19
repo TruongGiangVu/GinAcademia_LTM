@@ -10,6 +10,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextField;
@@ -27,28 +29,37 @@ import javax.swing.JButton;
 import Module.MyRegEx;
 import Socket.Client;
 import Module.ImagePanel;
+import java.awt.event.KeyAdapter;
 
 
 @SuppressWarnings("serial")
 public class Login extends JFrame {
 	private Client client;
 	private JPanel contentPane;
-	private ImagePanel panel;
+	private ImagePanel panelLamMau;
 	private JTextField txtUsername;
 	private JLabel lblNewLabel;
 	private JLabel label;
 	private JPasswordField txtPassword;
 	private JLabel lblChaCTi;
-	private JLabel label_1;
-	private JButton btnNewButton;
+	private JLabel lblRegister;
+	private JButton btnLogin;
 	int xx, xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
 	private Image bg;
 
 	public Login() {
+		this.init("localhost", 5000);
+	}
+	
+	public Login(String host, int port) {
+		this.init(host, port);
+	}
+	
+	private void init(String host, int port) {
 		System.out.println("run...");
-		client = new Client("localhost", 5000);
+		client = new Client(host, port);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -77,9 +88,9 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		panel = new ImagePanel(client, this.bg, 365, 400);
+		panelLamMau = new ImagePanel(client, this.bg, 365, 400);
 
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
+		panelLamMau.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
@@ -87,7 +98,7 @@ public class Login extends JFrame {
 				Login.this.setLocation(x - xx, y - xy);
 			}
 		});
-		panel.addMouseListener(new MouseAdapter() {
+		panelLamMau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				xx = e.getX();
@@ -95,8 +106,8 @@ public class Login extends JFrame {
 			}
 		});
 
-		panel.setBounds(0, 0, 365, 390);
-		contentPane.add(panel);
+		panelLamMau.setBounds(0, 0, 365, 390);
+		contentPane.add(panelLamMau);
 
 		txtUsername = new JTextField();
 		txtUsername.setText("user1");
@@ -127,9 +138,9 @@ public class Login extends JFrame {
 		lblChaCTi.setBounds(427, 305, 113, 14);
 		contentPane.add(lblChaCTi);
 
-		label_1 = new JLabel("Đăng ký ngay");
-		label_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		label_1.addMouseListener(new MouseAdapter() {
+		lblRegister = new JLabel("Đăng ký ngay");
+		lblRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		lblRegister.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Login.this.dispose();
@@ -139,27 +150,37 @@ public class Login extends JFrame {
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				label_1.setForeground(new Color(8, 87, 40).brighter());
+				lblRegister.setForeground(new Color(8, 87, 40).brighter());
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 
-				label_1.setForeground(new Color(8, 87, 40));
+				lblRegister.setForeground(new Color(8, 87, 40));
 			}
 		});
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_1.setForeground(new Color(8, 87, 40));
-		label_1.setBounds(535, 305, 94, 14);
-		contentPane.add(label_1);
+		lblRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblRegister.setForeground(new Color(8, 87, 40));
+		lblRegister.setBounds(535, 305, 94, 14);
+		contentPane.add(lblRegister);
 
-		btnNewButton = new JButton("Đăng nhập");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				Login.this.loginPlayer();
+		btnLogin = new JButton("Đăng nhập");
+		btnLogin.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				System.out.println("abcd");
+				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+			            System.out.println("Hello");
+			            loginPlayer();
+			        }
 			}
 		});
-		btnNewButton.setUI(new MetalToggleButtonUI() {
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loginPlayer();
+			}
+		});
+		btnLogin.setUI(new MetalToggleButtonUI() {
 			@Override
 			protected Color getSelectColor() {
 				return new Color(8, 87, 40).brighter();
@@ -168,7 +189,7 @@ public class Login extends JFrame {
 			@Override
 			protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
 				Color fg;
-				if (btnNewButton.isSelected() || btnNewButton.getModel().isArmed()) {
+				if (btnLogin.isSelected() || btnLogin.getModel().isArmed()) {
 					fg = Color.WHITE;
 				}
 
@@ -180,25 +201,25 @@ public class Login extends JFrame {
 				super.paintText(g, b, textRect, text);
 			}
 		});
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnNewButton.setBorder(null);
-				btnNewButton.setBackground(new Color(8, 87, 40).brighter());
+				btnLogin.setBorder(null);
+				btnLogin.setBackground(new Color(8, 87, 40).brighter());
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(new Color(8, 87, 40));
+				btnLogin.setBackground(new Color(8, 87, 40));
 			}
 		});
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(8, 87, 40));
-		btnNewButton.setBounds(391, 265, 280, 35);
-		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnNewButton.setFocusable(false);
-		contentPane.add(btnNewButton);
+		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnLogin.setForeground(new Color(255, 255, 255));
+		btnLogin.setBackground(new Color(8, 87, 40));
+		btnLogin.setBounds(391, 265, 280, 35);
+		btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnLogin.setFocusable(false);
+		contentPane.add(btnLogin);
 
 		errorUsername = new JLabel("");
 		errorUsername.setForeground(Color.RED);
