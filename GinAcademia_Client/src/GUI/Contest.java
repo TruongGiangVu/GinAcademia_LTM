@@ -226,10 +226,11 @@ public class Contest extends MyPanel implements MouseListener {
 			this.index = this.indexOfPlayer(responseGameRoom.players, this.player); // get index player
 			this.displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer); // display answer, both player
 			this.updateHeader(index, responseGameRoom.points); // update point
+		}
+	}
 	class ContestGame implements Runnable {
 		public ContestGame() {
 		}
-
 		@Override
 		public void run() {
 			System.out.println("End turn \n");
@@ -274,6 +275,7 @@ public class Contest extends MyPanel implements MouseListener {
 			} finally {
 				Thread.currentThread().interrupt();
 			}
+		
 		}
 	}
 
