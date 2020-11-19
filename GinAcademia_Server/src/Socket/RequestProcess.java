@@ -21,7 +21,7 @@ public class RequestProcess {
 		this.client = clientHandler;
 		this.request = requestRaw;
 		
-		this.playerBus = new PlayerBUS();
+		this.playerBus = new PlayerBUS(); 
 		this.questionBUS = new QuestionBUS();
 	}
 
@@ -61,27 +61,27 @@ public class RequestProcess {
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
 		playerBus.update(tempRequest.player);
 		client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-				"Cập nhật thành công!"));
+				"Cập nhật thành công!"),false);
 	}
 
 	private void rankProcess() { // send list player
 		ArrayList<Player> arr = playerBus.Read();
-		client.sendResponse(new SocketResponseRank(arr));
+		client.sendResponse(new SocketResponseRank(arr),false);
 	}
 
 	private void registerProcess() { // register new player 
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
 		if (playerBus.checkExistPlayer(tempRequest.player) == true) {
 			client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"));
+					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"),false);
 		} else {
 			playerBus.insert(tempRequest.player);
 			Player p = playerBus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
-			client.sendResponse(new SocketResponsePlayer(p));
+			client.sendResponse(new SocketResponsePlayer(p),false);
 		}
 	}
 	private void contestProcess() { // just for test, will delete later
 		ArrayList<Question> arr = questionBUS.ReadContest(5);
-		client.sendResponse(new SocketResponseContestTest(arr));
+		client.sendResponse(new SocketResponseContestTest(arr),false);
 	}
 }

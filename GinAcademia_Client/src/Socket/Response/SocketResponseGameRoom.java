@@ -20,11 +20,6 @@ public class SocketResponseGameRoom extends SocketResponse{
 		this.rightAnswer = rightAnswer;
 		this.question = question;
 		
-		System.out.print("Points: ");
-		for (int p : this.points) {
-			System.out.print(p + " ");
-		}
-		System.out.println();
 		
 	}
 

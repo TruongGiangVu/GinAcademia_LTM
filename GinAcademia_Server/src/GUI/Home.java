@@ -77,6 +77,15 @@ public class Home extends JPanel implements MouseListener {
 		add(lblNewLabel_1_1);
 		
 		JButton btnNewButton = new JButton("Thiết lập trò chơi");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				SettingDialog dlg = new SettingDialog();
+				dlg.setLocationRelativeTo(null);
+				dlg.setModal(true);
+				dlg.setResizable(false);
+				dlg.setVisible(true);
+			}
+		});
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 11));
 		btnNewButton.setBackground(new Color(255, 255, 255));
 		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -117,7 +126,6 @@ public class Home extends JPanel implements MouseListener {
 			       lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); // cho t ti time ,t tao ham cho
 //			       if (Server.clients == null || Server.clients.size() == 0) {
 //			    	   timer.stop();
-//				       System.out.println("Stop refresh");
 //
 //			       }
 			    }    
@@ -188,7 +196,7 @@ public class Home extends JPanel implements MouseListener {
 			JLabel lbEmpty = new JLabel("Không tìm thấy người chơi nào");
 			pnEmpty.add(lbEmpty);
 			this.add(pnEmpty);
-		}
+		} 
 		else {
 			for (int i = 0; i < n; i++) {
 				String temp = "";
@@ -205,7 +213,6 @@ public class Home extends JPanel implements MouseListener {
 						
 					}
 					else {
-						System.out.println("vòng "+i);
 						if(Server.isOnlinePlayer(arr.get(i).getUsername())) {
 							temp = "Online";
 						}

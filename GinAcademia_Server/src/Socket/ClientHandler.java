@@ -12,7 +12,7 @@ import Socket.Response.*;
 import BUS.PlayerBUS;
 
 // a client Thread for connect to just 1 player
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable { 
 	public int id = 0;
 	Socket socket;
 	public ContestRoom contestRoom = null;
@@ -81,9 +81,12 @@ public class ClientHandler implements Runnable {
 		}
 	}
 
-	protected void sendResponse(SocketResponse response) {
+	protected void sendResponse(SocketResponse response, boolean flag_reset) {
 		try {
 			sender.writeObject(response);
+			if(flag_reset) {
+				sender.reset();
+			}
 		} catch (IOException e) {
 			this.close();
 		}
@@ -94,7 +97,7 @@ public class ClientHandler implements Runnable {
 		try {
 			request = (SocketRequest) receiver.readObject();
 			if (request == null) {
-				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"));
+				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"),false);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			this.close();
@@ -107,19 +110,19 @@ public class ClientHandler implements Runnable {
 		if (this.isValidateClient(requestRaw)) { // check data, and get this.player
 			if (this.player.getStatus() == 1) { // if client is blocked
 				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-						"Tài khoản này đã bị khóa!"));
+						"Tài khoản này đã bị khóa!"),false);
 			} else if (this.player.getStatus() == 0) {
 				if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
 					sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-							"Tài khoản này hiện đang online ở một thiết bị khác!"));
+							"Tài khoản này hiện đang online ở một thiết bị khác!"),false);
 				} else { // login OK
 					isLoggedIn = true;
-					sendResponse(new SocketResponsePlayer(this.player));
+					sendResponse(new SocketResponsePlayer(this.player),false);
 				}
 			}
 		} else { // data wrong
 			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản hoặc mật khẩu không đúng.")); // vay de t thu cai moi nay noi
+					"Tài khoản hoặc mật khẩu không đúng."),false); // vay de t thu cai moi nay noi
 		}
 	}
 
@@ -176,7 +179,7 @@ public class ClientHandler implements Runnable {
 		}
 		this.contestRoom = null;
 		sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-				"cancelGame"));
+				"cancelGame"),false);
 	}
 
 	public boolean isLoggedIn() {

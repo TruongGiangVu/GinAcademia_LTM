@@ -98,10 +98,9 @@ public class Client {
 		try {
 //			response = (SocketResponse) this.receiver.readObject();
 			Object object = this.receiver.readObject();
-			System.out.println("a: "+object.getClass()); 
-			System.out.println("b:"+object.toString()); 
 			response = (SocketResponse)object;
 			this.message = response.getMessage();
+			
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

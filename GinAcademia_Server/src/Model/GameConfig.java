@@ -12,7 +12,7 @@ public class GameConfig implements Serializable  {
 	public GameConfig() {
 	}
 	
-	public GameConfig(String gameId, int numQuestion, int point, int time, int numPlayer) {
+	public GameConfig(int numQuestion, int point, int time, int numPlayer) {
 		NumQuestion = numQuestion;
 		Point = point;
 		Time = time;

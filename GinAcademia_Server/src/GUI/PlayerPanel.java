@@ -6,12 +6,17 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+
 import java.awt.Component;
 import java.awt.GridLayout;
 
 @SuppressWarnings("serial")
 public class PlayerPanel extends JPanel {
+	DefaultTableModel tbModelPlayer;
+	JTable tbPlayer;
 	private JTextField textField;
 
 	/**
@@ -20,26 +25,19 @@ public class PlayerPanel extends JPanel {
 	public PlayerPanel() {
 		setBackground(Color.WHITE);
 		setLayout(null);
-		
+		 
 		JLabel lblNewLabel = new JLabel("Danh sách người chơi");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblNewLabel.setBounds(30, 15, 365, 40);
 		add(lblNewLabel);
 		
-		JButton btnAdd = new JButton("+");
-		btnAdd.setForeground(Color.WHITE);
-		btnAdd.setFont(new Font("Tahoma", Font.BOLD, 16));
-		btnAdd.setBackground(new Color(0, 153, 0));
-		btnAdd.setBounds(30, 70, 50, 30);
-		add(btnAdd);
-		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(30, 115, 265, 25);
+		textField.setBounds(30, 65, 265, 25);
 		add(textField);
 		
 		JButton btnSearch = new JButton("Tìm kiếm");
-		btnSearch.setBounds(305, 115, 90, 25);
+		btnSearch.setBounds(305, 65, 90, 25);
 		add(btnSearch);
 		
 		JButton btnI = new JButton("X");
@@ -47,16 +45,12 @@ public class PlayerPanel extends JPanel {
 		btnI.setFont(new Font("SansSerif", Font.BOLD, 15));
 		btnI.setBorder(null);
 		btnI.setBackground(null);
-		btnI.setBounds(520, 115, 50, 25);
+		btnI.setBounds(520, 65, 50, 25);
 		add(btnI);
 		
-		JPanel panelTable = new JPanel();
-		panelTable.setBounds(30, 155, 540, 400);
-		add(panelTable);
-		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		JScrollPane scrollPane = new JScrollPane((Component) null);
-		panelTable.add(scrollPane);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(30, 120, 540, 400);
+		add(scrollPane);
 
 	}
 }

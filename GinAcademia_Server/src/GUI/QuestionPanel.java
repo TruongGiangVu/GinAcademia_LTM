@@ -27,6 +27,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	DefaultTableModel tableModel;
 	JTable table;
 	private JPanel panelTable;
+	
 	private QuestionBUS bus = new QuestionBUS();
 	ArrayList<Question> arr = new ArrayList<Question>();
 	private JButton btnAdd;

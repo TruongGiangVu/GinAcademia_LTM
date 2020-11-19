@@ -218,7 +218,6 @@ public class Contest extends MyPanel implements MouseListener {
 			SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
 			this.index = this.indexOfPlayer(responseGameRoom.players, this.player); // get index player
 			this.displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer); // display answer, both player
-																						// and enemy
 			this.updateHeader(index, responseGameRoom.points); // update point
 
 			// delay 2s
