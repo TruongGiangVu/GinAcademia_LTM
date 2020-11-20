@@ -77,19 +77,28 @@ public class Server {
 	
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
-		int n = clients.size();
-		if (n < 1)
+		
+		if (clients == null)
 			isExist = false;
-		else
-			for (int i = 0; i < n; ++i) {
-				if(clients.get(i).isLoggedIn) {
-					if (username.equals(clients.get(i).player.getUsername())) {
-						
-						isExist = true;
-						break;
-					} 
+		else {
+			int n = clients.size();
+			if(n < 1) {
+				isExist = false;
+			}
+			else {
+				for (int i = 0; i < n; ++i) {
+					if(clients.get(i).isLoggedIn) {
+						if (username.equals(clients.get(i).player.getUsername())) {
+							
+							isExist = true;
+							break;
+						} 
+					}
 				}
 			}
+			
+		}
+			
 		return isExist;
 	}
 	

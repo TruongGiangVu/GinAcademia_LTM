@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -14,10 +15,12 @@ import javax.swing.table.DefaultTableModel;
 import Model.Question;
 import BUS.QuestionBUS;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -30,6 +33,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	
 	private QuestionBUS bus = new QuestionBUS();
 	ArrayList<Question> arr = new ArrayList<Question>();
+	ArrayList<Question> searchArr;
 	private JButton btnAdd;
 	private JButton btnView;
 	private JTextField txtSearch;
@@ -52,8 +56,14 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		table = new JTable(tableModel);
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(25);
-
-		this.RefreshTableData();
+		table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table.getColumnModel().getColumn(1).setPreferredWidth(150);
+		table.getColumnModel().getColumn(2).setPreferredWidth(30);
+		table.getColumnModel().getColumn(3).setPreferredWidth(30);
+		table.getColumnModel().getColumn(4).setPreferredWidth(30);
+		table.getColumnModel().getColumn(5).setPreferredWidth(30);
+		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		this.RefreshTableData(arr);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
@@ -78,12 +88,19 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		add(btnView);
 
 		txtSearch = new JTextField();
-		txtSearch.setBounds(30, 115, 265, 25);
+		txtSearch.setBounds(30, 115, 410, 25);
 		add(txtSearch);
 		txtSearch.setColumns(10);
 
-		btnSearch = new JButton("Tìm kiếm");
-		btnSearch.setBounds(305, 115, 90, 25);
+		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH);
+		
+		btnSearch = new JButton();
+		btnSearch.setBounds(450, 115, 30, 25);
+		btnSearch.setBorder(null);
+		btnSearch.setOpaque(false);
+		btnSearch.setBackground(null);
+		btnSearch.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnSearch.setIcon(new ImageIcon(scaled));
 		btnSearch.addActionListener(this);
 		add(btnSearch);
 		
@@ -94,20 +111,6 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		add(lblNewLabel);
 	}
 
-	public void RefreshTableData() {
-		this.RemoveTableData();
-//		tableModel.removeRow();
-//		tableModel.remove
-		int n = arr.size();
-//	    Object[][] rows = new Object[n][8];
-		for (int i = 0; i < n; i++) {
-			Object[] row = { arr.get(i).getId(), arr.get(i).getQuestion(), arr.get(i).getOptions().get(0).Option,
-					arr.get(i).getOptions().get(1).Option, arr.get(i).getOptions().get(2).Option,
-					arr.get(i).getOptions().get(3).Option, arr.get(i).getAnswerString() };
-			this.tableModel.addRow(row);
-		}
-		this.SetTableData();
-	}
 	public void AddData() {
 		int n = arr.size() - 1;
 		Object[] row = {arr.get(n).getId(), arr.get(n).getQuestion(), arr.get(n).getOptions().get(0).Option,
@@ -125,31 +128,20 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		}
 		this.tableModel.fireTableDataChanged();
 	}
-	public void RefreshTableData(ArrayList<Question> arrl) {
+	public void RefreshTableData(ArrayList<Question> data) {
 		this.RemoveTableData();
-		int n = arrl.size();
+		int n = data.size();
 		for (int i = 0; i < n; i++) {
-			Object[] row = { arrl.get(i).getId(), arrl.get(i).getQuestion(), arrl.get(i).getOptions().get(0).Option,
-					arrl.get(i).getOptions().get(1).Option, arrl.get(i).getOptions().get(2).Option,
-					arrl.get(i).getOptions().get(3).Option, arrl.get(i).getAnswerString() };
+			Object[] row = { data.get(i).getId(), data.get(i).getQuestion(), data.get(i).getOptions().get(0).Option,
+					data.get(i).getOptions().get(1).Option, data.get(i).getOptions().get(2).Option,
+					data.get(i).getOptions().get(3).Option, data.get(i).getAnswerString() };
 			tableModel.addRow(row);
 		}
-		this.SetTableData();
+		this.table.setModel(this.tableModel);
 	}
 	public void RemoveTableData() {
 		this.tableModel = (DefaultTableModel) this.table.getModel();
 		this.tableModel.setRowCount(0);
-	}
-	public void SetTableData() {
-		
-		this.table.setModel(this.tableModel);
-		this.table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		this.table.getColumnModel().getColumn(1).setPreferredWidth(150);
-		this.table.getColumnModel().getColumn(2).setPreferredWidth(30);
-		this.table.getColumnModel().getColumn(3).setPreferredWidth(30);
-		this.table.getColumnModel().getColumn(4).setPreferredWidth(30);
-		this.table.getColumnModel().getColumn(5).setPreferredWidth(30);
-		this.table.getColumnModel().getColumn(6).setPreferredWidth(20);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -159,7 +151,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		} else if (source == this.btnView)
 			this.UpdateButton();
 		else if (source == this.btnSearch)
-			this.SearchButton();
+			this.searchData();
 	}
 
 	public void InsertButton() {
@@ -196,13 +188,18 @@ public class QuestionPanel extends JPanel implements ActionListener {
 
 	}
 
-	public void SearchButton() {
-		String search = txtSearch.getText();
-		if (search == null || search.trim() == "") {
-			arr = bus.ReadAll();
+	public void searchData() {
+		String searchQuerry = txtSearch.getText();
+		searchArr = new ArrayList<Question>();
+		if (searchQuerry.isEmpty() || searchQuerry.trim().equals("") || searchQuerry == null) {
+			this.RefreshTableData(arr);
 		} else {
-			arr = bus.searchQuestion(arr, search);
+			for(Question q: arr) {
+				if(q.getQuestion().contains(searchQuerry)) {
+					searchArr.add(q);
+				}
+			}
+			this.RefreshTableData(searchArr);
 		}
-		RefreshTableData(arr);
 	}
 }

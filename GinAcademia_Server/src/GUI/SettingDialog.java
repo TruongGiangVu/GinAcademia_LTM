@@ -9,6 +9,7 @@ import Model.GameConfig;
 
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
@@ -23,9 +24,12 @@ import javax.swing.event.ChangeEvent;
 @SuppressWarnings("serial")
 public class SettingDialog extends JDialog {
 
-	private boolean confirm = false;
-	private JSpinner.DefaultEditor editor;
 	
+	private JSpinner.DefaultEditor editor;
+	private boolean questionFlag = true;
+	private boolean timeFlag = true;
+	private boolean pointFlag = true;
+
 	public GameConfig conf = new GameConfig();
 
 	public static void main(String[] args) {
@@ -96,7 +100,6 @@ public class SettingDialog extends JDialog {
 		editor.getTextField().setEnabled(false);
 		editor.getTextField().setDisabledTextColor(Color.BLACK);
 		getContentPane().add(spnQuestion);
-		
 		spnQuestion.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				
@@ -105,14 +108,17 @@ public class SettingDialog extends JDialog {
 				if(n < 5) {
 					lblNumQuesErr.setText("Tối thiếu 5 câu");
 					lblNumQuesErr.setVisible(true);
+					questionFlag = false;
 				}
 				else {
 					if(n > 30) {
 						lblNumQuesErr.setText("Tối đa 30 câu");
 						lblNumQuesErr.setVisible(true);
+						questionFlag = false;
 					}
 					else {
 						lblNumQuesErr.setVisible(false);
+						questionFlag = true;
 					}
 				}
 			}
@@ -130,14 +136,17 @@ public class SettingDialog extends JDialog {
 				if(n < 10) {
 					lblTimeErr.setText("Tối thiếu 10 giây");
 					lblTimeErr.setVisible(true);
+					timeFlag = false;
 				}
 				else {
 					if(n > 30) {
 						lblTimeErr.setText("Tối đa 30 giây");
 						lblTimeErr.setVisible(true);
+						timeFlag = false;
 					}
 					else {
 						lblTimeErr.setVisible(false);
+						timeFlag = true;
 					}
 				}
 			}
@@ -166,14 +175,17 @@ public class SettingDialog extends JDialog {
 				if(n < 100) {
 					lblPointErr.setText("Tối thiếu 100 điểm/câu");
 					lblPointErr.setVisible(true);
+					pointFlag = false;
 				}
 				else {
-					if(n> 30) {
+					if(n> 1000) {
 						lblPointErr.setText("Tối đa 1000 điểm/câu");
 						lblPointErr.setVisible(true);
+						pointFlag = false;
 					}
 					else {
 						lblPointErr.setVisible(false);
+						pointFlag  =true;
 					}
 				}
 			}
@@ -183,7 +195,14 @@ public class SettingDialog extends JDialog {
 		JButton btnNewButton = new JButton("Thiết lập");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GameConfig conf = new GameConfig((int)spnQuestion.getValue(),(int)spnPoint.getValue(),(int)spnTime.getValue(),2);
+				if(questionFlag && timeFlag && pointFlag) {
+					GameConfig conf = new GameConfig((int)spnQuestion.getValue(),(int)spnPoint.getValue(),(int)spnTime.getValue(),2);
+					dispose();
+				}
+				else {
+					String message = "Các thông số chưa đúng";
+					JOptionPane.showMessageDialog(getContentPane(), (Object) message, "Lỗi thiết lập", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnNewButton.setBounds(56, 170, 100, 23);
