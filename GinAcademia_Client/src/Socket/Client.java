@@ -93,9 +93,9 @@ public class Client {
 	public SocketResponse getResponse() {
 		SocketResponse response = null;
 		try {
-//			response = (SocketResponse) this.receiver.readObject();
-			Object object = this.receiver.readObject();
-			response = (SocketResponse)object;
+			response = (SocketResponse) this.receiver.readObject();
+//			Object object = this.receiver.readObject();
+//			response = (SocketResponse)object;
 			this.message = response.getMessage();
 			
 		} catch (IOException | ClassNotFoundException e) {

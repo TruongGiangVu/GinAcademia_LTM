@@ -130,7 +130,7 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 		panelMain.add(panelContent);
 
 //		pnHome = new Home(this.img);
-		pnHome = new Home(client, this);
+		pnHome = new Home(client);
 		panelContent.add(pnHome, "home");
 
 		pnProfile = new Profile(client);
@@ -235,7 +235,8 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	}
 	public void clickReturnHome() {
 		deck.removeLayoutComponent(pnHome);
-		this.pnHome = new Home(client, this.img);
+//		this.pnHome = new Home(client, this.img);
+		this.pnHome = new Home(client);
 		panelContent.add(pnHome, "home");
 		deck.show(panelContent, "home");
 	}

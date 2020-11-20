@@ -11,6 +11,12 @@ public class SocketResponsePlayer extends SocketResponse {
 		this.player = player;
 		
 	}
+	public SocketResponsePlayer(Player player, SocketResponse.Action action,String message) {
+		// TODO Auto-generated constructor stub
+		super(Status.SUCCESS, action, message);
+		this.player = player;
+		
+	}
 	public Player getPlayer() {
 		return player;
 	}

@@ -12,6 +12,7 @@ import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
 import Socket.Response.SocketResponseGameRoom;
+import Socket.Response.SocketResponsePlayer;
 import Socket.Response.SocketResponseQuestion;
 import BUS.QuestionBUS;
 import BUS.PlayerBUS;
@@ -29,7 +30,7 @@ public class ContestRoom {
 	public int accept = 0;
 
 	public boolean isEndContest = false;
- 
+
 	ArrayList<Player> players = new ArrayList<Player>();
 	ArrayList<Integer> points = new ArrayList<Integer>();
 	ArrayList<Integer> answers = new ArrayList<Integer>();
@@ -56,7 +57,7 @@ public class ContestRoom {
 			this.points.add(0);
 			this.answers.add(0);
 		}
-		
+
 		if (this.players.size() == this.config.getNumPlayer()) {
 			int n = this.clients.size();
 			for (int i = 0; i < n; ++i) {
@@ -64,7 +65,8 @@ public class ContestRoom {
 				System.out.println(this.clients.get(i).player.getId() + " ");
 			}
 
-			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"),false);
+			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"),
+					false);
 
 			try { // delay 1s for client open ContestPanel
 				Thread.sleep(2000);
@@ -79,7 +81,7 @@ public class ContestRoom {
 			// start contest
 			this.startContest();
 		}
-		
+
 	}
 
 	public void leaveRoom(ClientHandler client) {
@@ -121,13 +123,13 @@ public class ContestRoom {
 	}
 
 	public int amountOfPlayerInGame() {
-		return this.players.size(); // ok roi
+		return this.players.size();
 	}
 
 	public void startContest() {
 		contestTimer = new Timer();
 		contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
-		sendQuestionToAll(); // send first
+		sendQuestionToAll(); // send first question
 	}
 
 	class ContestTask extends TimerTask {
@@ -153,13 +155,15 @@ public class ContestRoom {
 			contestTimer.cancel(); // cancel current timer
 
 			int next = 1;
-			if (this.currentQ == this.config.getNumQuestion() - 1) // check if has next question
-			{	this.endGame();
+			if (this.currentQ >= this.config.getNumQuestion()) { // check if has next question
+				this.endGame();
 				return;
-			}
-			else {
+			} else {
+				if (this.currentQ == this.config.getNumQuestion() - 1)
+					next = 0;
 				this.sendALL(new SocketResponseGameRoom(this.players, this.points, this.answers,
-						this.questions.get(this.currentQ).getAnswer(), this.questions.get(this.currentQ + next)),true);
+						this.questions.get(this.currentQ).getAnswer(), this.questions.get(this.currentQ + next)), true);
+				refreshAnswer();
 				this.currentQ++;
 				Thread.sleep(2000);
 
@@ -169,26 +173,26 @@ public class ContestRoom {
 				contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 			}
 			// send to all, point, answer, next question
-			
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void sendALL(SocketResponse response,boolean flag) {
+	public void sendALL(SocketResponse response, boolean flag) {
 		int n = this.clients.size();
 		for (int i = 0; i < n; ++i) {
-			this.clients.get(i).sendResponse(response,flag);
+			this.clients.get(i).sendResponse(response, flag);
 		}
 	}
 
 	public void sendQuestionToAll() {
 		this.countAns = 0;
-		this.sendALL(new SocketResponseQuestion(this.questions.get(this.currentQ)),true);
+		this.sendALL(new SocketResponseQuestion(this.questions.get(this.currentQ)), true);
 	}
 
 	private void sendStartContest() {
-		this.sendALL(new SocketResponseContest(this.players, this.points),true);
+		this.sendALL(new SocketResponseContest(this.players, this.points), true);
 
 		System.out.print("Points: ");
 		for (int p : points) {
@@ -243,31 +247,12 @@ public class ContestRoom {
 
 	public void endGame() {
 		System.out.println("End game");
-		// get index of winner
-		int n = this.points.size();
-		int index = -1;
-		int maxPoint = -1;
-		for (int i = 0; i < n; ++i) {
-			if (this.points.get(i) > maxPoint) {
-				maxPoint = this.points.get(i);
-				index = i;
-			}
-		}
-		// winner
-		this.winner = this.players.get(index);
-		this.clients.get(index).sendResponse(
-				new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thắng!"),false);
-//		this.playerBus.updateWin(this.winner);
-		System.out.println("Winner:" + winner.toString());
 
-		// loser
-		for (int i = 0; i < n; ++i) {
-			if (i == index)
-				continue;
-//			this.playerBus.updateLose(this.players.get(i));
-			System.out.println("Loser:" + this.players.get(i).toString());
-			this.clients.get(i).sendResponse(
-					new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thua!"),false);
+		// check tie
+		if (this.checkTie2Player()) { // if no one wins
+			this.noWinner();
+		} else { // if it has winner
+			this.hasWinner();
 		}
 
 		this.refreshGameOfClient();
@@ -281,6 +266,51 @@ public class ContestRoom {
 		for (int i = 0; i < n; ++i) {
 			this.clients.get(i).isInGame = false;
 			this.clients.get(i).contestRoom = null;
+		}
+	}
+
+	private boolean checkTie2Player() {
+		boolean ans = false;
+		if (this.points.get(0) == this.points.get(1))
+			ans = true;
+		return ans;
+	}
+
+	private void noWinner() {
+		int n = this.points.size();
+		for (int i = 0; i < n; ++i) {
+			this.clients.get(i).player = this.players.get(i);
+			this.clients.get(i).sendResponse(new SocketResponsePlayer(this.clients.get(i).player,
+					SocketResponse.Action.MESSAGE, "Trận đấu hòa!"), false);
+		}
+	}
+
+	private void hasWinner() {
+		// get index of winner
+		int n = this.points.size();
+		int index = -1;
+		int maxPoint = -1;
+		for (int i = 0; i < n; ++i) {
+			if (this.points.get(i) > maxPoint) {
+				maxPoint = this.points.get(i);
+				index = i;
+			}
+		}
+		// winner: update and send new info to player
+		this.winner = this.players.get(index);
+		this.clients.get(index).player = this.playerBus.updateWin(this.winner);
+		this.clients.get(index).sendResponse(
+				new SocketResponsePlayer(this.clients.get(index).player, SocketResponse.Action.MESSAGE, "Bạn thắng!"),
+				false);
+
+		// loser: update and send new info to player
+		for (int i = 0; i < n; ++i) {
+			if (i == index)
+				continue;
+			this.clients.get(i).player = this.playerBus.updateLose(this.players.get(i));
+			this.clients.get(i).sendResponse(
+					new SocketResponsePlayer(this.clients.get(i).player, SocketResponse.Action.MESSAGE, "Bạn thua!"),
+					false);
 		}
 	}
 

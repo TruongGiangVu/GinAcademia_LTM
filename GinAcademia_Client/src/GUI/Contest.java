@@ -25,6 +25,7 @@ import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
 import Socket.Response.SocketResponseGameRoom;
+import Socket.Response.SocketResponsePlayer;
 import Socket.Response.SocketResponseQuestion;
 
 //import javax.swing.Timer;
@@ -261,7 +262,9 @@ public class Contest extends MyPanel implements MouseListener {
 						
 					} else { // if over
 						SocketResponse responseEnd = client.getResponse();
-						showDialog(responseEnd.getMessage());
+						SocketResponsePlayer player = (SocketResponsePlayer) responseEnd;
+						showDialog(player.getMessage());
+						client.player = player.getPlayer(); // update again info
 					}
 
 					timer = new Timer();
@@ -324,6 +327,7 @@ public class Contest extends MyPanel implements MouseListener {
 	private void updatePoint(ArrayList<Integer> points) {
 		System.out.println("update Point");
 		int n = points.size();
+		System.out.println("n:"+ n+ " index: "+ index);
 		this.lblYourPoint.setText(points.get(index) + "");
 		for (int i = 0; i < n; ++i) {
 			if (i != index)
@@ -423,6 +427,7 @@ public class Contest extends MyPanel implements MouseListener {
 		int ind = -1;
 		int n = players.size();
 		for (int i = 0; i < n; ++i) {
+			System.out.println("Id: " +players.get(i).getId());
 			if (players.get(i).getId().equals(p.getId())) {
 				ind = i;
 				break;
