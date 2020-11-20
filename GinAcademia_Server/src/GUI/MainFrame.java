@@ -105,6 +105,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		panelContent.add(pnPlayer,"player");
 		
 		deck.show(panelContent, "home");
+		btnHome.setSelected(true);
 		btnHome.addActionListener(this);
 		btnPlayer.addActionListener(this);
 		btnQuestion.addActionListener(this);
