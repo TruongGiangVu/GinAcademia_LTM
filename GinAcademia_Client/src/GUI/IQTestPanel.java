@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -202,13 +203,12 @@ public class IQTestPanel extends MyPanel {
 				this.arrTxt.get(i).setText(symbol.get(i) + " " + q.getOptions().get(i).Option);
 			}
 		}
-
 	}
 
 	public void getAnswer() {
-		String ans = txtAnswer.getText().trim(); // get answer
+		String ans = txtAnswer.getText().trim().toLowerCase(); // get answer
 
-		if (ans.equals(this.arr.get(this.currentQ).getAnswer())) { // answer right
+		if (ans.equals(this.arr.get(this.currentQ).getAnswer().toLowerCase())) { // answer right
 			this.numRight++;
 		}
 		// clean answer
@@ -223,7 +223,10 @@ public class IQTestPanel extends MyPanel {
 			SocketResponsePlayer response = (SocketResponsePlayer) client.getResponse();
 			client.player = response .getPlayer();
 			JOptionPane.showMessageDialog(this, "Điểm IQ của bạn là:"+response.getPlayer().getIQPoint() );
+			MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+			parent.clickReturnHome();
 		}
+		this.txtAnswer.requestFocus();
 	}
 	public void loadImage(String nameImage) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
