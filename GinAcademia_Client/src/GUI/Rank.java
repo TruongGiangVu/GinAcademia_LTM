@@ -29,7 +29,6 @@ import javax.swing.JButton;
 public class Rank extends MyPanel {
 
 	private JTable table;
-	private JPanel panelTable;
 	private DefaultTableCellRenderer cellRenderer;
 	public int orderRank = 0;
 	private JLabel lblNewLabel;
@@ -48,44 +47,14 @@ public class Rank extends MyPanel {
 		this.player = client.player;
 		this.setSize(600, 600);
 		this.setBackground(Color.WHITE);
-		if (status == 1) {
-			this.initRank();
-			this.initTable();
-
-			panelTable = new JPanel();
-			panelTable.setBounds(30, 134, 540, 435);
-			panelTable.setLayout(new GridLayout(0, 1, 0, 0));
-			panelTable.setBackground(Color.WHITE);
-			JScrollPane scrollPane = new JScrollPane(table);
-			panelTable.add(scrollPane);
-
-			add(panelTable);
-
-			this.initComponent();
-		}
-	}
-
-	private void initRank() {
+		if (status == 0)
+			return;
+		
 		SocketRequest request = new SocketRequest(SocketRequest.Action.RANK, "Rank view");
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
 		listplayer = response.getList();
-		
-		this.initTable();
 
-		panelTable = new JPanel();
-		panelTable.setBounds(30, 134, 540, 400);
-		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
-		panelTable.setBackground(Color.WHITE);
-		JScrollPane scrollPane = new JScrollPane(table);
-		panelTable.add(scrollPane);
-
-		add(panelTable);
-		
-		this.initComponent();
-	}
-
-	private void initTable() {
 		tableModel = new RankTableModel(listplayer);
 		setLayout(null);
 		table = new JTable(tableModel);
@@ -102,9 +71,13 @@ public class Rank extends MyPanel {
 		cellRenderer = new DefaultTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
-	}
 
-	private void initComponent() {
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(30, 134, 540, 400);
+		scrollPane.setBackground(Color.WHITE);
+
+		add(scrollPane);
+
 		lblNewLabel = new JLabel("Hạng của bạn:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblNewLabel.setBounds(30, 26, 105, 24);
@@ -137,10 +110,11 @@ public class Rank extends MyPanel {
 		txtSearch.setBounds(315, 80, 214, 30);
 		add(txtSearch);
 		txtSearch.setColumns(10);
-		
-		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH);
+
+		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30, 30,
+				java.awt.Image.SCALE_SMOOTH);
 //		Icon icon = new ImageIcon("./img/search_icon.png");
-		
+
 		btnNewButton = new JButton();
 		btnNewButton.setBounds(539, 80, 31, 30);
 		btnNewButton.setBorder(null);
@@ -150,4 +124,7 @@ public class Rank extends MyPanel {
 		btnNewButton.setIcon(new ImageIcon(scaled));
 		add(btnNewButton);
 	}
+
+
+
 }

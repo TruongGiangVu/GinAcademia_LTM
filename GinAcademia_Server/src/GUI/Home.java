@@ -235,7 +235,7 @@ public class Home extends JPanel implements MouseListener {
 				status = "Offline";
 			}
 			for (int i = 0; i < n; i++) {
-				if(Server.isOnlinePlayer(arr.get(i).getUsername())) {
+				if(Server.isOnlinePlayer(temp.get(i).getUsername())) {
 					status = "Online";
 				}
 				Object[] row = { temp.get(i).getId(), temp.get(i).getName(),temp.get(i).getUsername(), status };

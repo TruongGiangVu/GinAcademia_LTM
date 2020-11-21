@@ -10,6 +10,9 @@ import Model.IQTest;
 import Model.OptionIQ;
 import Module.MyPanel;
 import Socket.Client;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.SwingConstants;
 
 @SuppressWarnings("serial")
 public class IQTestPanel extends MyPanel {
@@ -22,7 +25,19 @@ public class IQTestPanel extends MyPanel {
 
 	public IQTestPanel(Client client) {
 		super(client);
-		this.setBackground(Color.WHITE);
+//		this.setBackground(Color.WHITE);
+		this.setSize(600, 600);
+		setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("2000");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 13));
+		lblNewLabel.setBounds(286, 11, 80, 25);
+		add(lblNewLabel);
+		
+		JLabel lblNewLabel_1 = new JLabel("New label");
+		lblNewLabel_1.setBounds(25, 40, 550, 70);
+		add(lblNewLabel_1);
 		this.seedData();
 	}
 
@@ -123,5 +138,4 @@ public class IQTestPanel extends MyPanel {
 			client.sendRequest(null);
 		}
 	}
-
 }
