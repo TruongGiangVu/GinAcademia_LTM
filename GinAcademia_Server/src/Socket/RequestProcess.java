@@ -40,6 +40,7 @@ public class RequestProcess {
 					registerProcess();
 					break;
 				case IQTEST:
+					iQTestProcess();
 					break;
 				case CONTEST:
 					contestProcess();
@@ -83,5 +84,8 @@ public class RequestProcess {
 	private void contestProcess() { // just for test, will delete later
 		ArrayList<Question> arr = questionBUS.ReadContest(5);
 		client.sendResponse(new SocketResponseContestTest(arr),false);
+	}
+	private void iQTestProcess() {
+		// code
 	}
 }

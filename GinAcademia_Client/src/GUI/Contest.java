@@ -20,7 +20,6 @@ import Module.MyLabel;
 import Module.MyPanel;
 
 import Socket.Client;
-import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
@@ -203,6 +202,7 @@ public class Contest extends MyPanel implements MouseListener {
 		int countdown = 10;
 
 		public ContestTask() {
+			clearColorOption();
 		}
 
 		@Override
@@ -217,18 +217,6 @@ public class Contest extends MyPanel implements MouseListener {
 		}
 	}
 
-	private void endTurn() {
-		System.out.println("End turn \n");
-
-		SocketResponse responseServer = (SocketResponse) client.getResponse();
-		timer.cancel(); // timer stop
-		if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
-			SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
-			this.index = this.indexOfPlayer(responseGameRoom.players, this.player); // get index player
-			this.displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer); // display answer, both player
-			this.updateHeader(index, responseGameRoom.points); // update point
-		}
-	}
 	class ContestGame implements Runnable {
 		public ContestGame() {
 		}
@@ -257,7 +245,6 @@ public class Contest extends MyPanel implements MouseListener {
 					if (stt <= 5) { // if has next question
 						isAnswer = false;
 						setEnableOption(true);
-						clearColorOption();
 						loadQuestion(responseGameRoom.question);
 						
 					} else { // if over
@@ -419,8 +406,9 @@ public class Contest extends MyPanel implements MouseListener {
 	private void clearColorOption() {
 		int n = arrTxt.size();
 		for (int i = 0; i < n; ++i) {
-			this.arrTxt.get(index).setBackground(Color.WHITE);
+			this.arrTxt.get(i).setBackground(new Color(255,255,255));
 		}
+		System.out.println("Clear color");
 	}
 
 	private int indexOfPlayer(ArrayList<Player> players, Player p) {

@@ -136,7 +136,7 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 		pnProfile = new Profile(client);
 		panelContent.add(pnProfile, "profile");
 
-		pnIQTest = new IQTest(client);
+		pnIQTest = new IQTestPanel(client);
 		panelContent.add(pnIQTest, "iqTest");
 
 		pnRank = new Rank(client, 0);
@@ -209,7 +209,7 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 			deck.show(panelContent, "profile");
 		} else if (source == this.btnIQ) {
 			deck.removeLayoutComponent(pnIQTest);
-			this.pnIQTest = new IQTest(client);
+			this.pnIQTest = new IQTestPanel(client);
 			panelContent.add(pnIQTest, "iqTest");
 			deck.show(panelContent, "iqTest");
 		} else if (source == this.btnRank) {
