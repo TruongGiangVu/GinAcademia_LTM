@@ -51,7 +51,7 @@ public class ContestRoomManager {
 		ContestRoom room = null;
 		int n = rooms.size();
 		if(n == 0) {
-			room = this.createRoom();
+			room = this.createRoom(config);
 		}
 		else {
 			for (int i = 0; i < n; ++i) {
@@ -61,10 +61,18 @@ public class ContestRoomManager {
 				}
 			}
 			if(room == null) {
-				room = this.createRoom();
+				room = this.createRoom(config);
 			}
 		}
 		return room;
+	}
+	
+	public GameConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(GameConfig config) {
+		this.config = config;
 	}
 
 }

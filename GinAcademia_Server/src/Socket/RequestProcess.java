@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import BUS.PlayerBUS;
 import BUS.QuestionBUS;
 import Model.Player;
-import Model.Question;
 
 public class RequestProcess {
 	ClientHandler client;
@@ -41,9 +40,6 @@ public class RequestProcess {
 					break;
 				case IQTEST:
 					iQTestProcess();
-					break;
-				case CONTEST:
-					contestProcess();
 					break;
 				default:
 					break;
@@ -81,11 +77,11 @@ public class RequestProcess {
 			client.sendResponse(new SocketResponsePlayer(p),false);
 		}
 	}
-	private void contestProcess() { // just for test, will delete later
-		ArrayList<Question> arr = questionBUS.ReadContest(5);
-		client.sendResponse(new SocketResponseContestTest(arr),false);
-	}
 	private void iQTestProcess() {
-		// code
+		SocketRequestIQTest iqtest = (SocketRequestIQTest) this.request;
+		int point = iqtest.numRight * 155 / iqtest.numQ;
+		client.player.setIQPoint(point);
+		playerBus.update(client.player);
+		client.sendResponse(new SocketResponsePlayer(client.player),false);
 	}
 }

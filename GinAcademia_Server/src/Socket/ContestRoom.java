@@ -133,7 +133,7 @@ public class ContestRoom {
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = 10;
+		int countdown = config.getTime();
 
 		public ContestTask() {
 			System.out.println("start countdown");
@@ -192,7 +192,7 @@ public class ContestRoom {
 	}
 
 	private void sendStartContest() {
-		this.sendALL(new SocketResponseContest(this.players, this.points), true);
+		this.sendALL(new SocketResponseContest(this.players, this.points, this.config), true);
 
 		System.out.print("Points: ");
 		for (int p : points) {

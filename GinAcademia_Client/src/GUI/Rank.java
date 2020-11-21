@@ -1,6 +1,5 @@
 package GUI;
 
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -9,7 +8,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
