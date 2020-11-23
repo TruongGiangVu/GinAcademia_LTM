@@ -66,7 +66,12 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		this.tbModelPlayer = new DefaultTableModel();
 	
 		this.tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản","Email", "Trạng thái"});
-		this.tbPlayer = new JTable(this.tbModelPlayer);
+		this.tbPlayer = new JTable(this.tbModelPlayer){
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		this.tbPlayer.setRowHeight(25);
 		this.tbPlayer.getColumnModel().getColumn(1).setPreferredWidth(200);
 		this.tbPlayer.getColumnModel().getColumn(2).setPreferredWidth(100);

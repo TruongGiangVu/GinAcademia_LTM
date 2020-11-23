@@ -53,7 +53,12 @@ public class QuestionPanel extends JPanel implements ActionListener {
 
 		tableModel = new DefaultTableModel();
 		tableModel.setColumnIdentifiers(new Object[] { "Id", "Câu hỏi", "Câu A", "Câu B", "Câu C", "Câu D", "Đáp án" });
-		table = new JTable(tableModel);
+		table = new JTable(tableModel) {
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(25);
 		table.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -63,6 +68,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		table.getColumnModel().getColumn(4).setPreferredWidth(30);
 		table.getColumnModel().getColumn(5).setPreferredWidth(30);
 		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		
 		this.RefreshTableData(arr);
 
 		JScrollPane scrollPane = new JScrollPane(table);

@@ -111,14 +111,22 @@ public class Home extends JPanel implements MouseListener {
 		
 		tbModelPlayer = new DefaultTableModel();
 		tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản", "Trạng thái"});
-		this.tbPlayer = new JTable(tbModelPlayer);
+		this.tbPlayer = new JTable(tbModelPlayer){
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		this.tbPlayer.setRowHeight(25);
 		this.tbPlayer.getColumnModel().getColumn(1).setPreferredWidth(200);
 		this.tbPlayer.getColumnModel().getColumn(2).setPreferredWidth(150);
 
 		this.tbPlayer.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		this.tbPlayer.getColumnModel().getColumn(3).setCellRenderer(customRenderer);
+		
 		this.LoadPlayerOnline();
+		
+		
 		scrollPane = new JScrollPane(this.tbPlayer);
 		scrollPane.setBounds(30, 80, 540, 150);
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -131,7 +139,6 @@ public class Home extends JPanel implements MouseListener {
 
 		this.tbModelGameRank = new DefaultTableModel();
 		this.tbModelGameRank.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi", "Tên tài khoản", "Số trận"});
-//		this.tbModelGameRan
 		
 		this.tbModelWinRank = new DefaultTableModel();
 		this.tbModelWinRank.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi", "Tên tài khoản", "Số trận thắng"});
@@ -139,7 +146,12 @@ public class Home extends JPanel implements MouseListener {
 		this.tbModelWinSQRank = new DefaultTableModel();
 		this.tbModelWinSQRank.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi", "Tên tài khoản", "Chuỗi thắng"});
 		
-		this.tbGameRank = new JTable(this.tbModelGameRank);
+		this.tbGameRank = new JTable(this.tbModelGameRank){
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		this.tbGameRank.setRowHeight(25);
 		this.tbGameRank.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		this.tbGameRank.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -149,7 +161,12 @@ public class Home extends JPanel implements MouseListener {
 		this.tbGameRank.getColumnModel().getColumn(2).setPreferredWidth(100);
 
 		
-		this.tbWinRank = new JTable(this.tbModelWinRank);
+		this.tbWinRank = new JTable(this.tbModelWinRank){
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		this.tbWinRank.setRowHeight(25);
 		this.tbWinRank.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		this.tbWinRank.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -157,7 +174,12 @@ public class Home extends JPanel implements MouseListener {
 		this.tbWinRank.getColumnModel().getColumn(1).setPreferredWidth(200);
 		this.tbWinRank.getColumnModel().getColumn(2).setPreferredWidth(100);
 		
-		this.tbWinSQRank = new JTable(this.tbModelWinSQRank);
+		this.tbWinSQRank = new JTable(this.tbModelWinSQRank){
+			private static final long serialVersionUID = 1L;
+	        public boolean isCellEditable(int row, int column) {                
+	                return false;               
+	        };
+		};
 		this.tbWinSQRank.setRowHeight(25);
 		this.tbWinSQRank.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		this.tbWinSQRank.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
@@ -241,35 +263,35 @@ public class Home extends JPanel implements MouseListener {
 		this.RemoveTableData(this.tbWinRank);
 		this.RemoveTableData(this.tbWinSQRank);
 		
-		PlayerActive.sort(Comparator.comparing(Player::getTotalGame).reversed());
+		data.sort(Comparator.comparing(Player::getTotalGame).reversed());
 		int top = 10;
 //		set top: 3,5,10
-		if(PlayerActive.size() < 10 && PlayerActive.size() > 5) {
+		if(data.size() < 10 && data.size() > 5) {
 			top = 5;
 		}
 		else {
-			if(PlayerActive.size() < 5) {
+			if(data.size() < 5) {
 				top = 3;
 			}
 		}
 //		load number game join
 		for (int i = 0; i < top; i++) {
-			Object[] row = {i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getTotalGame() };
+			Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
 			this.tbModelGameRank.addRow(row);
 		}
 		this.tbGameRank.setModel(this.tbModelGameRank);
 		
 //		load win game
-		PlayerActive.sort(Comparator.comparing(Player::getWins).reversed());
+		data.sort(Comparator.comparing(Player::getWins).reversed());
 		for (int i = 0; i < top; i++) {
-			Object[] row = {i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getWins() };
+			Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getWins() };
 			this.tbModelWinRank.addRow(row);
 		}
 		this.tbWinRank.setModel(this.tbModelWinRank);
 //		load win sequence game
-		PlayerActive.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
+		data.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
 		for (int i = 0; i < top; i++) {
-			Object[] row = { i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getMaxWinSequence()};
+			Object[] row = { i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence()};
 			this.tbModelWinSQRank.addRow(row);
 		}
 		this.tbWinSQRank.setModel(this.tbModelWinSQRank);
@@ -348,8 +370,5 @@ public class Home extends JPanel implements MouseListener {
 		// TODO Auto-generated method stub
 			}
 	
-	public static void abcd() {
-	  lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); 
 	
-	}
 }
