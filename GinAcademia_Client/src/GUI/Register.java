@@ -225,19 +225,19 @@ public class Register extends MyFrame {
 		errorPassword = new JLabel("");
 		errorPassword.setForeground(Color.RED);
 		errorPassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorPassword.setBounds(30, 324, 280, 14);
+		errorPassword.setBounds(30, 400, 280, 14);
 		contentPane.add(errorPassword);
 		
 		errorRePassword = new JLabel("");
 		errorRePassword.setForeground(Color.RED);
 		errorRePassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorRePassword.setBounds(30, 300, 280, 14);
+		errorRePassword.setBounds(30, 500, 280, 14);
 		contentPane.add(errorRePassword);
 		
 		errorEmail = new JLabel("");
 		errorEmail.setForeground(Color.RED);
 		errorEmail.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorEmail.setBounds(30, 415, 280, 14);
+		errorEmail.setBounds(30, 300, 280, 14);
 		contentPane.add(errorEmail);
 		
 		errorBirthdate = new JLabel("");
@@ -311,6 +311,7 @@ public class Register extends MyFrame {
 			else { // success
 				client.connect(p.getUsername(), p.getPassword()); // connect Player
 				JOptionPane.showMessageDialog(this, client.message);
+				this.dispose();
 				MainFrame frame = new MainFrame(client); // open main frame
 				frame.setVisible(true);
 			}
