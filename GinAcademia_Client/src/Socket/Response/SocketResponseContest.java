@@ -10,6 +10,7 @@ public class SocketResponseContest extends SocketResponse {
 	public ArrayList<Player> players;
 	public ArrayList<Integer> points;
 	public GameConfig config;
+
 	public SocketResponseContest(ArrayList<Player> players, ArrayList<Integer> points, GameConfig config) {
 		super(Status.SUCCESS, Action.CONTEST, "contest");
 		this.players = players;

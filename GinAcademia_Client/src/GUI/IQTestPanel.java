@@ -63,6 +63,7 @@ public class IQTestPanel extends MyPanel {
 
 		lblQuestion = new JLabel("question");
 		lblQuestion.setBounds(25, 40, 550, 90);
+//		lblQuestion.
 		add(lblQuestion);
 
 		txtAnswer = new JTextField();
@@ -78,7 +79,7 @@ public class IQTestPanel extends MyPanel {
 		});
 		btnEnter.setBounds(255, 480, 90, 23);
 		add(btnEnter);
-		
+
 		lblImage = new JLabel("");
 		lblImage.setBounds(25, 140, 550, 300);
 		add(lblImage);
@@ -104,7 +105,7 @@ public class IQTestPanel extends MyPanel {
 		arrTxt.add(lblB);
 		arrTxt.add(lblC);
 		arrTxt.add(lblD);
-		
+
 		this.seedData();
 		this.startIQTest();
 		this.loadQuestion(this.arr.get(this.currentQ));
@@ -171,7 +172,8 @@ public class IQTestPanel extends MyPanel {
 		@Override
 		public void run() {
 			// set label
-			lblTime.setText(time + "");
+			String timeStr = (time / 60) + " : " + (time % 60);
+			lblTime.setText(timeStr);
 			if (time == 0) {
 				// end
 			}
@@ -187,7 +189,7 @@ public class IQTestPanel extends MyPanel {
 
 	public void loadQuestion(IQTest q) {
 		// set text
-		String title = "Câu " + (this.currentQ + 1) + " :" + q.getIQQuestion();
+		String title = "<html>" + "Câu " + (this.currentQ + 1) + " :" + q.getIQQuestion() + "</html>";
 		lblQuestion.setText(title);
 		if (q.isImageQuestion()) { // image question
 			this.visuablePanel(true);
@@ -200,7 +202,7 @@ public class IQTestPanel extends MyPanel {
 			symbol.add("C.");
 			symbol.add("D.");
 			for (int i = 0; i < 4; ++i) {
-				this.arrTxt.get(i).setText(symbol.get(i) + " " + q.getOptions().get(i).Option);
+				this.arrTxt.get(i).setText("<html>" + symbol.get(i) + " " + q.getOptions().get(i).Option + "</html>");
 			}
 		}
 	}
@@ -218,16 +220,17 @@ public class IQTestPanel extends MyPanel {
 		if (this.currentQ < this.numQ) // has next question
 			this.loadQuestion(this.arr.get(this.currentQ));
 		else { // over
-			System.out.print("num right:"+ this.numRight);
+			timer.cancel();
 			client.sendRequest(new SocketRequestIQTest(this.numQ, this.numRight));
 			SocketResponsePlayer response = (SocketResponsePlayer) client.getResponse();
-			client.player = response .getPlayer();
-			JOptionPane.showMessageDialog(this, "Điểm IQ của bạn là:"+response.getPlayer().getIQPoint() );
+			client.player = response.getPlayer();
+			JOptionPane.showMessageDialog(this, "Điểm IQ của bạn là:" + response.getPlayer().getIQPoint());
 			MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 			parent.clickReturnHome();
 		}
 		this.txtAnswer.requestFocus();
 	}
+
 	public void loadImage(String nameImage) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
 		Image image = icon.getImage(); // transform it

@@ -47,8 +47,9 @@ public class Home extends JPanel implements MouseListener {
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
+	private static JLabel lblNewLabel_1_1 ;
 	private PlayerBUS bus = new PlayerBUS();
-	ArrayList<Player> arr = new ArrayList<Player>();
+	public ArrayList<Player> arr = new ArrayList<Player>();
 	
 	/**
 	 * Create the panel.
@@ -85,7 +86,7 @@ public class Home extends JPanel implements MouseListener {
 		lblNewLabel_2.setBounds(200, 30, 170, 30);
 		add(lblNewLabel_2);
 		
-		JLabel lblNewLabel_1_1 = new JLabel(Server.countPlayerOnline()+ ""); 
+		lblNewLabel_1_1 = new JLabel(Server.countPlayerOnline()+ ""); 
 		lblNewLabel_1_1.setBounds(380, 30, 30, 30);
 		add(lblNewLabel_1_1);
 		
@@ -211,7 +212,7 @@ public class Home extends JPanel implements MouseListener {
 		add(btnRefresh);
 		
 	}
-	public void LoadPlayerOnline(ArrayList<Player> data) {
+	public  void LoadPlayerOnline(ArrayList<Player> data) {
 		this.RemoveTableData(this.tbPlayer);
 		if(data == null || data.size() == 0) {
 			this.remove(this.scrollPane);
@@ -331,4 +332,9 @@ public class Home extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 			}
+	
+	public static void abcd() {
+	  lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); 
+	
+	}
 }

@@ -4,6 +4,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import Model.Player;
 import Socket.Request.SocketRequest;
@@ -24,6 +38,9 @@ public class Client {
 	public Player player = null;
 	public String message = "";
 
+	private Cipher cipher;
+	private Cipher dcipher;
+
 	public Client() {
 		init();
 	}
@@ -36,10 +53,29 @@ public class Client {
 
 	public void init() {
 		try {
+			final char[] password = "secret_password".toCharArray();
+			final byte[] salt = "random_salt".getBytes();
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			KeySpec spec = new PBEKeySpec(password, salt, 1024, 128);
+			SecretKey tmp = factory.generateSecret(spec);
+			SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+			cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, secret);
+			dcipher = Cipher.getInstance("AES");
+			dcipher.init(Cipher.DECRYPT_MODE, secret);
 			this.socket = new Socket(host, port);
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		}
 	}
@@ -78,10 +114,13 @@ public class Client {
 
 	public void sendRequest(SocketRequest request) {
 		try {
-			sender.writeObject(request);
+			SealedObject so = new SealedObject(request, cipher); // ma hoa
+			sender.writeObject(so);
 			sender.flush();
 		} catch (IOException e) {
 			System.out.println("loi");
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		}
 	}
@@ -93,12 +132,17 @@ public class Client {
 	public SocketResponse getResponse() {
 		SocketResponse response = null;
 		try {
-			response = (SocketResponse) this.receiver.readObject();
-//			Object object = this.receiver.readObject();
-//			response = (SocketResponse)object;
+//			response = (SocketResponse) this.receiver.readObject();
+			SealedObject s = (SealedObject) this.receiver.readObject();
+			response = (SocketResponse) s.getObject(dcipher);
 			this.message = response.getMessage();
 			
+
 		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
 			e.printStackTrace();
 		}
 		return response;

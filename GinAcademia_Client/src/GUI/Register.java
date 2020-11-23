@@ -39,11 +39,9 @@ public class Register extends MyFrame {
 	private JPanel contentPane;
 	private JTextField txtName;
 	private JLabel lblNewLabel;
-	private JLabel lblTnTiKhon;
 	private JPasswordField txtPassword;
 	private JButton btnNewButton;
 	int xx,xy;
-	private JTextField txtUsername;
 	private JLabel lblMtKhu;
 	private JLabel lblNhpLiMt;
 	private JPasswordField txtRePassword;
@@ -58,7 +56,6 @@ public class Register extends MyFrame {
 	private ArrayList<JTextField> arrTF = new ArrayList<JTextField>();
 	private ArrayList<JLabel> arrError = new ArrayList<JLabel>();
 	private JLabel errorName;
-	private JLabel errorUsername;
 	private JLabel errorPassword;
 	private JLabel errorRePassword;
 	private JLabel errorEmail;
@@ -82,7 +79,7 @@ public class Register extends MyFrame {
 		txtName = new JTextField();
 		txtName.setText("Vu Tr");
 		txtName.setToolTipText("name");
-		txtName.setBounds(30, 60, 280, 35);
+		txtName.setBounds(30, 70, 280, 35);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
 		
@@ -92,15 +89,9 @@ public class Register extends MyFrame {
 		lblNewLabel.setBounds(30, 25, 159, 25);
 		contentPane.add(lblNewLabel);
 		
-		lblTnTiKhon = new JLabel("TÊN TÀI KHOẢN");
-		lblTnTiKhon.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblTnTiKhon.setForeground(Color.BLACK);
-		lblTnTiKhon.setBounds(30, 253, 159, 25);
-		contentPane.add(lblTnTiKhon);
-		
 		txtPassword = new JPasswordField("12345");
 		txtPassword.setToolTipText("password");
-		txtPassword.setBounds(30, 368, 280, 35);
+		txtPassword.setBounds(30, 365, 280, 35);
 		contentPane.add(txtPassword);
 		
 		btnNewButton = new JButton("Đăng ký");
@@ -124,51 +115,44 @@ public class Register extends MyFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(8,87,40));
-		btnNewButton.setBounds(30, 508, 280, 35);
+		btnNewButton.setBounds(30, 520, 280, 35);
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);
-		
-		txtUsername = new JTextField();
-		txtUsername.setText("user3");
-		txtUsername.setToolTipText("username");
-		txtUsername.setColumns(10);
-		txtUsername.setBounds(30, 288, 280, 35);
-		contentPane.add(txtUsername);
 		
 		lblMtKhu = new JLabel("MẬT KHẨU");
 		lblMtKhu.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMtKhu.setForeground(Color.BLACK);
-		lblMtKhu.setBounds(30, 333, 159, 25);
+		lblMtKhu.setBounds(30, 320, 159, 25);
 		contentPane.add(lblMtKhu);
 		
 		lblNhpLiMt = new JLabel("NHẬP LẠI MẬT KHẨU");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNhpLiMt.setForeground(Color.BLACK);
-		lblNhpLiMt.setBounds(30, 413, 181, 25);
+		lblNhpLiMt.setBounds(30, 420, 181, 25);
 		contentPane.add(lblNhpLiMt);
 		
 		txtRePassword = new JPasswordField("123456");
 		txtRePassword.setToolTipText("password");
-		txtRePassword.setBounds(30, 448, 280, 35);
+		txtRePassword.setBounds(30, 465, 280, 35);
 		contentPane.add(txtRePassword);
 		
 		lblEmail = new JLabel("EMAIL");
 		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblEmail.setForeground(Color.BLACK);
-		lblEmail.setBounds(30, 173, 159, 25);
+		lblEmail.setBounds(30, 220, 159, 25);
 		contentPane.add(lblEmail);
 		
 		txtEmail = new JTextField();
 		txtEmail.setText("abc@gmail.com");
 		txtEmail.setToolTipText("email");
 		txtEmail.setColumns(10);
-		txtEmail.setBounds(30, 208, 280, 35);
+		txtEmail.setBounds(30, 265, 280, 35);
 		contentPane.add(txtEmail);
 		
 		lblNgySinh = new JLabel("NGÀY SINH");
 		lblNgySinh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNgySinh.setForeground(Color.BLACK);
-		lblNgySinh.setBounds(30, 105, 159, 25);
+		lblNgySinh.setBounds(30, 125, 159, 25);
 		contentPane.add(lblNgySinh);
 		
 		UtilDateModel model = new UtilDateModel();
@@ -183,19 +167,19 @@ public class Register extends MyFrame {
 		datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
 		datePicker.getJFormattedTextField().setBackground(Color.WHITE);
 		datePicker.setSize(173, 28);
-		datePicker.setLocation(30, 140);
+		datePicker.setLocation(30, 170);
 			
 		contentPane.add(datePicker);
 		lblGiiTnh = new JLabel("GIỚI TÍNH");
 		lblGiiTnh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblGiiTnh.setForeground(Color.BLACK);
-		lblGiiTnh.setBounds(219, 106, 103, 28);
+		lblGiiTnh.setBounds(219, 125, 103, 28);
 		contentPane.add(lblGiiTnh);
 		
 		txtGender = new JComboBox<String>();
 		txtGender.setBackground(Color.WHITE);
 		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
-		txtGender.setBounds(219, 140, 72, 25);
+		txtGender.setBounds(219, 170, 72, 25);
 		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
 		((JTextField)txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
@@ -203,7 +187,7 @@ public class Register extends MyFrame {
 		lblCTi = new JLabel("Đã có tài khoản?");
 		lblCTi.setForeground(Color.BLACK);
 		lblCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCTi.setBounds(72, 554, 103, 25);
+		lblCTi.setBounds(72, 560, 103, 25);
 		contentPane.add(lblCTi);
 		
 		lblngNhpNgay = new JLabel("Đăng nhập ngay");
@@ -229,31 +213,25 @@ public class Register extends MyFrame {
 		});
 		lblngNhpNgay.setForeground(new Color(8,87,40));
 		lblngNhpNgay.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblngNhpNgay.setBounds(167, 554, 159, 25);
+		lblngNhpNgay.setBounds(167, 560, 159, 25);
 		contentPane.add(lblngNhpNgay);
 		
 		errorName = new JLabel("");
 		errorName.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorName.setForeground(Color.RED);
-		errorName.setBounds(30, 95, 280, 14);
+		errorName.setBounds(30, 105, 280, 14);
 		contentPane.add(errorName);
-		
-		errorUsername = new JLabel("");
-		errorUsername.setForeground(Color.RED);
-		errorUsername.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorUsername.setBounds(30, 175, 280, 14);
-		contentPane.add(errorUsername);
 		
 		errorPassword = new JLabel("");
 		errorPassword.setForeground(Color.RED);
 		errorPassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorPassword.setBounds(30, 255, 280, 14);
+		errorPassword.setBounds(30, 324, 280, 14);
 		contentPane.add(errorPassword);
 		
 		errorRePassword = new JLabel("");
 		errorRePassword.setForeground(Color.RED);
 		errorRePassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorRePassword.setBounds(30, 335, 280, 14);
+		errorRePassword.setBounds(30, 300, 280, 14);
 		contentPane.add(errorRePassword);
 		
 		errorEmail = new JLabel("");
@@ -265,17 +243,15 @@ public class Register extends MyFrame {
 		errorBirthdate = new JLabel("");
 		errorBirthdate.setForeground(Color.RED);
 		errorBirthdate.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorBirthdate.setBounds(30, 483, 280, 14);
+		errorBirthdate.setBounds(30, 200, 280, 14);
 		contentPane.add(errorBirthdate);
 		
 		arrTF.add(txtName);
-		arrTF.add(txtUsername);
 		arrTF.add(txtPassword);
 		arrTF.add(txtRePassword);
 		arrTF.add(txtEmail);
 		
 		arrError.add(errorName);
-		arrError.add(errorUsername);
 		arrError.add(errorPassword);
 		arrError.add(errorRePassword);
 		arrError.add(errorEmail);
@@ -287,12 +263,11 @@ public class Register extends MyFrame {
 	}
 	private Player getData() { // take data
 		String name = this.txtName.getText();
-		String user = this.txtUsername.getText();
+		String user = this.txtEmail.getText();
 		String pass = String.valueOf(this.txtPassword.getPassword());
-		String email = this.txtEmail.getText();
 		String birthdate = this.datePicker.getJFormattedTextField().getText();
 		boolean gender = this.txtGender.getSelectedItem().toString().equals("Nam") ? true: false ;
-		Player p = new Player(name, user, pass, email, birthdate, gender);
+		Player p = new Player(name, user, pass, "", birthdate, gender);
 		return p;
 	}
 	private boolean checkData() { //check data, return true if data is OK
