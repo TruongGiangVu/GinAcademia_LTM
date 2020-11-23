@@ -24,6 +24,7 @@ import Socket.Request.*;
 import Socket.Response.SocketResponse;
 import Socket.Response.*;
 import BUS.PlayerBUS;
+import GUI.Home;
 
 // a client Thread for connect to just 1 player
 public class ClientHandler implements Runnable { 
@@ -164,6 +165,7 @@ public class ClientHandler implements Runnable {
 				} else { // login OK
 					isLoggedIn = true;
 					sendResponse(new SocketResponsePlayer(this.player),false);
+					Home.updatePlayerOnline(this.player);
 				}
 			}
 		} else { // data wrong
@@ -184,6 +186,7 @@ public class ClientHandler implements Runnable {
 		}
 		// sign out off server by id of clientHandler
 		Server.signOutPlayer(this.id);
+		Home.updatePlayerOnline(this.player);
 		this.close();
 	}
 
