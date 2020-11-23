@@ -54,6 +54,7 @@ public class ClientHandler implements Runnable {
 			cipher.init(Cipher.ENCRYPT_MODE, secret);
 			dcipher = Cipher.getInstance("AES");
 			dcipher.init(Cipher.DECRYPT_MODE, secret);
+			
 			this.id = id;
 			this.socket = socket;
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());

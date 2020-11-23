@@ -73,7 +73,7 @@ public class Home extends ImagePanel implements ActionListener {
 		lblTime.setForeground(Color.WHITE);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 24));
-		lblTime.setBounds(250, 350, 100, 80);
+		lblTime.setBounds(250, 343, 100, 80);
 		add(lblTime);
 
 		btnCancel = new JButton("Hủy");
@@ -103,7 +103,7 @@ public class Home extends ImagePanel implements ActionListener {
 	public void waittingContest() {
 		waitTask = new WaitTask();
 		timer = new Timer();
-		timer.scheduleAtFixedRate(waitTask, 0, 1000);
+		timer.scheduleAtFixedRate(waitTask, 0, 1000); // run timer
 	}
 
 	class WaitTask extends TimerTask {
@@ -121,6 +121,9 @@ public class Home extends ImagePanel implements ActionListener {
 				timer.cancel();
 				timer.purge();
 				callParentToStartContest();
+			}
+			if(time == 60) {
+				cancelButton();
 			}
 			time++;
 		}
@@ -180,17 +183,7 @@ public class Home extends ImagePanel implements ActionListener {
 		} else if (source == btnCancel) {
 			System.out.println("cancel button");
 			if (waitGame) {
-				client.sendRequest(new SocketRequest(SocketRequest.Action.CANCELCONTEST, "cancel")); 
-				// stop, kill timer and thread
-				waitTask.cancel(); 
-				timer.cancel();
-				timer.purge();;
-				// change on GUI
-				this.displayWaitingGame(false);
-				lblTime.setText("0");
-//				parent.setActiveMenuButton(true);
-				callParentToSetMenuButton(true);
-				System.out.println("Cancel join contest");
+				this.cancelButton();
 			}
 		}
 	}
@@ -201,5 +194,18 @@ public class Home extends ImagePanel implements ActionListener {
 	public void callParentToSetMenuButton(boolean active) {
 		MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 		parent.setActiveMenuButton(active);
+	}
+	public void cancelButton() {
+		client.sendRequest(new SocketRequest(SocketRequest.Action.CANCELCONTEST, "cancel")); 
+		// stop, kill timer and thread
+		waitTask.cancel(); 
+		timer.cancel();
+		timer.purge();;
+		// change on GUI
+		this.displayWaitingGame(false);
+		lblTime.setText("0");
+//		parent.setActiveMenuButton(true);
+		callParentToSetMenuButton(true);
+		System.out.println("Cancel join contest");
 	}
 }

@@ -270,7 +270,7 @@ public class Home extends JPanel implements MouseListener {
 			top = 5;
 		}
 		else {
-			if(data.size() < 5) {
+			if(temp.size() <= 5) {
 				top = 3;
 			}
 		}

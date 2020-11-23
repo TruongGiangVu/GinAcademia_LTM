@@ -231,28 +231,10 @@ public class Profile extends MyPanel implements ActionListener {
 		add(btnLogout);
 		btnLogout.addActionListener(this);
 
+		this.txtEmail.setEditable(false);
 		this.loadInfo();
 		this.loadGame();
 		this.activeText(false);
-
-//		SwingWorker sw = new SwingWorker() {
-//
-//			@Override
-//			protected Void doInBackground() throws Exception {
-//				while (true) {
-//					//nhn
-//					String s = client.getResponse();
-//					publish(s);
-//				}
-//			}
-//			@Override
-//            protected void process(List chunks) {
-//				
-//				lblBirth.setText(chunks[chunks.size() -1]);
-//			}
-//			
-//		};
-//		sw.execute();
 	}
 
 	public void activeText(boolean active) { // allow edit text
@@ -260,7 +242,6 @@ public class Profile extends MyPanel implements ActionListener {
 		
 		this.lblGender.setVisible(!active);
 		this.txtGender.setVisible(active);
-		this.txtEmail.setEditable(active);
 		
 		this.lblBirth.setVisible(!active);
 		this.datePicker.setVisible(active);
@@ -268,7 +249,7 @@ public class Profile extends MyPanel implements ActionListener {
 
 	public void loadInfo() { // load player profile information, can update
 		this.txtName.setText(this.player.getName());
-		this.txtEmail.setText(this.player.getEmail());
+		this.txtEmail.setText(this.player.getUsername());
 		this.datePicker.getJFormattedTextField().setText(this.player.getBirthdateString());
 		this.txtGender.setSelectedIndex(this.player.getGenderInt());
 		this.lblBirth.setText(this.player.getBirthdateString());
@@ -277,7 +258,6 @@ public class Profile extends MyPanel implements ActionListener {
 
 	public void updateData() { // update info on GUI
 		this.player.setName(this.txtName.getText());
-		this.player.setEmail(this.txtEmail.getText());
 		this.player.setBirthdate(this.datePicker.getJFormattedTextField().getText());
 		this.player.setGender(this.txtGender.getSelectedItem().toString());
 	}
@@ -320,6 +300,8 @@ public class Profile extends MyPanel implements ActionListener {
 				// update name on MainFrame
 				MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 				parent.lblName.setText(this.player.getName());
+				// update client info
+				client.player = this.player;
 				// show info
 				JOptionPane.showMessageDialog(this, response.getMessage());
 			}

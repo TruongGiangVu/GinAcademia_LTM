@@ -109,7 +109,7 @@ public class Login extends JFrame {
 		contentPane.add(panelLamMau);
 
 		txtUsername = new JTextField();
-		txtUsername.setText("user1");
+		txtUsername.setText("user1@gmail.com");
 		txtUsername.setBounds(391, 106, 280, 36);
 		contentPane.add(txtUsername);
 		txtUsername.setColumns(10);
