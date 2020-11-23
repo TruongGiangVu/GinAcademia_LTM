@@ -73,7 +73,7 @@ public class Home extends ImagePanel implements ActionListener {
 		lblTime.setForeground(Color.WHITE);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 24));
-		lblTime.setBounds(250, 350, 100, 80);
+		lblTime.setBounds(250, 343, 100, 80);
 		add(lblTime);
 
 		btnCancel = new JButton("Hủy");

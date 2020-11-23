@@ -10,24 +10,23 @@ import java.util.concurrent.Executors;
 import Model.GameConfig;
 
 public class Server {
+
 	public static ArrayList<ClientHandler> clients;
-	
-//	private ExecutorService pool;
 	public static ContestRoomManager contestRoomManager;
 	private ExecutorService pool;
-	int numThread = 2;
 	int id = 1;
 
 	static GameConfig config;
-
 	public ServerSocket server;
 
 	public Server() {
 		init(5000);
 	}
+
 	public Server(int port) {
 		init(port);
 	}
+
 	private void init(int port) {
 		try {
 			config = new GameConfig();
@@ -44,7 +43,7 @@ public class Server {
 
 		} catch (IOException e) {
 			System.out.println("Client off ngu vl");
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -59,9 +58,6 @@ public class Server {
 			id++;
 			clients.add(clientThread);
 			pool.submit(clientThread);
-//			pool.execute(clientThread);
-
-//			if(clients.size() >= numThread) pool.shutdown();
 
 			if (pool.isTerminated()) {
 				System.out.println("All clients have been killed.");
@@ -74,34 +70,33 @@ public class Server {
 		}
 		pool.shutdown();
 	}
-	
+
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
-		
+
 		if (clients == null)
 			isExist = false;
 		else {
 			int n = clients.size();
-			if(n < 1) {
+			if (n < 1) {
 				isExist = false;
-			}
-			else {
+			} else {
 				for (int i = 0; i < n; ++i) {
-					if(clients.get(i).isLoggedIn) {
+					if (clients.get(i).isLoggedIn) {
 						if (username.equals(clients.get(i).player.getUsername())) {
-							
+
 							isExist = true;
 							break;
-						} 
+						}
 					}
 				}
 			}
-			
+
 		}
-			
+
 		return isExist;
 	}
-	
+
 	public static void signOutPlayer(int id) {
 		clients.remove(getIndexOf(id));
 		int n = clients.size();
@@ -116,24 +111,26 @@ public class Server {
 		}
 		return -1;
 	}
-	
+
 	public static int countPlayerOnline() {
 		int ans = 0;
-		if(clients == null) return ans;
+		if (clients == null)
+			return ans;
 		int n = clients.size();
 		for (int i = 0; i < n; ++i) {
-			if(clients.get(i).isLoggedIn)
+			if (clients.get(i).isLoggedIn)
 				ans++;
 		}
-		return ans ;
+		return ans;
 	}
-	//Server.config
+	
 	public static GameConfig getConfig() {
 		return config;
 	}
+
 	public static void setConfig(GameConfig configNew) {
 		config = configNew;
 		contestRoomManager.setConfig(config);
 	}
-	
+
 }
