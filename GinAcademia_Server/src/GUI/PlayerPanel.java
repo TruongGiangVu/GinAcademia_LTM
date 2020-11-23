@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.awt.Cursor;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 
 @SuppressWarnings("serial")
@@ -42,6 +44,17 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	public PlayerPanel() {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		
+		DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
+			@Override
+            public Component getTableCellRendererComponent(JTable table,Object value,boolean isSelected,boolean hasFocus,int row,int column) {
+                Component c = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+                c.setFont(new Font("Sans Serif", Font.BOLD, 12));
+                c.setForeground(((String) value) == "Tốt" ? Color.GREEN : Color.RED);
+                return c;
+            }
+		};
+		customRenderer.setHorizontalAlignment(JLabel.CENTER);
 		setBackground(Color.WHITE);
 		setLayout(null);
 		this.arr = bus.ReadAll();
@@ -60,7 +73,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		this.tbPlayer.getColumnModel().getColumn(3).setPreferredWidth(150);
 
 		this.tbPlayer.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-		this.tbPlayer.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
+		this.tbPlayer.getColumnModel().getColumn(4).setCellRenderer(customRenderer);
 		this.loadData(arr);
 		textField = new JTextField();
 		textField.addActionListener(new ActionListener() {
@@ -86,15 +99,14 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		
 
 		add(btnSearch);
-		Image block_icon = new ImageIcon("./img/block-icon.jpg").getImage().getScaledInstance(30,30, java.awt.Image.SCALE_SMOOTH);
+		Image block_icon = new ImageIcon("./img/block-icon.jpg").getImage().getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH);
 
-		btnBlock = new JButton();
+		btnBlock = new JButton("Khóa");
+		btnBlock.setBackground(Color.WHITE);
+		btnBlock.setHorizontalAlignment(SwingConstants.RIGHT);
 		btnBlock.setFocusable(false);
 		btnBlock.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnBlock.setBorder(null);
-		btnBlock.setOpaque(false);
-		btnBlock.setBackground(null);
-		btnBlock.setBounds(530, 65, 40, 25);
+		btnBlock.setBounds(475, 65, 95, 25);
 		btnBlock.setIcon(new ImageIcon(block_icon));
 		add(btnBlock);
 		
@@ -112,7 +124,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		else {
 			searchArr = new ArrayList<Player>();
 			for (Player p : arr) {
-				if (p.getUsername().contains(searchQuerry) || p.getEmail().contains(searchQuerry) || p.getName().contains(searchQuerry) || "Hoạt động".contains(searchQuerry) || "Đã khóa".contains(searchQuerry)) {
+				if (p.getUsername().contains(searchQuerry) || p.getEmail().contains(searchQuerry) || p.getName().contains(searchQuerry) || "Tốt".contains(searchQuerry) || "Khóa".contains(searchQuerry)) {
 					searchArr.add(p);
 				}
 			}
@@ -127,10 +139,10 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			for(int i=0;i<n;i++) {
 				String temp = "";
 				if(data.get(i).getStatus() == 0) {
-					temp = "Hoạt động";
+					temp = "Tốt";
 				}
 				else {
-					temp = "Đã khóa";
+					temp = "Khóa";
 				}
 				Object[] row = { data.get(i).getId(), data.get(i).getName(),data.get(i).getUsername(),data.get(i).getEmail(),temp};
 				tbModelPlayer.addRow(row);
@@ -172,19 +184,19 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		int ind = this.tbPlayer.getSelectedRow();
 		Player p = bus.getPlayerById(this.tbPlayer.getValueAt(ind,0).toString());
 		
-		String stt = "Đã khóa";
+		String stt = "Khóa";
 		String mess = "";
 		int status = 0;
 		if(p != null) {
 			if(p.getStatus() == 1) {
-				stt = "Hoạt động";
+				stt = "Tốt";
 				status = 0;
 				mess = "Bạn muốn mở khóa tài khoản" + p.getUsername() + " ?";
 			}
 			else {
-				stt = "Đã khóa";
+				stt = "Khóa";
 				status = 1;
-				mess = "Bạn muốn khóa tài khoản" + p.getUsername() + " ?";
+				mess = "Bạn muốn khóa tài khoản " + p.getUsername() + " ?";
 			}
 			int result = JOptionPane.showConfirmDialog(this, (Object) mess);
 			if(result == 0) {

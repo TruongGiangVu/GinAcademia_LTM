@@ -7,7 +7,6 @@ import java.awt.Cursor;
 
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.Timer;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,7 +32,7 @@ import java.awt.event.MouseListener;
 
 @SuppressWarnings("serial")
 public class Home extends JPanel implements MouseListener {
-	DefaultTableModel tbModelPlayer;
+	static DefaultTableModel tbModelPlayer;
 	JTable tbPlayer;
 	DefaultTableModel tbModelGameRank;
 	DefaultTableModel tbModelWinRank;
@@ -41,14 +40,14 @@ public class Home extends JPanel implements MouseListener {
 	JTable tbGameRank;
 	JTable tbWinRank;
 	JTable tbWinSQRank;
-	private Timer timer;
-	public final static int INTERVAL = 10000; 
 	private JScrollPane scrollPane;
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
 	private PlayerBUS bus = new PlayerBUS();
+	private static JLabel lblNumOnline;
 	ArrayList<Player> arr = new ArrayList<Player>();
+	static ArrayList<Player> PlayerActive =  new ArrayList<Player>();
 	
 	/**
 	 * Create the panel.
@@ -56,7 +55,7 @@ public class Home extends JPanel implements MouseListener {
 	public Home() {
 		
 		this.arr = bus.ReadAll();
-
+		this.loadActive(this.arr);
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		
@@ -81,13 +80,13 @@ public class Home extends JPanel implements MouseListener {
 		lblNewLabel_1.setBounds(145, 30, 30, 30);
 		add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Số người chơi đang online: ");
-		lblNewLabel_2.setBounds(200, 30, 170, 30);
-		add(lblNewLabel_2);
+		JLabel lblOnline = new JLabel("Số người chơi đang online: ");
+		lblOnline.setBounds(200, 30, 170, 30);
+		add(lblOnline);
 		
-		JLabel lblNewLabel_1_1 = new JLabel(Server.countPlayerOnline()+ ""); 
-		lblNewLabel_1_1.setBounds(380, 30, 30, 30);
-		add(lblNewLabel_1_1);
+		lblNumOnline = new JLabel(Server.countPlayerOnline()+ ""); 
+		lblNumOnline.setBounds(380, 30, 30, 30);
+		add(lblNumOnline);
 		
 		JButton btnNewButton = new JButton("Thiết lập trò chơi");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -109,19 +108,16 @@ public class Home extends JPanel implements MouseListener {
 //		btnNewButton.getModel()
 		add(btnNewButton);
 		
-		this.tbModelPlayer = new DefaultTableModel();
-		this.tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản", "Trạng thái"});
-		this.tbPlayer = new JTable(this.tbModelPlayer);
+		tbModelPlayer = new DefaultTableModel();
+		tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản", "Trạng thái"});
+		this.tbPlayer = new JTable(tbModelPlayer);
 		this.tbPlayer.setRowHeight(25);
 		this.tbPlayer.getColumnModel().getColumn(1).setPreferredWidth(200);
 		this.tbPlayer.getColumnModel().getColumn(2).setPreferredWidth(150);
 
 		this.tbPlayer.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		this.tbPlayer.getColumnModel().getColumn(3).setCellRenderer(customRenderer);
-
-//		this.tbPlayer.getColumnModel().getColumn(3).setCellEditor(cellEditor);
-		
-		this.LoadPlayerOnline(arr);
+		this.LoadPlayerOnline();
 		scrollPane = new JScrollPane(this.tbPlayer);
 		scrollPane.setBounds(30, 80, 540, 150);
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -131,17 +127,7 @@ public class Home extends JPanel implements MouseListener {
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.setBounds(30, 311, 540, 229);
 		add(tabbedPane);
-		timer = new Timer(INTERVAL, new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
 
-			   //Refresh the panel
-			       LoadPlayerOnline(arr);
-			       lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); 
-
-			    }    
-			});
-
-			timer.start();
 		this.tbModelGameRank = new DefaultTableModel();
 		this.tbModelGameRank.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi", "Tên tài khoản", "Số trận"});
 //		this.tbModelGameRan
@@ -211,9 +197,9 @@ public class Home extends JPanel implements MouseListener {
 		add(btnRefresh);
 		
 	}
-	public void LoadPlayerOnline(ArrayList<Player> data) {
+	public void LoadPlayerOnline() {
 		this.RemoveTableData(this.tbPlayer);
-		if(data == null || data.size() == 0) {
+		if(PlayerActive == null || PlayerActive.size() == 0) {
 			this.remove(this.scrollPane);
 			JPanel pnEmpty = new JPanel();
 			pnEmpty.setBounds(30, 80, 540, 150);
@@ -223,68 +209,66 @@ public class Home extends JPanel implements MouseListener {
 			this.add(pnEmpty);
 		}
 		else {
-			ArrayList<Player> temp = new ArrayList<Player>();
-			for(Player p: data) {
-				if(p.getStatus()==0) {
-					temp.add(p);
-				}
-			}
-			int n = temp.size();
+			int n = PlayerActive.size();
 			String status = "Offline";
 			if(Server.clients == null ||Server.clients.size() == 0) {
 				status = "Offline";
 			}
 			for (int i = 0; i < n; i++) {
-				if(Server.isOnlinePlayer(arr.get(i).getUsername())) {
+				status = "Offline";
+				if(Server.isOnlinePlayer(PlayerActive.get(i).getUsername())) {
 					status = "Online";
 				}
-				Object[] row = { temp.get(i).getId(), temp.get(i).getName(),temp.get(i).getUsername(), status };
-				this.tbModelPlayer.addRow(row);				
+				Object[] row = { PlayerActive.get(i).getId(), PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(), status };
+				tbModelPlayer.addRow(row);				
 			}
-			this.tbPlayer.setModel(this.tbModelPlayer);
+			this.tbPlayer.setModel(tbModelPlayer);
 		}
 		
+	}
+	public void loadActive(ArrayList<Player> data) {
+		PlayerActive.clear();
+		for(Player p: data) {
+			if(p.getStatus()==0) {
+				PlayerActive.add(p);
+			}
+		}
 	}
 	public void loadRank(ArrayList<Player> data) {
 		
 		this.RemoveTableData(this.tbGameRank);
 		this.RemoveTableData(this.tbWinRank);
 		this.RemoveTableData(this.tbWinSQRank);
-		ArrayList<Player> temp = new ArrayList<Player>();
-		for(Player p:data) {
-			if(p.getStatus()==0) {
-				temp.add(p);
-			}
-		}
-		temp.sort(Comparator.comparing(Player::getTotalGame).reversed());
+		
+		PlayerActive.sort(Comparator.comparing(Player::getTotalGame).reversed());
 		int top = 10;
 //		set top: 3,5,10
-		if(temp.size() < 10 && temp.size() > 5) {
+		if(PlayerActive.size() < 10 && PlayerActive.size() > 5) {
 			top = 5;
 		}
 		else {
-			if(temp.size() < 5) {
+			if(PlayerActive.size() < 5) {
 				top = 3;
 			}
 		}
 //		load number game join
 		for (int i = 0; i < top; i++) {
-			Object[] row = {i+1, temp.get(i).getName(),temp.get(i).getUsername(),temp.get(i).getTotalGame() };
+			Object[] row = {i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getTotalGame() };
 			this.tbModelGameRank.addRow(row);
 		}
 		this.tbGameRank.setModel(this.tbModelGameRank);
 		
 //		load win game
-		temp.sort(Comparator.comparing(Player::getWins).reversed());
+		PlayerActive.sort(Comparator.comparing(Player::getWins).reversed());
 		for (int i = 0; i < top; i++) {
-			Object[] row = {i+1, temp.get(i).getName(),temp.get(i).getUsername(),temp.get(i).getWins() };
+			Object[] row = {i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getWins() };
 			this.tbModelWinRank.addRow(row);
 		}
 		this.tbWinRank.setModel(this.tbModelWinRank);
 //		load win sequence game
-		temp.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
+		PlayerActive.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
 		for (int i = 0; i < top; i++) {
-			Object[] row = { i+1, temp.get(i).getName(),temp.get(i).getUsername(),temp.get(i).getMaxWinSequence()};
+			Object[] row = { i+1, PlayerActive.get(i).getName(),PlayerActive.get(i).getUsername(),PlayerActive.get(i).getMaxWinSequence()};
 			this.tbModelWinSQRank.addRow(row);
 		}
 		this.tbWinSQRank.setModel(this.tbModelWinSQRank);
@@ -293,6 +277,37 @@ public class Home extends JPanel implements MouseListener {
 	public void RemoveTableData(JTable jtb) {
 		DefaultTableModel tbModel = (DefaultTableModel) jtb.getModel();
 		tbModel.setRowCount(0);
+	}
+	public static void updatePlayerOnline(Player p) {
+		String status = "Offline";
+		int i = 0;
+		boolean flag = true;
+		
+		if(Server.isOnlinePlayer(p.getUsername())) {
+			status = "Online";
+		}
+		Object[] row = { p.getId(), p.getName(),p.getUsername(), status };
+		int n = PlayerActive.size() - 1;
+		while(flag) {
+			if(i > n) {
+				flag = false;
+			}
+			else {
+				if(PlayerActive.get(i).getId().equals(p.getId())) {
+					flag = false;
+				}
+				else {
+					i++;
+				}
+			}	
+		}
+		for(int j = 0; j < tbModelPlayer.getColumnCount();j++) {
+			tbModelPlayer.setValueAt(row[j], i, j);
+		}
+		
+		tbModelPlayer.fireTableDataChanged();
+		
+		lblNumOnline.setText(Server.countPlayerOnline()+"");
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
