@@ -4,6 +4,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import Model.Player;
 import Socket.Request.*;
@@ -24,14 +38,35 @@ public class ClientHandler implements Runnable {
 	Player player = null;
 
 	public boolean isInGame = false;
+	private Cipher cipher;
+	private Cipher dcipher;
 
 	public ClientHandler(int id, Socket socket) {
 		try {
+			final char[] password = "secret_password".toCharArray();
+			final byte[] salt = "random_salt".getBytes();
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+			KeySpec spec = new PBEKeySpec(password, salt, 1024, 128);
+			SecretKey tmp = factory.generateSecret(spec);
+			SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+			cipher = Cipher.getInstance("AES");
+			cipher.init(Cipher.ENCRYPT_MODE, secret);
+			dcipher = Cipher.getInstance("AES");
+			dcipher.init(Cipher.DECRYPT_MODE, secret);
 			this.id = id;
 			this.socket = socket;
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		}
 	}
@@ -85,26 +120,35 @@ public class ClientHandler implements Runnable {
 
 	protected void sendResponse(SocketResponse response, boolean flag_reset) {
 		try {
-			sender.writeObject(response);
+			SealedObject so = new SealedObject(response, cipher);
+			sender.writeObject(so);
+//			sender.writeObject(response);
 			if(flag_reset) {
 				sender.reset();
 			}
 		} catch (IOException e) {
 			this.close();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
 		}
 	}
 
 	protected SocketRequest receiveRequest() {
 		SocketRequest request = null;
 		try {
-			request = (SocketRequest) receiver.readObject();
+			SealedObject s = (SealedObject) this.receiver.readObject();
+			request = (SocketRequest) s.getObject(dcipher);
+//			request = (SocketRequest) receiver.readObject();
 			if (request == null) {
 				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"),false);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			this.close();
+		} catch (IllegalBlockSizeException e) {
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			e.printStackTrace();
 		}
-
 		return request;
 	}
 

@@ -133,6 +133,7 @@ public class Server {
 	}
 	public static void setConfig(GameConfig configNew) {
 		config = configNew;
+		contestRoomManager.setConfig(config);
 	}
 	
 }

@@ -9,7 +9,6 @@ Run by `Main.java` outside (in default package, if you use Eclipse)
   - Request: class for sending request
   - Response: class for receive response
   - Class Client: for connecting to server by Client
-- BUS: process business
 - Module: extend feature and design
 - Model: object classes
 

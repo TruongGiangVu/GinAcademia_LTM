@@ -130,13 +130,13 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 		panelMain.add(panelContent);
 
 //		pnHome = new Home(this.img);
-		pnHome = new Home(client, this);
+		pnHome = new Home(client);
 		panelContent.add(pnHome, "home");
 
 		pnProfile = new Profile(client);
 		panelContent.add(pnProfile, "profile");
 
-		pnIQTest = new IQTest(client);
+		pnIQTest = new IQTestPanel(client);
 		panelContent.add(pnIQTest, "iqTest");
 
 		pnRank = new Rank(client, 0);
@@ -209,7 +209,7 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 			deck.show(panelContent, "profile");
 		} else if (source == this.btnIQ) {
 			deck.removeLayoutComponent(pnIQTest);
-			this.pnIQTest = new IQTest(client);
+			this.pnIQTest = new IQTestPanel(client);
 			panelContent.add(pnIQTest, "iqTest");
 			deck.show(panelContent, "iqTest");
 		} else if (source == this.btnRank) {
@@ -235,7 +235,8 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	}
 	public void clickReturnHome() {
 		deck.removeLayoutComponent(pnHome);
-		this.pnHome = new Home(client, this.img);
+//		this.pnHome = new Home(client, this.img);
+		this.pnHome = new Home(client);
 		panelContent.add(pnHome, "home");
 		deck.show(panelContent, "home");
 	}

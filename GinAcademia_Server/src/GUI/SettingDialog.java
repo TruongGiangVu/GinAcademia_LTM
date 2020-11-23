@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 
 import Model.GameConfig;
-
+import Socket.Server;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -197,6 +197,7 @@ public class SettingDialog extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				if(questionFlag && timeFlag && pointFlag) {
 					GameConfig conf = new GameConfig((int)spnQuestion.getValue(),(int)spnPoint.getValue(),(int)spnTime.getValue(),2);
+					Server.setConfig(conf);
 					dispose();
 				}
 				else {

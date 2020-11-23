@@ -35,8 +35,9 @@ public class PlayerBUS {
 		dao.active(id);
 	}
 
-	public void update(Player p) {
+	public Player update(Player p) {
 		dao.update(p);
+		return p;
 	}
 	public Player getPlayerById(String id) {
 		return dao.getPlayerById(id);
@@ -74,23 +75,31 @@ public class PlayerBUS {
 		}
 		return check;
 	}
-	public void updateWin(Player p) {
+	public Player updateWin(Player p) {
 		if(p.getCurrentLoseSequence() > 0)
 			p.setCurrentLoseSequence(0);
 		int newWin = p.getCurrentWinSequence()+1;
 		p.setCurrentWinSequence(newWin);
 		if(newWin > p.getMaxWinSequence())
 			p.setMaxWinSequence(newWin);
+		
+		int temp=p.getWins();
+		p.setWins(temp +1);
 		this.update(p);
+		return p;
 	}
-	public void updateLose(Player p) {
+	public Player updateLose(Player p) {
 		if(p.getCurrentWinSequence() > 0)
 			p.setCurrentWinSequence(0);
 		int newLose = p.getCurrentLoseSequence()+1;
 		p.setCurrentLoseSequence(newLose);
 		if(newLose > p.getMaxLoseSequence())
 			p.setMaxLoseSequence(newLose);
+		// 
+		int temp=p.getLoses();
+		p.setLoses(temp +1);
 		this.update(p);
+		return p;
 	}
 	public boolean comparePlayer(Player p1, Player p2) {
 		if(p1.getUsername().equals(p2.getUsername())) 

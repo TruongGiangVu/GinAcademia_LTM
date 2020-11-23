@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import java.util.TimerTask;
 import java.util.Timer;
@@ -37,17 +38,18 @@ public class Home extends ImagePanel implements ActionListener {
 
 	SocketResponseContest contest;
 	Question question;
-	MainFrame parent;
+//	MainFrame parent;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public Home(Client client, MainFrame parent) {
+	public Home(Client client) {
 		super(client);
 		Image temp = new ImageIcon("./img/background.jpg").getImage().getScaledInstance(600, 600,
 				java.awt.Image.SCALE_AREA_AVERAGING);
 		this.img = new ImageIcon(temp);
-		this.parent = parent;
+//		this.parent = parent;
+//		this.parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 		init();
 	}
 
@@ -118,8 +120,7 @@ public class Home extends ImagePanel implements ActionListener {
 				waitTask.cancel();
 				timer.cancel();
 				timer.purge();
-				parent.clickStart();
-//				
+				callParentToStartContest();
 			}
 			time++;
 		}
@@ -167,7 +168,8 @@ public class Home extends ImagePanel implements ActionListener {
 			client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "join"));
 			// change on GUI
 			this.displayWaitingGame(true);
-			parent.setActiveMenuButton(false);
+//			parent.setActiveMenuButton(false);
+			callParentToSetMenuButton(false);
 			// start waiting timer and thread
 			this.waittingContest();
 			thread = new Thread(new GetMessage());
@@ -186,9 +188,18 @@ public class Home extends ImagePanel implements ActionListener {
 				// change on GUI
 				this.displayWaitingGame(false);
 				lblTime.setText("0");
-				parent.setActiveMenuButton(true);
+//				parent.setActiveMenuButton(true);
+				callParentToSetMenuButton(true);
 				System.out.println("Cancel join contest");
 			}
 		}
+	}
+	public void callParentToStartContest() {
+		MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+		parent.clickStart();
+	}
+	public void callParentToSetMenuButton(boolean active) {
+		MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+		parent.setActiveMenuButton(active);
 	}
 }

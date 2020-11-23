@@ -44,6 +44,7 @@ public class Home extends JPanel implements MouseListener {
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
+	private static JLabel lblNewLabel_1_1 ;
 	private PlayerBUS bus = new PlayerBUS();
 	private static JLabel lblNumOnline;
 	ArrayList<Player> arr = new ArrayList<Player>();
@@ -346,4 +347,9 @@ public class Home extends JPanel implements MouseListener {
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 			}
+	
+	public static void abcd() {
+	  lblNewLabel_1_1.setText(Server.countPlayerOnline()+""); 
+	
+	}
 }

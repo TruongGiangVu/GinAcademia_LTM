@@ -20,11 +20,11 @@ import Module.MyLabel;
 import Module.MyPanel;
 
 import Socket.Client;
-import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
 import Socket.Response.SocketResponseGameRoom;
+import Socket.Response.SocketResponsePlayer;
 import Socket.Response.SocketResponseQuestion;
 
 //import javax.swing.Timer;
@@ -46,6 +46,8 @@ public class Contest extends MyPanel implements MouseListener {
 	private Question currentQ = new Question();
 	private int index = -1;
 	private boolean isAnswer = false;
+	private int maxTime = 0;
+	private int numQ = 0;
 
 	private Timer timer;
 	private JLabel lblTime;
@@ -70,7 +72,6 @@ public class Contest extends MyPanel implements MouseListener {
 		this.player = client.getPlayer();
 		this.parent = parent;
 		init();
-//		this.initContest(contest, question);
 		this.initContest();
 	}
 
@@ -149,7 +150,7 @@ public class Contest extends MyPanel implements MouseListener {
 
 	private void loadQuestion(Question q) {
 		this.currentQ = q;
-		this.lblQuestion.setText("Câu " + this.stt + ": " + q.getQuestion());
+		this.lblQuestion.setText("<html>" + "Câu " + this.stt + ": " + q.getQuestion() + "</html>");
 		stt++;
 		loadOption(currentQ);
 	}
@@ -162,7 +163,7 @@ public class Contest extends MyPanel implements MouseListener {
 		symbol.add("D.");
 		Collections.shuffle(q.getOptions()); // shuffle option
 		for (int i = 0; i < 4; ++i) {
-			this.arrTxt.get(i).setText(symbol.get(i) + " " + q.getOptions().get(i).Option);
+			this.arrTxt.get(i).setText("<html>" + symbol.get(i) + " " + q.getOptions().get(i).Option + "</html>");
 			this.arrTxt.get(i).theme = q.getOptions().get(i).OptionId;
 		}
 	}
@@ -181,7 +182,6 @@ public class Contest extends MyPanel implements MouseListener {
 		SocketResponse responseContest = client.getResponse(); // get init contest
 		if (responseContest.getAction().equals(SocketResponse.Action.CONTEST)) {
 			if (responseContest.getMessage().equals("contest")) {
-				this.updateHeader(responseContest);
 				this.initNamePlayer(responseContest);
 			}
 		}
@@ -199,9 +199,10 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = 10;
+		int countdown = maxTime;
 
 		public ContestTask() {
+			clearColorOption();
 		}
 
 		@Override
@@ -216,21 +217,10 @@ public class Contest extends MyPanel implements MouseListener {
 		}
 	}
 
-	private void endTurn() {
-		System.out.println("End turn \n");
-
-		SocketResponse responseServer = (SocketResponse) client.getResponse();
-		timer.cancel(); // timer stop
-		if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
-			SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
-			this.index = this.indexOfPlayer(responseGameRoom.players, this.player); // get index player
-			this.displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer); // display answer, both player
-			this.updateHeader(index, responseGameRoom.points); // update point
-		}
-	}
 	class ContestGame implements Runnable {
 		public ContestGame() {
 		}
+
 		@Override
 		public void run() {
 			System.out.println("End turn \n");
@@ -242,26 +232,22 @@ public class Contest extends MyPanel implements MouseListener {
 					index = indexOfPlayer(responseGameRoom.players, player); // get index player
 					displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer);
 					setEnableOption(false);
-					System.out.print("Points: ");
-					for (int p : responseGameRoom.points) {
-						System.out.print(p + " ");
-					}
-					System.out.println();
-					
+
 					updateHeader(index, responseGameRoom.points); // update point
 
 					// delay 2s
 					Thread.sleep(2000);
 
-					if (stt <= 5) { // if has next question
+					if (stt <= numQ) { // if has next question
 						isAnswer = false;
 						setEnableOption(true);
-						clearColorOption();
 						loadQuestion(responseGameRoom.question);
-						
+
 					} else { // if over
 						SocketResponse responseEnd = client.getResponse();
-						showDialog(responseEnd.getMessage());
+						SocketResponsePlayer player = (SocketResponsePlayer) responseEnd;
+						showDialog(player.getMessage());
+						client.player = player.getPlayer(); // update again info
 					}
 
 					timer = new Timer();
@@ -275,7 +261,7 @@ public class Contest extends MyPanel implements MouseListener {
 			} finally {
 				Thread.currentThread().interrupt();
 			}
-		
+
 		}
 	}
 
@@ -298,21 +284,17 @@ public class Contest extends MyPanel implements MouseListener {
 		}
 	}
 
-	private void updateHeader(SocketResponse response) { // get index and update point
-		SocketResponseContest contest = (SocketResponseContest) response;
-		this.index = contest.players.indexOf(this.player);
-		this.updatePoint(contest.points);
-	}
-
 	private void updateHeader(int index, ArrayList<Integer> points) { // get index and update point
-		System.out.println("Header -> point");
 		this.index = index;
-		System.out.println("Index:" + index);
 		this.updatePoint(points);
 	}
 
 	private void initNamePlayer(SocketResponse response) { // update name init
 		SocketResponseContest contest = (SocketResponseContest) response;
+		index = indexOfPlayer(contest.players, player); // get index player
+		this.maxTime = contest.config.getTime();
+		this.numQ = contest.config.getNumQuestion();
+		this.updatePoint(contest.points);
 		int n = contest.players.size();
 		for (int i = 0; i < n; ++i) {
 			if (i != index)
@@ -322,9 +304,10 @@ public class Contest extends MyPanel implements MouseListener {
 
 //	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
-		System.out.println("update Point");
 		int n = points.size();
+		System.out.println("index:" +index);
 		this.lblYourPoint.setText(points.get(index) + "");
+		
 		for (int i = 0; i < n; ++i) {
 			if (i != index)
 				this.lblEnemyPoint.setText(points.get(i) + "");
@@ -332,7 +315,6 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	private void displayAnswer(ArrayList<Integer> answers, int rightAnswer) {
-		System.out.println("displayAnswer");
 		this.enemyAnswer(answers);
 		this.rightAnswer(rightAnswer); // display right answer
 	}
@@ -344,7 +326,6 @@ public class Contest extends MyPanel implements MouseListener {
 			enemy = 1;
 		// display
 		int choose = answers.get(enemy);
-		System.out.println("enemy answer: " + choose);
 		if (choose == 0)
 			return;
 		int n = arrTxt.size();
@@ -358,7 +339,6 @@ public class Contest extends MyPanel implements MouseListener {
 
 	private void rightAnswer(int right) {
 		int n = arrTxt.size();
-		System.out.println("right answer: " + right);
 		for (int i = 0; i < n; ++i) {
 			if (right == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("right"));
@@ -415,7 +395,7 @@ public class Contest extends MyPanel implements MouseListener {
 	private void clearColorOption() {
 		int n = arrTxt.size();
 		for (int i = 0; i < n; ++i) {
-			this.arrTxt.get(index).setBackground(Color.WHITE);
+			this.arrTxt.get(i).setBackground(new Color(255, 255, 255));
 		}
 	}
 
