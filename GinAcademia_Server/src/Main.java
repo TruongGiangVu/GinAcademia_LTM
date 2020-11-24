@@ -10,10 +10,12 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		MainFrame frame = new MainFrame();
-		frame.setVisible(true);
-		Server server = new Server(5000);
-		server.hashCode();
+		RegisterProcess send = new RegisterProcess();
+		
+//		MainFrame frame = new MainFrame();
+//		frame.setVisible(true);
+//		Server server = new Server(5000);
+//		server.hashCode();
 		
 		
 		
