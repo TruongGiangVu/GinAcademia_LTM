@@ -73,7 +73,7 @@ public class SettingDialog extends JDialog {
 		lblNumQuesErr.setVisible(false);
 		lblNumQuesErr.setFont(new Font("Tahoma", Font.ITALIC, 10));
 		lblNumQuesErr.setForeground(Color.RED);
-		lblNumQuesErr.setBounds(140, 50, 100, 14);
+		lblNumQuesErr.setBounds(140, 50, 154, 14);
 		getContentPane().add(lblNumQuesErr);
 		
 		JLabel lblTimeErr = new JLabel();
@@ -119,19 +119,22 @@ public class SettingDialog extends JDialog {
 				}
 				else {
 					if(n>num) {
-						lblNumQuesErr.setText("Số lượng câu hỏi vượt quá số câu hỏi có hiện tại");
-						lblNumQuesErr.setVisible(true);
-						questionFlag = true;
-					}
-					if(n > 30) {
-						lblNumQuesErr.setText("Tối đa 30 câu");
+						lblNumQuesErr.setText("Không đủ câu hỏi để hiển thị");
 						lblNumQuesErr.setVisible(true);
 						questionFlag = false;
 					}
 					else {
-						lblNumQuesErr.setVisible(false);
-						questionFlag = true;
+						if(n > 30) {
+							lblNumQuesErr.setText("Tối đa 30 câu");
+							lblNumQuesErr.setVisible(true);
+							questionFlag = false;
+						}
+						else {
+							lblNumQuesErr.setVisible(false);
+							questionFlag = true;
+						}
 					}
+					
 				}
 			}
 		});
