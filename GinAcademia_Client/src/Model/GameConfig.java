@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class GameConfig implements Serializable  {
 	private int NumQuestion = 5;
 	private int Point = 100;
-	private int Time = 10000; // milis second
+	private int Time = 10; //  second
 	private int numPlayer = 2;
 	
 	public GameConfig() {

@@ -18,6 +18,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import java.awt.Color;
 import javax.swing.event.ChangeListener;
+
+import BUS.QuestionBUS;
+
 import javax.swing.event.ChangeEvent;
 
 
@@ -26,6 +29,7 @@ public class SettingDialog extends JDialog {
 
 	
 	private JSpinner.DefaultEditor editor;
+	private QuestionBUS quesBus;
 	private boolean questionFlag = true;
 	private boolean timeFlag = true;
 	private boolean pointFlag = true;
@@ -89,8 +93,9 @@ public class SettingDialog extends JDialog {
 		getContentPane().add(lblPointErr);
 		
 		JSpinner spnQuestion = new JSpinner();
+		GameConfig conf = Server.getConfig(); 
 		spnQuestion.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		spnQuestion.setModel(new SpinnerNumberModel(5, null, null, 1));
+		spnQuestion.setModel(new SpinnerNumberModel(conf.getNumQuestion(), null, null, 1));
 		spnQuestion.setBounds(140, 22, 60, 25);
 		spnQuestion.setFocusable(false);
 		
@@ -103,6 +108,8 @@ public class SettingDialog extends JDialog {
 		spnQuestion.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				
+				quesBus = new QuestionBUS();
+				int num = quesBus.ReadAll().size();
 				int n = (int)spnQuestion.getValue() ;
 
 				if(n < 5) {
@@ -111,6 +118,11 @@ public class SettingDialog extends JDialog {
 					questionFlag = false;
 				}
 				else {
+					if(n>num) {
+						lblNumQuesErr.setText("Số lượng câu hỏi vượt quá số câu hỏi có hiện tại");
+						lblNumQuesErr.setVisible(true);
+						questionFlag = true;
+					}
 					if(n > 30) {
 						lblNumQuesErr.setText("Tối đa 30 câu");
 						lblNumQuesErr.setVisible(true);
@@ -124,7 +136,7 @@ public class SettingDialog extends JDialog {
 			}
 		});
 		JSpinner spnTime = new JSpinner();
-		spnTime.setModel(new SpinnerNumberModel(10, null, null, 1));
+		spnTime.setModel(new SpinnerNumberModel(conf.getTime(), null, null, 1));
 		spnTime.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spnTime.setBounds(140, 72, 60, 25);
 		((JSpinner.DefaultEditor) spnTime.getEditor()).getTextField().setEnabled(false);
@@ -162,7 +174,7 @@ public class SettingDialog extends JDialog {
 		getContentPane().add(lblNewLabel_3_1);
 		
 		JSpinner spnPoint = new JSpinner();
-		spnPoint.setModel(new SpinnerNumberModel(100, null, null, 100));
+		spnPoint.setModel(new SpinnerNumberModel(conf.getPoint(), null, null, 100));
 		spnPoint.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spnPoint.setBounds(140, 122, 60, 25);
 		

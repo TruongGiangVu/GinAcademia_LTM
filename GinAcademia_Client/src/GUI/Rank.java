@@ -96,10 +96,8 @@ public class Rank extends MyPanel implements ActionListener{
 		lblEmpty.setFont(new Font("Monospace",Font.BOLD,20));
 		pnEmpty.add(lblEmpty);
 		scrollPane = new JScrollPane(table);
-//		scrollPane.setLayout();
 		scrollPane.setBounds(30, 134, 540, 400);
 		scrollPane.setBackground(Color.WHITE);
-//		scrollPane.add(pnEmpty);
 
 		add(scrollPane);
 
@@ -128,7 +126,6 @@ public class Rank extends MyPanel implements ActionListener{
 
 		Image scaled = new ImageIcon("./img/search_icon.png").getImage().getScaledInstance(30, 30,
 				java.awt.Image.SCALE_SMOOTH);
-//		Icon icon = new ImageIcon("./img/search_icon.png");
 
 		btnNewButton = new JButton();
 		btnNewButton.setBounds(539, 80, 31, 30);
