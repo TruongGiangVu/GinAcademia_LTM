@@ -76,7 +76,7 @@ public class ContestRoom {
 
 			this.isClocked = true;
 			System.out.println("start contest");
-			 // announce to all players about starting game
+			// announce to all players about starting game
 			this.sendALL(new SocketResponseContest(this.players, this.points, this.config), true);
 
 			// start contest
@@ -235,20 +235,22 @@ public class ContestRoom {
 	public void endGame() {
 		System.out.println("End game");
 
-		// check tie
-		if (this.checkTie2Player()) { // if no one wins
-			this.noWinner();
-		} else { // if it has winner
-			this.hasWinner();
+		if(this.players.size() == 1) {
+			this.onlyOne();
 		}
-		System.out.println("End game 1");
+		else {
+			// check tie
+			if (this.checkTie2Player()) { // if no one wins
+				this.noWinner();
+			} else { // if it has winner
+				this.hasWinner();
+			}
+		}
+		
 
 		this.refreshGameOfClient();
-		System.out.println("End game 2");
 		this.isEndContest = true; // for deleting this game room
-		System.out.println("End game 3");
 		Server.contestRoomManager.finishRoom(RoomId);
-		System.out.println("End game 4");
 	}
 
 	private void refreshGameOfClient() {
@@ -302,6 +304,13 @@ public class ContestRoom {
 					new SocketResponsePlayer(this.clients.get(i).player, SocketResponse.Action.MESSAGE, "Bạn thua!"),
 					false);
 		}
+	}
+	private void onlyOne() { // if it just has a player
+		this.winner = this.players.get(0);
+		this.clients.get(0).player = this.playerBus.updateWin(this.winner);
+		this.clients.get(0).sendResponse(
+				new SocketResponsePlayer(this.clients.get(0).player, SocketResponse.Action.MESSAGE, "Bạn thắng!"),
+				false);
 	}
 
 }
