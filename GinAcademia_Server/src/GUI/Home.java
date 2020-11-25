@@ -44,7 +44,6 @@ public class Home extends JPanel implements MouseListener {
 	private JScrollPane scrollPane_1;
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
-	private static JLabel lblNewLabel_1_1 ;
 	private PlayerBUS bus = new PlayerBUS();
 	private static JLabel lblNumOnline;
 	ArrayList<Player> arr = new ArrayList<Player>();
@@ -128,7 +127,7 @@ public class Home extends JPanel implements MouseListener {
 		
 		
 		scrollPane = new JScrollPane(this.tbPlayer);
-		scrollPane.setBounds(30, 80, 540, 150);
+		scrollPane.setBounds(30, 80, 540, 165);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		add(scrollPane);
 

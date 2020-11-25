@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -26,20 +27,27 @@ import Socket.Response.SocketResponseRank;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+
 @SuppressWarnings("serial")
 public class Rank extends MyPanel implements ActionListener{
 
 	private JTable table;
-	private DefaultTableCellRenderer cellRenderer;
 	public int orderRank = 0;
 	private JLabel lblNewLabel;
 	private JLabel lblYourRank;
 	private JLabel lblNewLabel_2;
 	private JComboBox<String> cbbRank;
 	private Player player;
-
-	private ArrayList<Player> listPlayer = new ArrayList<Player>();
+	private JScrollPane scrollPane;
 	private ArrayList<Player> playerActive= new ArrayList<Player>();
+	private ArrayList<Player> totalGame;
+	private ArrayList<Player> totalWin;
+	private ArrayList<Player> winStreak;
+	private String totalGameRank;
+	private String totalWinRank;
+	private String winStreakRank;
+	private JPanel pnEmpty;
+	private JLabel lblEmpty;
 	private DefaultTableModel tableModel;
 	private JTextField txtSearch;
 	private JButton btnNewButton;
@@ -56,21 +64,20 @@ public class Rank extends MyPanel implements ActionListener{
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
 		
-		
-		
 		tableModel = new DefaultTableModel();
-//		tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Số trận tham gia", "Số trận thắng","Chuỗi thắng","Tỉ lệ thắng"});
 		setLayout(null);
-		table = new JTable(tableModel){
+		table = new JTable(){
 			private static final long serialVersionUID = 1L;
 	        public boolean isCellEditable(int row, int column) {                
 	                return false;               
 	        };
 		};
+		table.setBackground(Color.WHITE);
 		cbbRank = new JComboBox<String>();
+		
 		cbbRank.setFont(new Font("Monospace", Font.PLAIN, 12));
 		cbbRank.setBackground(Color.WHITE);
-		cbbRank.setModel(new DefaultComboBoxModel<String>(new String[] { "Số trận thắng", "Tỉ lệ thắng","Chuỗi thắng" }));
+		cbbRank.setModel(new DefaultComboBoxModel<String>(new String[] { "Số trận thắng", "Số trận tham gia","Chuỗi thắng" }));
 		cbbRank.setBounds(85, 80, 101, 30);
 		add(cbbRank);
 
@@ -79,13 +86,18 @@ public class Rank extends MyPanel implements ActionListener{
 		lblYourRank.setBounds(145, 28, 38, 20);
 		add(lblYourRank);
 		
-
+		pnEmpty = new JPanel();
+		pnEmpty.setBounds(40, 30, 460, 150);
+		pnEmpty.setBackground(Color.WHITE);
 		
-		table.getColumnModel().getColumn(0).setCellRenderer(cellRenderer);
-
-		JScrollPane scrollPane = new JScrollPane(table);
+		lblEmpty = new JLabel("Không tìm thấy kết quả");
+		lblEmpty.setFont(new Font("Monospace",Font.BOLD,20));
+		pnEmpty.add(lblEmpty);
+		scrollPane = new JScrollPane(table);
+//		scrollPane.setLayout();
 		scrollPane.setBounds(30, 134, 540, 400);
 		scrollPane.setBackground(Color.WHITE);
+//		scrollPane.add(pnEmpty);
 
 		add(scrollPane);
 
@@ -127,74 +139,115 @@ public class Rank extends MyPanel implements ActionListener{
 		btnNewButton.addActionListener(this);
 		txtSearch.addActionListener(this);
 		add(btnNewButton);
-		this.loadPlayerActive(response);
-		this.loadRank(this.playerActive);
-
+		String option = (String) cbbRank.getSelectedItem();
+		this.loadPlayerRankTable(response);
+		lblYourRank.setText(this.totalWinRank);
+		this.loadRank(this.totalWin,option);
+		cbbRank.addActionListener(this);
+//		
 	}
-	public void loadPlayerActive(SocketResponseRank rs) {
-		this.listPlayer.clear();
+	public void loadPlayerRankTable(SocketResponseRank rs) {
 		this.playerActive.clear();
-		this.listPlayer = rs.getList();
-		for(Player p:this.listPlayer) {
-			if(p.getStatus()==0) {
-				this.playerActive.add(p);
-			}
-		}
+		this.playerActive = rs.getList();
+		
+		this.totalGame = new ArrayList<Player>();
+		this.totalGame.addAll(this.playerActive);
+		this.totalWin = new ArrayList<Player>();
+		this.totalWin.addAll(this.playerActive);
+		this.winStreak= new ArrayList<Player>();
+		this.winStreak.addAll(this.playerActive);
+		
+		this.totalWin.sort(Comparator.comparing(Player::getWins).reversed());
+		this.totalGame.sort(Comparator.comparing(Player::getTotalGame).reversed());
+		this.winStreak.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
+		
+		this.totalGameRank = this.loadPlayerRank(this.totalGame);
+		this.totalWinRank = this.loadPlayerRank(this.totalWin);
+		this.winStreakRank = this.loadPlayerRank(this.winStreak);
 		
 	}
-	public void loadRank(ArrayList<Player> data) {
-		String val = (String)cbbRank.getSelectedItem();
-		int n = data.size()-1;
-		int ind = 0;
-		this.RemoveTableData(this.table);
-		if(val.equals("Số trận thắng")) {
-			this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Tên tài khoản","Số trận thắng"});
-			data.sort(Comparator.comparing(Player::getWins).reversed());
-			for(int i=0;i<n;i++) {
-				if(data.get(i).getId().equals(this.player.getId())) ind = i+1;
-				Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getWins() };
-				this.tableModel.addRow(row);
+	public void loadRank(ArrayList<Player> data, String opt) {
+		if(data.size() > 0) {
+			if(scrollPane.isAncestorOf(pnEmpty)) {
+				scrollPane.remove(pnEmpty);
+				
+			}
+			if(!scrollPane.isAncestorOf(table))			scrollPane.add(table);
+			scrollPane.revalidate();
+			scrollPane.repaint();
+			int n = data.size() > 1? data.size()-1 : 1;
+			this.RemoveTableData(this.table);
+			this.tableModel.setRowCount(0);
+			if(opt.equals("Số trận thắng")) {
+				this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Tên tài khoản","Số trận thắng"});
+				for(int i=0;i<n;i++) {
+					Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getWins() };
+					this.tableModel.addRow(row);
+				}
+			}
+			else
+			{
+				if(opt.equals("Số trận tham gia")) {
+					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Số trận tham gia"});
+					for(int i=0;i<n;i++) {
+						Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
+						this.tableModel.addRow(row);
+					}
+				}
+				else
+				{
+					if(opt.equals("Chuỗi thắng")) {
+						this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Chuỗi thắng"});
+						for(int i=0;i<n;i++) {
+							Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence() };
+							this.tableModel.addRow(row);
+						}
+					}
+				}
 			}
 			this.table.setModel(this.tableModel);
-			lblYourRank.setText(ind+"");
+			DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+			centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+			table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+			table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+			table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+			table.getColumnModel().getColumn(0).setPreferredWidth(20);
+			table.getColumnModel().getColumn(1).setPreferredWidth(200);
+			table.getColumnModel().getColumn(2).setPreferredWidth(100);
 		}
-//		else
-//		{
-//			if(val.equals("Số trận tham gia")) {
-//				data.sort(Comparator.comparing(Player::getTotalGame).reversed());
-//				this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Số trận tham gia"});
-//				for(int i=0;i<n;i++) {
-//					if(data.get(i).getId().equals(this.player.getId())) ind = i;
-//					Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
-//					this.tableModel.addRow(row);
-//				}
-//				this.table.setModel(this.tableModel);
-//				lblYourRank.setText(ind+"");
-//			}
-//			else
-//			{
-//				if(val.equals("Chuỗi thắng")) {
-//					data.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
-//					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Chuỗi thắng"});
-//					for(int i=0;i<n;i++) {
-//						if(data.get(i).getId().equals(this.player.getId())) ind = i;
-//						Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence() };
-//						this.tableModel.addRow(row);
-//					}
-//					this.table.setModel(this.tableModel);
-//					lblYourRank.setText(ind+"");
-//				}
-//			}
-//		}
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+		else {
+			scrollPane.removeAll();
+			scrollPane.add(pnEmpty);
+			scrollPane.revalidate();
+			scrollPane.repaint();
+//			tableModel.
+			
+		}
 		
-		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(0).setPreferredWidth(20);
-		table.getColumnModel().getColumn(1).setPreferredWidth(200);
-		table.getColumnModel().getColumn(2).setPreferredWidth(100);
+	}
+	public String loadPlayerRank(ArrayList<Player> data) {
+		int ind = -1;
+		String rs = "";
+		boolean flag = true;
+		int n = data.size();
+		int i = 0;
+		while(flag && i<n ) {
+			if(data.get(i).getId().equals(this.player.getId())) {
+				ind = i + 1;
+				flag = false;
+				i++;
+			}
+			else {
+				i++;
+			}
+		}
+		if(ind == -1) {
+			rs = "Chưa vào bảng xếp hạng";
+		}
+		else {
+			rs = ind + "";
+		}
+		return rs;
 	}
 	private String normalizedString(String val) {
 		return val.toLowerCase().trim().replaceAll("\\s+", " ");
@@ -204,24 +257,73 @@ public class Rank extends MyPanel implements ActionListener{
 		Object widget = arg0.getSource();
 		if(widget == btnNewButton || widget == txtSearch) {
 			String txt = txtSearch.getText();
-			this.SearchRank(txt);
+			String option = (String) cbbRank.getSelectedItem();
+			this.SearchRank(txt,option);
+		}
+		else
+		{
+			if(widget == cbbRank) {
+				String option = (String) cbbRank.getSelectedItem();
+				if(option == "Số trận thắng") {
+					this.loadRank(this.totalWin, option);
+				}
+				else
+				{
+					if(option == "Số trận tham gia") {
+						this.loadRank(this.totalGame, option);
+					}
+					else {
+						this.loadRank(this.winStreak, option);
+					}
+				}
+			}
 		}
 	}
 	
-	public void SearchRank(String searchQuerry) {
+	public void SearchRank(String searchQuerry,String opt) {
 		this.RemoveTableData(this.table);
+		
 		ArrayList<Player> temp = new ArrayList<Player>();
 		if(searchQuerry.isEmpty() || searchQuerry.trim().equals("") || searchQuerry == null) {
-//			this.loadData(arr);
+			this.loadRank(this.playerActive,opt);
 		}
 		else {
+			searchQuerry = this.normalizedString(searchQuerry);
+			if(opt.equals("Số trận thắng")) {
+				for(Player p:this.totalWin) {
+					if(this.normalizedString(p.getName()).contains(searchQuerry)) {
+						temp.add(p);
+					}
+				}
+				
+				lblYourRank.setText(this.totalWinRank);
+			}
+			else {
+				if(opt.equals("Số trận tham gia")) {
+					for(Player p:this.totalGame) {
+						if(this.normalizedString(p.getName()).contains(searchQuerry)) {
+							temp.add(p);
+						}
+					}
+					lblYourRank.setText(this.totalGameRank);
+
+				}
+				else {
+					if(opt.equals("Chuỗi thắng")) {
+						for(Player p:this.winStreak) {
+							if(this.normalizedString(p.getName()).contains(searchQuerry)) {
+								temp.add(p);
+							}
+						}
+						lblYourRank.setText(this.winStreakRank);
+					}
+				}
+			}
+			
+			this.loadRank(temp,opt);
 			
 		}
-		for(Player p:this.playerActive) {
-			if(p.getName().contains(searchQuerry)) {
-				temp.add(p);
-			}
-		}
+		
 	}
 	public void RemoveTableData(JTable jtb) {
 		DefaultTableModel tbModel = (DefaultTableModel) jtb.getModel();
