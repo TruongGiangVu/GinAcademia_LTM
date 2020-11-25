@@ -109,7 +109,7 @@ public class SettingDialog extends JDialog {
 			public void stateChanged(ChangeEvent arg0) {
 				
 				quesBus = new QuestionBUS();
-				int num = quesBus.ReadAll().size();
+				int num = quesBus.getSize();
 				int n = (int)spnQuestion.getValue() ;
 
 				if(n < 5) {

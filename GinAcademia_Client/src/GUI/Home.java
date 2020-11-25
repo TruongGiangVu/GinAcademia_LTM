@@ -1,9 +1,12 @@
 package GUI;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
@@ -35,7 +38,7 @@ public class Home extends ImagePanel implements ActionListener {
 	public boolean checked = false;
 	public boolean waitGame = false;
 	public boolean joinGame = false;
-
+	private Font font;
 	SocketResponseContest contest;
 	Question question;
 //	MainFrame parent;
@@ -55,34 +58,54 @@ public class Home extends ImagePanel implements ActionListener {
 
 	public void init() {
 		this.setSize(600, 600);
+		File font_file = new File("./Font/Ademo W00 Gray.ttf");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		Font sizedFont = font.deriveFont(Font.PLAIN,49);
 
 		btnStart = new JButton("START");
 		btnStart.setOpaque(false);
 		btnStart.setContentAreaFilled(false);
 		btnStart.setBorderPainted(false);
 		btnStart.setForeground(Color.WHITE);
-		btnStart.setFont(new Font("AdemoW00-Gray", Font.PLAIN, 49));
+		btnStart.setFont(sizedFont);
 		btnStart.setBackground(null);
 		btnStart.setBorder(null);
 		btnStart.setFocusable(false);
 		btnStart.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnStart.setBounds(205, 330, 200, 60);
+		btnStart.setBounds(210, 330, 200, 60);
 		add(btnStart);
 
 		lblTime = new JLabel("-1");
 		lblTime.setForeground(Color.WHITE);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 24));
+		lblTime.setFont(font.deriveFont(Font.PLAIN,24));
 		lblTime.setBounds(250, 343, 100, 80);
 		add(lblTime);
 
-		btnCancel = new JButton("Hủy");
+		btnCancel = new JButton("CANCEL");
+		btnCancel.setForeground(Color.WHITE);
+		btnCancel.setBorder(null);
+		btnCancel.setOpaque(false);
+		btnCancel.setContentAreaFilled(false);
+		btnCancel.setBorderPainted(false);
+		btnCancel.setBackground(null);
+		btnCancel.setFocusable(false);
+		btnCancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnCancel.setFont(font.deriveFont(Font.PLAIN,18));
 		btnCancel.setBounds(250, 440, 100, 25);
-		add(btnCancel);
 
 		btnStart.addActionListener(this);
 		btnCancel.addActionListener(this);
 		this.displayWaitingGame(false);
+		add(btnCancel);
+
 	}
 
 	public Home(Client client, ImageIcon img) {
