@@ -235,10 +235,9 @@ public class ContestRoom {
 	public void endGame() {
 		System.out.println("End game");
 
-		if(this.players.size() == 1) {
+		if (this.players.size() == 1) {
 			this.onlyOne();
-		}
-		else {
+		} else {
 			// check tie
 			if (this.checkTie2Player()) { // if no one wins
 				this.noWinner();
@@ -246,7 +245,6 @@ public class ContestRoom {
 				this.hasWinner();
 			}
 		}
-		
 
 		this.refreshGameOfClient();
 		this.isEndContest = true; // for deleting this game room
@@ -305,6 +303,7 @@ public class ContestRoom {
 					false);
 		}
 	}
+
 	private void onlyOne() { // if it just has a player
 		this.winner = this.players.get(0);
 		this.clients.get(0).player = this.playerBus.updateWin(this.winner);
