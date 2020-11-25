@@ -21,13 +21,12 @@ import javax.crypto.spec.SecretKeySpec;
 
 import Model.Player;
 import Socket.Request.*;
-import Socket.Response.SocketResponse;
 import Socket.Response.*;
 import BUS.PlayerBUS;
 import GUI.Home;
 
 // a client Thread for connect to just 1 player
-public class ClientHandler implements Runnable { 
+public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
 	public ContestRoom contestRoom = null;
@@ -54,7 +53,7 @@ public class ClientHandler implements Runnable {
 			cipher.init(Cipher.ENCRYPT_MODE, secret);
 			dcipher = Cipher.getInstance("AES");
 			dcipher.init(Cipher.DECRYPT_MODE, secret);
-			
+
 			this.id = id;
 			this.socket = socket;
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
@@ -86,12 +85,14 @@ public class ClientHandler implements Runnable {
 				// check request
 				if (requestRaw.getAction().equals(SocketRequest.Action.LOGIN)) { // if client request login
 					this.loginPlayerProcess(requestRaw);
-					
+
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.DISCONNECT)) { // disconnect close socket
 					this.disconnectProcess();
 					break;
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.CONTEST)) { // if player join game
 					this.contest(requestRaw); // send to contest, game room
+				} else if (requestRaw.getAction().equals(SocketRequest.Action.REGISTER)) { // player cancel
+					this.register(requestRaw);
 				} else if (requestRaw.getAction().equals(SocketRequest.Action.CANCELCONTEST)) { // player cancel
 					this.cancelContest();
 				} else {
@@ -124,7 +125,7 @@ public class ClientHandler implements Runnable {
 			SealedObject so = new SealedObject(response, cipher);
 			sender.writeObject(so);
 //			sender.writeObject(response);
-			if(flag_reset) {
+			if (flag_reset) {
 				sender.reset();
 			}
 		} catch (IOException e) {
@@ -141,7 +142,8 @@ public class ClientHandler implements Runnable {
 			request = (SocketRequest) s.getObject(dcipher);
 //			request = (SocketRequest) receiver.readObject();
 			if (request == null) {
-				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"),false);
+				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE, "Deo !"),
+						false);
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			this.close();
@@ -157,23 +159,23 @@ public class ClientHandler implements Runnable {
 		if (this.isValidateClient(requestRaw)) { // check data, and get this.player
 			if (this.player.getStatus() == 1) { // if client is blocked
 				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-						"Tài khoản này đã bị khóa!"),false);
+						"Tài khoản này đã bị khóa!"), false);
 			} else if (this.player.getStatus() == 0) {
 				if (Server.isOnlinePlayer(this.player.getUsername())) { // if player is online
 					sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-							"Tài khoản này hiện đang online ở một thiết bị khác!"),false);
+							"Tài khoản này hiện đang online ở một thiết bị khác!"), false);
 				} else { // login OK
 					isLoggedIn = true;
-					sendResponse(new SocketResponsePlayer(this.player),false);
+					sendResponse(new SocketResponsePlayer(this.player), false);
 					Home.updatePlayerOnline(this.player);
 				}
 			}
 		} else { // data wrong
 			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản hoặc mật khẩu không đúng."),false); 
+					"Tài khoản hoặc mật khẩu không đúng."), false);
 		}
 	}
- 
+
 	private void disconnectProcess() {
 		isLoggedIn = false;
 		// remove player, if player is in Game
@@ -220,6 +222,7 @@ public class ClientHandler implements Runnable {
 			this.contestRoom = null;
 		}
 	}
+
 	private void cancelContest() {
 		this.isInGame = false;
 		this.contestRoom.leaveRoom(this);
@@ -227,8 +230,23 @@ public class ClientHandler implements Runnable {
 			Server.contestRoomManager.finishRoom(this.contestRoom.RoomId);
 		}
 		this.contestRoom = null;
-		sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-				"cancelGame"),false);
+		sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "cancelGame"),
+				false);
+	}
+
+	private void register(SocketRequest requestRaw) {
+		SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
+		if (bus.checkExistPlayer(tempRequest.player) == true) {
+			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"), false);
+		} else {
+			RegisterProcess register = new RegisterProcess(this, "localhost", tempRequest.player.getUsername(),
+					tempRequest.player.getName());
+			// send otp
+			bus.insert(tempRequest.player);
+			Player p = bus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
+			sendResponse(new SocketResponsePlayer(p), false);
+		}
 	}
 
 	public boolean isLoggedIn() {

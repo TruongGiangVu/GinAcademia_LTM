@@ -270,9 +270,9 @@ public class Home extends JPanel implements MouseListener {
 			top = 5;
 		}
 		else {
-//			if(temp.size() <= 5) {
-//				top = 3;
-//			}
+			if(data.size() <= 5) {
+				top = 3;
+			}
 		}
 //		load number game join
 		for (int i = 0; i < top; i++) {
