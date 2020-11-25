@@ -55,7 +55,6 @@ public class Rank extends MyPanel implements ActionListener{
 		SocketRequest request = new SocketRequest(SocketRequest.Action.RANK, "Rank view");
 		client.sendRequest(request);
 		SocketResponseRank response = (SocketResponseRank) client.getResponse();
-		this.loadPlayerActive(response);
 		
 		
 		
@@ -79,7 +78,6 @@ public class Rank extends MyPanel implements ActionListener{
 		lblYourRank.setFont(new Font("Monospace", Font.PLAIN, 14));
 		lblYourRank.setBounds(145, 28, 38, 20);
 		add(lblYourRank);
-		this.loadRank(this.playerActive);
 		
 
 		
@@ -129,6 +127,9 @@ public class Rank extends MyPanel implements ActionListener{
 		btnNewButton.addActionListener(this);
 		txtSearch.addActionListener(this);
 		add(btnNewButton);
+		this.loadPlayerActive(response);
+		this.loadRank(this.playerActive);
+
 	}
 	public void loadPlayerActive(SocketResponseRank rs) {
 		this.listPlayer.clear();
@@ -157,34 +158,34 @@ public class Rank extends MyPanel implements ActionListener{
 			this.table.setModel(this.tableModel);
 			lblYourRank.setText(ind+"");
 		}
-		else
-		{
-			if(val.equals("Số trận tham gia")) {
-				data.sort(Comparator.comparing(Player::getTotalGame).reversed());
-				this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Số trận tham gia"});
-				for(int i=0;i<n;i++) {
-					if(data.get(i).getId().equals(this.player.getId())) ind = i;
-					Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
-					this.tableModel.addRow(row);
-				}
-				this.table.setModel(this.tableModel);
-				lblYourRank.setText(ind+"");
-			}
-			else
-			{
-				if(val.equals("Chuỗi thắng")) {
-					data.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
-					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Chuỗi thắng"});
-					for(int i=0;i<n;i++) {
-						if(data.get(i).getId().equals(this.player.getId())) ind = i;
-						Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence() };
-						this.tableModel.addRow(row);
-					}
-					this.table.setModel(this.tableModel);
-					lblYourRank.setText(ind+"");
-				}
-			}
-		}
+//		else
+//		{
+//			if(val.equals("Số trận tham gia")) {
+//				data.sort(Comparator.comparing(Player::getTotalGame).reversed());
+//				this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Số trận tham gia"});
+//				for(int i=0;i<n;i++) {
+//					if(data.get(i).getId().equals(this.player.getId())) ind = i;
+//					Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
+//					this.tableModel.addRow(row);
+//				}
+//				this.table.setModel(this.tableModel);
+//				lblYourRank.setText(ind+"");
+//			}
+//			else
+//			{
+//				if(val.equals("Chuỗi thắng")) {
+//					data.sort(Comparator.comparing(Player::getMaxWinSequence).reversed());
+//					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Chuỗi thắng"});
+//					for(int i=0;i<n;i++) {
+//						if(data.get(i).getId().equals(this.player.getId())) ind = i;
+//						Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence() };
+//						this.tableModel.addRow(row);
+//					}
+//					this.table.setModel(this.tableModel);
+//					lblYourRank.setText(ind+"");
+//				}
+//			}
+//		}
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 		
