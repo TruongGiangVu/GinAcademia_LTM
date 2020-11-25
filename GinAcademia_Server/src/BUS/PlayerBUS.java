@@ -11,7 +11,7 @@ public class PlayerBUS {
 		return dao.readAll();
 	}
 	public ArrayList<Player> Read() {
-		return dao.readAll();
+		return dao.read();
 	}
 	public void insert(Player p) {
 		dao.insert(p);

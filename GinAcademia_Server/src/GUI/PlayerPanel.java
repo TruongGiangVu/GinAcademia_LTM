@@ -59,13 +59,13 @@ public class PlayerPanel extends JPanel implements ActionListener {
 		setLayout(null);
 		this.arr = bus.ReadAll();
 		JLabel lblNewLabel = new JLabel("Danh sách người chơi");
-		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblNewLabel.setFont(new Font("Monospace", Font.BOLD, 20));
 		lblNewLabel.setBounds(30, 15, 365, 40);
 		add(lblNewLabel);
 		
 		this.tbModelPlayer = new DefaultTableModel();
 	
-		this.tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản","Email", "Trạng thái"});
+		this.tbModelPlayer.setColumnIdentifiers(new Object[] { "Id", "Tên người chơi", "Tên tài khoản","Điểm IQ", "Trạng thái"});
 		this.tbPlayer = new JTable(this.tbModelPlayer){
 			private static final long serialVersionUID = 1L;
 	        public boolean isCellEditable(int row, int column) {                
@@ -73,11 +73,13 @@ public class PlayerPanel extends JPanel implements ActionListener {
 	        };
 		};
 		this.tbPlayer.setRowHeight(25);
+		this.tbPlayer.getColumnModel().getColumn(0).setPreferredWidth(50);
 		this.tbPlayer.getColumnModel().getColumn(1).setPreferredWidth(200);
-		this.tbPlayer.getColumnModel().getColumn(2).setPreferredWidth(100);
-		this.tbPlayer.getColumnModel().getColumn(3).setPreferredWidth(150);
+		this.tbPlayer.getColumnModel().getColumn(2).setPreferredWidth(150);
+		this.tbPlayer.getColumnModel().getColumn(3).setPreferredWidth(50);
 
 		this.tbPlayer.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+		this.tbPlayer.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 		this.tbPlayer.getColumnModel().getColumn(4).setCellRenderer(customRenderer);
 		this.loadData(arr);
 		textField = new JTextField();
@@ -149,7 +151,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 				else {
 					temp = "Khóa";
 				}
-				Object[] row = { data.get(i).getId(), data.get(i).getName(),data.get(i).getUsername(),data.get(i).getEmail(),temp};
+				Object[] row = { data.get(i).getId(), data.get(i).getName(),data.get(i).getUsername(),data.get(i).getIQPoint(),temp};
 				tbModelPlayer.addRow(row);
 			}
 			this.tbPlayer.setModel(tbModelPlayer);
