@@ -4,6 +4,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -22,6 +24,8 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.FontFormatException;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 
@@ -39,14 +43,22 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	private JTextField txtSearch;
 	private JButton btnSearch;
 	private JLabel lblNewLabel;
-
+	private Font font;
 	public QuestionPanel() {
 		setBackground(Color.WHITE);
 		this.setSize(600, 600);
 		setLayout(null);
 		this.arr = bus.ReadAll();
 		arr = bus.sort(arr, false);
+		File font_file = new File("./Font/.VnAristote.ttf");
+		try {
+			font = Font.createFont(Font.TRUETYPE_FONT, font_file);
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 
+			e.printStackTrace();
+		}
 		panelTable = new JPanel();
 		panelTable.setBounds(30, 155, 540, 400);
 		add(panelTable);
@@ -85,11 +97,14 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		btnAdd.addActionListener(this);
 
 		btnView = new JButton("i");
-		btnView.setFont(new Font(".VnAristote", Font.BOLD, 20));
+		btnView.setFont(font.deriveFont(Font.PLAIN,25));
 		btnView.setForeground(Color.BLACK);
 		btnView.setBorder(null);
+		btnView.setContentAreaFilled(false);
+		btnView.setBorderPainted(false);
 		btnView.setBackground(null);
 		btnView.addActionListener(this);
+		btnView.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnView.setBounds(520, 115, 50, 25);
 		add(btnView);
 

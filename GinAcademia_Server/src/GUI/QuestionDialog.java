@@ -180,6 +180,7 @@ public class QuestionDialog extends JDialog {
 		p.setId(this.question.getId());
 		p.setQuestion(this.txtQuestion.getText());
 		ArrayList<Option> options = new ArrayList<Option>();
+		
 		options.add(new Option(1,this.txtOption1.getText() ));
 		options.add(new Option(2,this.txtOption2.getText() ));
 		options.add(new Option(3,this.txtOption3.getText() ));
