@@ -310,6 +310,8 @@ public class Contest extends MyPanel implements MouseListener {
 		int enemy = 0;
 		if (this.index == 0)
 			enemy = 1;
+		if(answers.size() == 1)
+			return;
 		// display
 		int choose = answers.get(enemy);
 		if (choose == 0)
