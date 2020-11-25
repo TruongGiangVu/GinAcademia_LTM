@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -72,6 +73,7 @@ public class Rank extends MyPanel implements ActionListener{
 	                return false;               
 	        };
 		};
+		table.setFillsViewportHeight(true);
 		table.setBackground(Color.WHITE);
 		cbbRank = new JComboBox<String>();
 		
@@ -168,11 +170,7 @@ public class Rank extends MyPanel implements ActionListener{
 	}
 	public void loadRank(ArrayList<Player> data, String opt) {
 		if(data.size() > 0) {
-			if(scrollPane.isAncestorOf(pnEmpty)) {
-				scrollPane.remove(pnEmpty);
-				
-			}
-			if(!scrollPane.isAncestorOf(table))			scrollPane.add(table);
+			
 			scrollPane.revalidate();
 			scrollPane.repaint();
 			int n = data.size() > 1? data.size()-1 : 1;
@@ -216,11 +214,7 @@ public class Rank extends MyPanel implements ActionListener{
 			table.getColumnModel().getColumn(2).setPreferredWidth(100);
 		}
 		else {
-			scrollPane.removeAll();
-			scrollPane.add(pnEmpty);
-			scrollPane.revalidate();
-			scrollPane.repaint();
-//			tableModel.
+			JOptionPane.showMessageDialog(this, "Không tìm thấy kết quả");
 			
 		}
 		

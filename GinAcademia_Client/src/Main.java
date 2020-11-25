@@ -12,6 +12,8 @@ public class Main {
             e.printStackTrace();
         }	
 		Login login = new Login("localhost",5000);
+//		Login login = new Login("192.168.110.103",5000);
+
 //		Login login = new Login("tcp://2.tcp.ngrok.io",10092);
 		//103.199.40.216
 		// tcp://2.tcp.ngrok.io:17364
