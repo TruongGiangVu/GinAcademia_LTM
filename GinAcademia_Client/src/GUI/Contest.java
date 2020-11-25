@@ -199,7 +199,7 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = maxTime;
+		int countdown = maxTime / 1000;
 
 		public ContestTask() {
 			clearColorOption();
@@ -209,7 +209,6 @@ public class Contest extends MyPanel implements MouseListener {
 		public void run() {
 			lblTime.setText(this.countdown + "");
 			if (this.countdown == 0 && isAnswer == false) {
-//				endTurn();
 				thread = new Thread(new ContestGame());
 				thread.start();
 			}
@@ -266,22 +265,9 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	private void showDialog(String message) { // dialog end game
-		String[] options = { "Tiếp tục", "Dừng chơi" };
-		int result = JOptionPane.showOptionDialog(this, message, "Bạn có muốn chơi tiếp không?",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, // no custom icon
-				options, // button titles
-				options[0] // default button
-		);
-		if (result == JOptionPane.YES_OPTION) {
-//			parent.clickStart();
-		} else if (result == JOptionPane.NO_OPTION) {
-			parent.setActiveMenuButton(true);
-			parent.clickReturnHome();
-
-		} else {
-			parent.setActiveMenuButton(true);
-			parent.clickReturnHome();
-		}
+		JOptionPane.showMessageDialog(this, message, "Game", JOptionPane.INFORMATION_MESSAGE);
+		parent.setActiveMenuButton(true);
+		parent.clickReturnHome();
 	}
 
 	private void updateHeader(int index, ArrayList<Integer> points) { // get index and update point
@@ -305,9 +291,9 @@ public class Contest extends MyPanel implements MouseListener {
 //	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
 		int n = points.size();
-		System.out.println("index:" +index);
+		System.out.println("index:" + index);
 		this.lblYourPoint.setText(points.get(index) + "");
-		
+
 		for (int i = 0; i < n; ++i) {
 			if (i != index)
 				this.lblEnemyPoint.setText(points.get(i) + "");

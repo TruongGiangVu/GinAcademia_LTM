@@ -35,9 +35,6 @@ public class RequestProcess {
 				case RANK:
 					rankProcess();
 					break;
-				case REGISTER:
-					registerProcess();
-					break;
 				case IQTEST:
 					iQTestProcess();
 					break;
@@ -72,7 +69,7 @@ public class RequestProcess {
 			client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"),false);
 		} else {
-			//send otp
+			// send otp
 			playerBus.insert(tempRequest.player);
 			Player p = playerBus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
 			client.sendResponse(new SocketResponsePlayer(p),false);
