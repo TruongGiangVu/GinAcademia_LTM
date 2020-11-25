@@ -15,53 +15,57 @@ public class RegisterProcess {
 	public String playerName = "";
 	public ClientHandler client;
 	public SendEmail email;
-	
+
 	Timer timer;
-	
+
 	boolean getCode = false;
 
-	public RegisterProcess(ClientHandler client,String host, String toEmail, String name) {
+	public RegisterProcess(ClientHandler client, String host, String toEmail, String name) {
 		this.init(client, host, "vuapha0008@gmail.com", toEmail, name);
 	}
 
-	public RegisterProcess( ClientHandler client,String host, String fromEmail, String toEmail, String name) {
+	public RegisterProcess(ClientHandler client, String host, String fromEmail, String toEmail, String name) {
 		this.init(client, host, fromEmail, toEmail, name);
 	}
-	public void init(ClientHandler client,String host, String fromEmail, String toEmail, String name) {
+
+	public void init(ClientHandler client, String host, String fromEmail, String toEmail, String name) {
 		email = new SendEmail(host, fromEmail, toEmail);
 		this.activeCode = this.createActiveCodeRandom();
 		this.playerName = name;
 		this.client = client;
 	}
-	
+
 	public void getReset(SocketRequest requestRaw) {
 		email.send();
 		timer.cancel();
 		this.waitActive();
 		this.getCode = false;
-		
 	}
+
 	public void getActiveCodeFromClient(String code) {
-		if(this.activeCode.equals(code)) {
+		if (this.activeCode.equals(code)) {
 			this.getCode = true;
-			this.client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS,SocketResponse.Action.MESSAGE,"Đăng ký tài khoản thành công!"), false);
+			this.client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
+					"Đăng ký tài khoản thành công!"), false);
 		}
 	}
+
 	public void waitActive() {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new WaitCode(), 0, 1000);
 	}
-	
-	class WaitCode extends TimerTask{
-		int time = 10*60;
+
+	class WaitCode extends TimerTask {
+		int time = 10 * 60;
+
 		@Override
 		public void run() {
 			time--;
-			if(getCode){
+			if (getCode) {
 				timer.cancel();
 			}
 		}
-		
+
 	}
 
 	class SendEmail {
@@ -161,5 +165,5 @@ public class RegisterProcess {
 	public void setEmail(SendEmail email) {
 		this.email = email;
 	}
-	
+
 }
