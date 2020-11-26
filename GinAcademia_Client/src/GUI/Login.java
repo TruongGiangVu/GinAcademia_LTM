@@ -41,8 +41,8 @@ public class Login extends JFrame {
 	private JLabel label;
 	private JPasswordField txtPassword;
 	private JLabel lblChaCTi;
-	private JLabel lblRegister;
-	private JButton btnLogin;
+	public static JLabel lblRegister;
+	public static JButton btnLogin;
 	int xx, xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
@@ -58,7 +58,6 @@ public class Login extends JFrame {
 	
 	private void init(String host, int port) {
 		System.out.println("run...");
-		client = new Client(host, port);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -138,38 +137,16 @@ public class Login extends JFrame {
 		contentPane.add(lblChaCTi);
 
 		lblRegister = new JLabel("Đăng ký ngay");
-		lblRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		lblRegister.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Login.this.dispose();
-				Register frame = new Register(client);
-				frame.setVisible(true);
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				lblRegister.setForeground(new Color(8, 87, 40).brighter());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-				lblRegister.setForeground(new Color(8, 87, 40));
-			}
-		});
 		lblRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblRegister.setForeground(new Color(8, 87, 40));
 		lblRegister.setBounds(535, 305, 94, 14);
 		contentPane.add(lblRegister);
 
-		btnLogin = new JButton("Đăng nhập");
+		btnLogin = new JButton("Đang tạo kết nối");
 		btnLogin.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				System.out.println("abcd");
 				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
-			            System.out.println("Hello");
 			            loginPlayer();
 			        }
 			}
@@ -218,6 +195,7 @@ public class Login extends JFrame {
 		btnLogin.setBounds(391, 265, 280, 35);
 		btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnLogin.setFocusable(false);
+		btnLogin.setEnabled(false);
 		contentPane.add(btnLogin);
 
 		errorUsername = new JLabel("");
@@ -235,6 +213,31 @@ public class Login extends JFrame {
 //		this.setUndecorated(true);
 		setResizable(false);
 		this.setVisible(true);
+		lblRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		client = new Client(host, port);
+		lblRegister.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(client.getSocket() != null) {
+					Login.this.dispose();
+					Register frame = new Register(client);
+					frame.setVisible(true);
+				}
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				lblRegister.setForeground(new Color(8, 87, 40).brighter());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+				lblRegister.setForeground(new Color(8, 87, 40));
+			}
+		});
 	}
 
 	private boolean checkData() {

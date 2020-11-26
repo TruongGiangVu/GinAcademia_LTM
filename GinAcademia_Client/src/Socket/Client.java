@@ -18,7 +18,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.swing.JOptionPane;
 
+import GUI.Login;
 import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Request.*;
@@ -37,7 +39,9 @@ public class Client {
 	public boolean isLogin = false;
 	public Player player = null;
 	public String message = "";
-
+	public boolean checkSend = false;
+	public boolean checkRequest = false;
+	public String request = "";
 	private Cipher cipher;
 	private Cipher dcipher;
 
@@ -67,8 +71,24 @@ public class Client {
 			this.socket = new Socket(host, port);
 			this.sender = new ObjectOutputStream(this.socket.getOutputStream());
 			this.receiver = new ObjectInputStream(this.socket.getInputStream());
+			Login.btnLogin.setText("Đăng nhập");
+			Login.btnLogin.setEnabled(true);
+			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("lỗi");
+			Login.btnLogin.setText("Lỗi kết nối");
+			Login.lblRegister.setCursor(null);
+//			Login.lblRegister.remove
+			if(e.getMessage().contains("timed out")) {
+				JOptionPane.showMessageDialog(null,(Object) "Kết nối hết hạn", "Lỗi kết nối", JOptionPane.ERROR_MESSAGE);
+				
+			}
+			else {
+				if(e.getMessage().contains("refused")) {
+					JOptionPane.showMessageDialog(null,(Object) "Lỗi kết nối đến máy chủ","Lỗi kết nối",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+//			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
@@ -114,12 +134,20 @@ public class Client {
 
 	public void sendRequest(SocketRequest request) {
 		try {
+			
 			SealedObject so = new SealedObject(request, cipher); // ma hoa
 			sender.writeObject(so);
 			sender.flush();
+			checkSend = true;
+			
 		} catch (IOException e) {
-			System.out.println("loi");
-			e.printStackTrace();
+			checkSend = false;
+			if(!request.getAction().equals(SocketRequest.Action.DISCONNECT)) {
+				if(e.getMessage().contains("reset")) {
+					JOptionPane.showMessageDialog(null, (Object) "Không thể kết nối tới server","Lỗi kết nối",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		}
@@ -136,10 +164,15 @@ public class Client {
 			SealedObject s = (SealedObject) this.receiver.readObject();
 			response = (SocketResponse) s.getObject(dcipher);
 			this.message = response.getMessage();
-			
+			checkRequest = true;
+
 
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			
+			if(e.getMessage().contains("reset")) {
+				JOptionPane.showMessageDialog(null, (Object) "Không nhận được thông tin phản hồi từ server","Lỗi nhận phản hồi từ server",JOptionPane.ERROR_MESSAGE);
+			}
+			checkRequest = false;
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
