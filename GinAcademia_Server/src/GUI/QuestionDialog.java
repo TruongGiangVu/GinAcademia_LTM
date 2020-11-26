@@ -158,12 +158,10 @@ public class QuestionDialog extends JDialog {
 							if (checkDuplicate() == true) {
 								confirm = true;
 								dispose();
-							} else {
-								JOptionPane.showMessageDialog(QuestionDialog.this, "Lựa chọn không đươc trùng!");
-							}
-						} else {
-							JOptionPane.showMessageDialog(QuestionDialog.this, "Không để trống dữ liệu!");
-						}
+							} else
+								JOptionPane.showMessageDialog(QuestionDialog.this, "Các câu trả lời không được trùng!");
+						} else
+							JOptionPane.showMessageDialog(QuestionDialog.this, "Không được để trống!");
 					}
 				});
 				okButton.setActionCommand("OK");
