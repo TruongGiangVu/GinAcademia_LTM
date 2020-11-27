@@ -4,8 +4,10 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
+import Model.Player;
 import Socket.Request.SocketRequest;
 import Socket.Response.SocketResponse;
+import Socket.Response.SocketResponsePlayer;
 
 import javax.activation.*;
 
@@ -17,8 +19,9 @@ public class RegisterProcess {
 	public SendEmail email;
 
 	Timer timer;
+	int currentTime = -1;
 
-	boolean getCode = false;
+	boolean gottenCode = false;
 
 	public RegisterProcess(ClientHandler client, String host, String toEmail, String name) {
 		this.init(client, host, "vuapha0008@gmail.com", toEmail, name);
@@ -29,25 +32,51 @@ public class RegisterProcess {
 	}
 
 	public void init(ClientHandler client, String host, String fromEmail, String toEmail, String name) {
-		email = new SendEmail(host, fromEmail, toEmail);
+		this.email = new SendEmail(host, fromEmail, toEmail);
 		this.activeCode = this.createActiveCodeRandom();
 		this.playerName = name;
 		this.client = client;
 	}
 
-	public void getReset(SocketRequest requestRaw) {
-		email.send();
-		timer.cancel();
-		this.waitActive();
-		this.getCode = false;
+	public void getResetAndSendEmail() {
+		if(!this.gottenCode) {
+			timer.cancel();
+			email.send();
+			this.waitActive();
+		}	
+	}
+	public void cancelEmail() {
+		if(!this.gottenCode) {
+			currentTime = -1;
+			timer.cancel();
+		}
+	}
+	
+	public void sendEmailToClient() {
+		if(!this.gottenCode) {
+			email.send();
+			this.waitActive();
+		}
 	}
 
-	public void getActiveCodeFromClient(String code) {
-		if (this.activeCode.equals(code)) {
-			this.getCode = true;
-			this.client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-					"Đăng ký tài khoản thành công!"), false);
+	public boolean getActiveCodeFromClient(String code) {
+		System.out.println("Active code");
+		if (this.currentTime > 0) {
+			if(this.activeCode.equals(code)) {
+				this.gottenCode = true;
+				this.client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
+						"Đăng ký tài khoản thành công!"), false);
+			}else {
+				this.client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+						"Mã của bạn bị sai"), false);
+			}
 		}
+		else {
+			this.client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+					"Mã này đã hết giờ"), false);
+		}
+		System.out.println("Active code over");
+		return this.gottenCode;
 	}
 
 	public void waitActive() {
@@ -60,10 +89,15 @@ public class RegisterProcess {
 
 		@Override
 		public void run() {
-			time--;
-			if (getCode) {
+			if (gottenCode) {
+				currentTime = -1;
 				timer.cancel();
 			}
+			if(time  == 0) {
+				currentTime = -1;
+				timer.cancel();
+			}
+			currentTime = --time;
 		}
 
 	}

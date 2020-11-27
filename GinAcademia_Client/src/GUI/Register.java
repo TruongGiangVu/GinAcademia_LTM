@@ -303,17 +303,23 @@ public class Register extends MyFrame {
 			Player p = getData();
 			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,p));
 			SocketResponse response = client.getResponse();	
-			
-			// check if register OK
-			if(response.getStatus().equals(SocketResponse.Status.FAILED)) { // failed
+			if(response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
+				ActiveCodeDialog dialog = new ActiveCodeDialog (client);
+				dialog.setVisible(true);
+				if(dialog.getConfirm()) {
+					client.connect(p.getUsername(), p.getPassword()); // connect Player
+					JOptionPane.showMessageDialog(this, client.message);
+					this.dispose();
+					MainFrame frame = new MainFrame(client); // open main frame
+					frame.setVisible(true);	
+				}
+				else {
+					
+				}
+					
+			}
+			else {
 				JOptionPane.showMessageDialog(this,response.getMessage(),"Alert",JOptionPane.WARNING_MESSAGE);
-			}		
-			else { // success
-				client.connect(p.getUsername(), p.getPassword()); // connect Player
-				JOptionPane.showMessageDialog(this, client.message);
-				this.dispose();
-				MainFrame frame = new MainFrame(client); // open main frame
-				frame.setVisible(true);
 			}
 		}
 	}

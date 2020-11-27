@@ -29,7 +29,8 @@ import GUI.Home;
 public class ClientHandler implements Runnable {
 	public int id = 0;
 	Socket socket;
-	public ContestRoom contestRoom = null;
+	ContestRoom contestRoom = null;
+	RegisterProcess register = null;
 	ObjectInputStream receiver = null;
 	ObjectOutputStream sender = null;
 	PlayerBUS bus = new PlayerBUS();
@@ -236,16 +237,32 @@ public class ClientHandler implements Runnable {
 
 	private void register(SocketRequest requestRaw) {
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
-		if (bus.checkExistPlayer(tempRequest.player) == true) {
+		if (register == null && bus.checkExistPlayer(tempRequest.player) == true) {
 			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"), false);
 		} else {
-			RegisterProcess register = new RegisterProcess(this, "localhost", tempRequest.player.getUsername(),
-					tempRequest.player.getName());
-			// send otp
-			bus.insert(tempRequest.player);
-			Player p = bus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
-			sendResponse(new SocketResponsePlayer(p), false);
+			if (register != null) {
+				String[] split = tempRequest.getMessage().split(" ");
+				if (split[0].equals("reset")) {
+					System.out.println("Reset");
+					register.getResetAndSendEmail();
+				} else if (split[0].equals("cancel")) {
+					System.out.println("Cancel");
+					register.cancelEmail();
+					register = null;
+				} else if (split[0].equals("code")) {
+					boolean ok = register.getActiveCodeFromClient(split[1]);
+					if (ok)
+						bus.insert(tempRequest.player);
+				}
+			} else {
+				RegisterProcess register = new RegisterProcess(this, "localhost", tempRequest.player.getUsername(),
+						tempRequest.player.getName());
+				register.sendEmailToClient();
+				sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
+						"Email hợp lệ, xin hãy xác nhận mã!"), false);
+				System.out.println("Open dialog");
+			}
 		}
 	}
 
