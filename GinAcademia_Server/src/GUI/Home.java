@@ -45,7 +45,8 @@ public class Home extends JPanel implements MouseListener {
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
 	private PlayerBUS bus = new PlayerBUS();
-	private static JLabel lblNumOnline;
+	static JLabel lblNumOnline;
+	static JLabel lblNumPlayer;
 	ArrayList<Player> arr = new ArrayList<Player>();
 	static ArrayList<Player> PlayerActive =  new ArrayList<Player>();
 	
@@ -76,9 +77,9 @@ public class Home extends JPanel implements MouseListener {
 		lblNewLabel.setBounds(30, 30, 105, 30);
 		add(lblNewLabel);
 		
-		JLabel lblNewLabel_1 = new JLabel(String.valueOf(this.arr.size()));
-		lblNewLabel_1.setBounds(145, 30, 30, 30);
-		add(lblNewLabel_1);
+		lblNumPlayer = new JLabel(String.valueOf(this.arr.size()));
+		lblNumPlayer.setBounds(145, 30, 30, 30);
+		add(lblNumPlayer);
 		
 		JLabel lblOnline = new JLabel("Số người chơi đang online: ");
 		lblOnline.setBounds(200, 30, 170, 30);
@@ -310,7 +311,7 @@ public class Home extends JPanel implements MouseListener {
 		tbModelPlayer.addRow(row);
 		tbModelPlayer.fireTableDataChanged();
 		lblNumOnline.setText(Server.countPlayerOnline()+"");
-
+		lblNumPlayer.setText(PlayerActive.size()+"");
 	}
 	public static void updatePlayerOnline(Player p) {
 		String status = "Offline";
