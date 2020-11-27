@@ -72,7 +72,7 @@ public class RegisterProcess {
 		}
 		else {
 			this.client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Mã này đã hết giờ"), false);
+					"Mã này đã hết hạn"), false);
 		}
 		return this.gottenCode;
 	}
@@ -83,7 +83,7 @@ public class RegisterProcess {
 	}
 
 	class WaitCode extends TimerTask {
-		int time = 10 ;
+		int time = 10*60 ;
 
 		@Override
 		public void run() {

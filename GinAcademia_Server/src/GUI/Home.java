@@ -304,32 +304,34 @@ public class Home extends JPanel implements MouseListener {
 		String status = "Offline";
 		int i = 0;
 		boolean flag = true;
-		
-		if(Server.isOnlinePlayer(p.getUsername())) {
-			status = "Online";
-		}
-		Object[] row = { p.getId(), p.getName(),p.getUsername(), status };
-		int n = PlayerActive.size() - 1;
-		while(flag) {
-			if(i > n) {
-				flag = false;
+		if(p!=null) {
+			if(Server.isOnlinePlayer(p.getUsername())) {
+				status = "Online";
 			}
-			else {
-				if(PlayerActive.get(i).getId().equals(p.getId())) {
+			Object[] row = { p.getId(), p.getName(),p.getUsername(), status };
+			int n = PlayerActive.size() - 1;
+			while(flag) {
+				if(i > n) {
 					flag = false;
 				}
 				else {
-					i++;
-				}
-			}	
-		}
-		for(int j = 0; j < tbModelPlayer.getColumnCount();j++) {
-			tbModelPlayer.setValueAt(row[j], i, j);
+					if(PlayerActive.get(i).getId().equals(p.getId())) {
+						flag = false;
+					}
+					else {
+						i++;
+					}
+				}	
+			}
+			for(int j = 0; j < tbModelPlayer.getColumnCount();j++) {
+				tbModelPlayer.setValueAt(row[j], i, j);
+			}
+			
+			tbModelPlayer.fireTableDataChanged();
+			
+			lblNumOnline.setText(Server.countPlayerOnline()+"");
 		}
 		
-		tbModelPlayer.fireTableDataChanged();
-		
-		lblNumOnline.setText(Server.countPlayerOnline()+"");
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
