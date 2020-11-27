@@ -52,6 +52,7 @@ public class Rank extends MyPanel implements ActionListener{
 	private DefaultTableModel tableModel;
 	private JTextField txtSearch;
 	private JButton btnNewButton;
+	public static boolean flag = true;
 
 	public Rank(Client client, int status) {
 		super(client);
@@ -62,8 +63,7 @@ public class Rank extends MyPanel implements ActionListener{
 			return;
 		
 		SocketRequest request = new SocketRequest(SocketRequest.Action.RANK, "Rank view");
-		client.sendRequest(request);
-		SocketResponseRank response = (SocketResponseRank) client.getResponse();
+		
 		
 		tableModel = new DefaultTableModel();
 		setLayout(null);
@@ -139,21 +139,35 @@ public class Rank extends MyPanel implements ActionListener{
 		txtSearch.addActionListener(this);
 		add(btnNewButton);
 		String option = (String) cbbRank.getSelectedItem();
-		this.loadPlayerRankTable(response);
-		lblYourRank.setText(this.totalWinRank);
-		this.loadRank(this.totalWin,option);
-		cbbRank.addActionListener(this);
+		if(client.checkSend) {
+			client.sendRequest(request);
+			if(client.checkSend) {
+				SocketResponseRank response = (SocketResponseRank) client.getResponse();
+
+				this.loadPlayerRankTable(response);
+				lblYourRank.setText(this.totalWinRank);
+				this.loadRank(this.totalWin,option);
+				cbbRank.addActionListener(this);
+			}
+			
+			
+		}
+		
+		
+		
 //		
 	}
 	public void loadPlayerRankTable(SocketResponseRank rs) {
 		this.playerActive.clear();
+		this.totalGame = new ArrayList<Player>();
+		this.totalWin = new ArrayList<Player>();
+		this.winStreak= new ArrayList<Player>();
+
+		
 		this.playerActive = rs.getList();
 		
-		this.totalGame = new ArrayList<Player>();
 		this.totalGame.addAll(this.playerActive);
-		this.totalWin = new ArrayList<Player>();
 		this.totalWin.addAll(this.playerActive);
-		this.winStreak= new ArrayList<Player>();
 		this.winStreak.addAll(this.playerActive);
 		
 		this.totalWin.sort(Comparator.comparing(Player::getWins).reversed());
@@ -164,9 +178,12 @@ public class Rank extends MyPanel implements ActionListener{
 		this.totalWinRank = this.loadPlayerRank(this.totalWin);
 		this.winStreakRank = this.loadPlayerRank(this.winStreak);
 		
+		
+		
 	}
 	public void loadRank(ArrayList<Player> data, String opt) {
-		if(data.size() > 0) {
+		
+		if(data!= null && data.size() > 0) {
 			
 			scrollPane.revalidate();
 			scrollPane.repaint();
@@ -179,24 +196,28 @@ public class Rank extends MyPanel implements ActionListener{
 					Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getWins() };
 					this.tableModel.addRow(row);
 				}
+				lblYourRank.setText(this.totalWinRank);
 			}
 			else
 			{
 				if(opt.equals("Số trận tham gia")) {
-					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Số trận tham gia"});
+					this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Tên tài khoản","Số trận tham gia"});
 					for(int i=0;i<n;i++) {
 						Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getTotalGame() };
 						this.tableModel.addRow(row);
 					}
+					lblYourRank.setText(this.totalGameRank);
 				}
 				else
 				{
 					if(opt.equals("Chuỗi thắng")) {
-						this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Giới tính","Chuỗi thắng"});
+						this.tableModel.setColumnIdentifiers(new Object[] { "Hạng", "Tên người chơi","Tên tài khoản","Chuỗi thắng"});
 						for(int i=0;i<n;i++) {
 							Object[] row = {i+1, data.get(i).getName(),data.get(i).getUsername(),data.get(i).getMaxWinSequence() };
 							this.tableModel.addRow(row);
 						}
+						lblYourRank.setText(this.winStreakRank);
+
 					}
 				}
 			}

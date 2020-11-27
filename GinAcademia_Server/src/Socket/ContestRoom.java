@@ -135,7 +135,7 @@ public class ContestRoom {
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = config.getTime() / 1000;
+		int countdown = config.getTime();
 
 		public ContestTask() {
 			System.out.println("start countdown");

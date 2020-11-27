@@ -180,26 +180,34 @@ public class Contest extends MyPanel implements MouseListener {
 //		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
-		if (responseContest.getAction().equals(SocketResponse.Action.CONTEST)) {
-			if (responseContest.getMessage().equals("contest")) {
-				this.initNamePlayer(responseContest);
+		if(client.checkRequest) {
+			if (responseContest.getAction().equals(SocketResponse.Action.CONTEST)) {
+				if (responseContest.getMessage().equals("contest")) {
+					this.initNamePlayer(responseContest);
+				}
 			}
-		}
-		this.initQuestion();
-		SocketResponse responseQuestion = client.getResponse(); // get first question
-		if (responseQuestion.getAction().equals(SocketResponse.Action.CONTEST)) {
-			if (responseQuestion.getMessage().equals("question")) {
-				SocketResponseQuestion question = (SocketResponseQuestion) responseQuestion;
-				this.loadQuestion(question.getQuestion());
+			this.initQuestion();
+			SocketResponse responseQuestion = client.getResponse(); // get first question
+			if(client.checkRequest) {
+				if (responseQuestion.getAction().equals(SocketResponse.Action.CONTEST)) {
+					if (responseQuestion.getMessage().equals("question")) {
+						SocketResponseQuestion question = (SocketResponseQuestion) responseQuestion;
+						this.loadQuestion(question.getQuestion());
+					}
+				}
 			}
+			
 		}
+		
+		
+		
 
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = maxTime / 1000;
+		int countdown = maxTime;
 
 		public ContestTask() {
 			clearColorOption();
@@ -225,34 +233,37 @@ public class Contest extends MyPanel implements MouseListener {
 			System.out.println("End turn \n");
 			try {
 				SocketResponse responseServer = (SocketResponse) client.getResponse();
-				if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
-					timer.cancel();
-					SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
-					index = indexOfPlayer(responseGameRoom.players, player); // get index player
-					displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer);
-					setEnableOption(false);
+				if(client.checkRequest) {
+					if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
+						timer.cancel();
+						SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;
+						index = indexOfPlayer(responseGameRoom.players, player); // get index player
+						displayAnswer(responseGameRoom.answers, responseGameRoom.rightAnswer);
+						setEnableOption(false);
 
-					updateHeader(index, responseGameRoom.points); // update point
+						updateHeader(index, responseGameRoom.points); // update point
 
-					// delay 2s
-					Thread.sleep(2000);
+						// delay 2s
+						Thread.sleep(2000);
 
-					if (stt <= numQ) { // if has next question
-						isAnswer = false;
-						setEnableOption(true);
-						loadQuestion(responseGameRoom.question);
+						if (stt <= numQ) { // if has next question
+							isAnswer = false;
+							setEnableOption(true);
+							loadQuestion(responseGameRoom.question);
 
-					} else { // if over
-						SocketResponse responseEnd = client.getResponse();
-						SocketResponsePlayer player = (SocketResponsePlayer) responseEnd;
-						showDialog(player.getMessage());
-						client.player = player.getPlayer(); // update again info
+						} else { // if over
+							SocketResponse responseEnd = client.getResponse();
+							SocketResponsePlayer player = (SocketResponsePlayer) responseEnd;
+							showDialog(player.getMessage());
+							client.player = player.getPlayer(); // update again info
+						}
+
+						timer = new Timer();
+						timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
+						Thread.currentThread().interrupt();
 					}
-
-					timer = new Timer();
-					timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
-					Thread.currentThread().interrupt();
 				}
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -344,11 +355,17 @@ public class Contest extends MyPanel implements MouseListener {
 		this.isAnswer = true;
 		client.sendRequest(
 				new SocketRequestAnswer(this.player, source.theme, Integer.valueOf(this.lblTime.getText()) * 1000));
-		this.setEnableOption(false);
-		source.setBackground(this.optionColor.getColor("choose"));
-//		this.endTurn();
-		thread = new Thread(new ContestGame());
-		thread.start();
+		if(client.checkSend) {
+			this.setEnableOption(false);
+			source.setBackground(this.optionColor.getColor("choose"));
+//			this.endTurn();
+			thread = new Thread(new ContestGame());
+			thread.start();
+		}
+		else {
+			timer.cancel();
+		}
+		
 	}
 
 	@Override

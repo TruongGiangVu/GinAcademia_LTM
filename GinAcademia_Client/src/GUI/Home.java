@@ -159,29 +159,34 @@ public class Home extends ImagePanel implements ActionListener {
 
 		@Override
 		public void run() {
-			while (waitGame) {
+//			while (waitGame) {
 				try {
 
 					SocketResponse response = client.getResponse(); 
-
-					System.out.println("Get response: " + response.getMessage());
-					if (response.getMessage().equals("HasGame")) {
-						waitGame = false;
-						joinGame = true; 
-						System.out.println("Get start contest in Home");
+					if(client.checkRequest) {
+						if (response.getMessage().equals("HasGame")) {
+							waitGame = false;
+							joinGame = true; 
+							System.out.println("Get start contest in Home");
+						}
+						else if(response.getMessage().equals("cancelGame")) {
+							waitGame = false;
+							joinGame = false; 
+							System.out.println("Get start contest in Home");
+							Thread.currentThread().interrupt();
+						}
 					}
-					else if(response.getMessage().equals("cancelGame")) {
-						waitGame = false;
-						joinGame = false; 
-						System.out.println("Get start contest in Home");
-						Thread.currentThread().interrupt();
+					else {
+						waitTask.cancel(); 
+						timer.cancel();
+						timer.purge();
 					}
+					
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("Thread was interrupted, Failed to complete operation");
-					break;
+//					break;
 				}
-			}
+//			}
 		}
 	}
 
@@ -192,16 +197,19 @@ public class Home extends ImagePanel implements ActionListener {
 			waitGame = true;
 			System.out.println("start button");
 			client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "join"));
-			// change on GUI
-			this.displayWaitingGame(true);
-//			parent.setActiveMenuButton(false);
-			callParentToSetMenuButton(false);
-			// start waiting timer and thread
-			this.waittingContest();
-			thread = new Thread(new GetMessage());
-			thread.start();
+			if(client.checkSend) {
+				// change on GUI
+				this.displayWaitingGame(true);
+//				parent.setActiveMenuButton(false);
+				callParentToSetMenuButton(false);
+				// start waiting timer and thread
+				this.waittingContest();
+				thread = new Thread(new GetMessage());
+				thread.start();
 
-			System.out.println("Contest join waiting .....");
+				System.out.println("Contest join waiting .....");
+			}
+			
 
 		} else if (source == btnCancel) {
 			System.out.println("cancel button");
@@ -223,7 +231,7 @@ public class Home extends ImagePanel implements ActionListener {
 		// stop, kill timer and thread
 		waitTask.cancel(); 
 		timer.cancel();
-		timer.purge();;
+		timer.purge();
 		// change on GUI
 		this.displayWaitingGame(false);
 		lblTime.setText("0");
