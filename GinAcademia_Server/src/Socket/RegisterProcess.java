@@ -60,7 +60,6 @@ public class RegisterProcess {
 	}
 
 	public boolean getActiveCodeFromClient(String code) {
-		System.out.println("Active code");
 		if (this.currentTime > 0) {
 			if(this.activeCode.equals(code)) {
 				this.gottenCode = true;
@@ -75,7 +74,6 @@ public class RegisterProcess {
 			this.client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
 					"Mã này đã hết giờ"), false);
 		}
-		System.out.println("Active code over");
 		return this.gottenCode;
 	}
 
@@ -85,7 +83,7 @@ public class RegisterProcess {
 	}
 
 	class WaitCode extends TimerTask {
-		int time = 10 * 60;
+		int time = 10 ;
 
 		@Override
 		public void run() {

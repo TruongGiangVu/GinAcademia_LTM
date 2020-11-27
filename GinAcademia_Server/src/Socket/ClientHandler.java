@@ -236,32 +236,33 @@ public class ClientHandler implements Runnable {
 	}
 
 	private void register(SocketRequest requestRaw) {
-		SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
-		if (register == null && bus.checkExistPlayer(tempRequest.player) == true) {
-			sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"), false);
-		} else {
-			if (register != null) {
-				String[] split = tempRequest.getMessage().split(" ");
-				if (split[0].equals("reset")) {
-					System.out.println("Reset");
-					register.getResetAndSendEmail();
-				} else if (split[0].equals("cancel")) {
-					System.out.println("Cancel");
-					register.cancelEmail();
-					register = null;
-				} else if (split[0].equals("code")) {
-					boolean ok = register.getActiveCodeFromClient(split[1]);
-					if (ok)
-						bus.insert(tempRequest.player);
-				}
-			} else {
-				RegisterProcess register = new RegisterProcess(this, "localhost", tempRequest.player.getUsername(),
+		if (register == null) {
+			SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
+			if (bus.checkExistPlayer(tempRequest.player) == true)
+				sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
+						"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"), false);
+			else {
+				register = new RegisterProcess(this, "localhost", tempRequest.player.getUsername(),
 						tempRequest.player.getName());
 				register.sendEmailToClient();
 				sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
 						"Email hợp lệ, xin hãy xác nhận mã!"), false);
-				System.out.println("Open dialog");
+			}
+		} else {
+			if (register != null) {
+				String[] split = requestRaw.getMessage().split(" ");
+				if (split[0].equals("reset")) {
+					register.getResetAndSendEmail();
+				} else if (split[0].equals("cancel")) {
+					register.cancelEmail();
+					register = null;
+				} else if (split[0].equals("code")) {
+					boolean ok = register.getActiveCodeFromClient(split[1]);
+					if (ok) {
+						SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
+						bus.insert(tempRequest.player);
+					}
+				} 
 			}
 		}
 	}

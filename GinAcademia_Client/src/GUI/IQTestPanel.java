@@ -222,9 +222,13 @@ public class IQTestPanel extends MyPanel {
 		else { // over
 			timer.cancel();
 			client.sendRequest(new SocketRequestIQTest(this.numQ, this.numRight));
-			SocketResponsePlayer response = (SocketResponsePlayer) client.getResponse();
-			client.player = response.getPlayer();
-			JOptionPane.showMessageDialog(this, "Điểm IQ của bạn là:" + response.getPlayer().getIQPoint());
+			if (client.checkSend) {
+				SocketResponsePlayer response = (SocketResponsePlayer) client.getResponse();
+				client.player = response.getPlayer();
+				JOptionPane.showMessageDialog(this, "Điểm IQ của bạn là:" + response.getPlayer().getIQPoint());
+			}else {
+				JOptionPane.showMessageDialog(this, "Kết quả kiểm tra IQ này của bạn sẽ không được lưu lại");
+			}
 			MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 			parent.clickReturnHome();
 		}

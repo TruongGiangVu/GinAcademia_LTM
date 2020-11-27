@@ -28,6 +28,7 @@ import Module.DateLabelFormatter;
 import Module.MyRegEx;
 import Module.MyFrame;
 import Model.Player;
+import Model.Question;
 import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestPlayer;
@@ -41,7 +42,7 @@ public class Register extends MyFrame {
 	private JLabel lblNewLabel;
 	private JPasswordField txtPassword;
 	private JButton btnNewButton;
-	int xx,xy;
+	int xx, xy;
 	private JLabel lblMtKhu;
 	private JLabel lblNhpLiMt;
 	private JPasswordField txtRePassword;
@@ -63,11 +64,10 @@ public class Register extends MyFrame {
 
 	public Register(Client client) {
 		super(client);
-		
+
 		setBackground(new Color(31, 22, 127));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(400, 10, 340, 630
-				);
+		setBounds(400, 10, 340, 630);
 		this.setTitle("GinAcademia - Đăng ký");
 		contentPane = new JPanel();
 		contentPane.setForeground(new Color(0, 0, 0));
@@ -75,25 +75,25 @@ public class Register extends MyFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		txtName = new JTextField();
 		txtName.setText("Vu Tr");
 		txtName.setToolTipText("name");
 		txtName.setBounds(30, 70, 280, 35);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
-		
+
 		lblNewLabel = new JLabel("HỌ VÀ TÊN");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNewLabel.setForeground(Color.BLACK);
 		lblNewLabel.setBounds(30, 25, 159, 25);
 		contentPane.add(lblNewLabel);
-		
+
 		txtPassword = new JPasswordField("12345");
 		txtPassword.setToolTipText("password");
 		txtPassword.setBounds(30, 365, 280, 35);
 		contentPane.add(txtPassword);
-		
+
 		btnNewButton = new JButton("Đăng ký");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -105,94 +105,95 @@ public class Register extends MyFrame {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
 				btnNewButton.setBorder(null);
-				btnNewButton.setBackground(new Color(3,87,40).brighter());
+				btnNewButton.setBackground(new Color(3, 87, 40).brighter());
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(new Color(8,87,40));
+				btnNewButton.setBackground(new Color(8, 87, 40));
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(8,87,40));
+		btnNewButton.setBackground(new Color(8, 87, 40));
 		btnNewButton.setBounds(30, 520, 280, 35);
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);
-		
+
 		lblMtKhu = new JLabel("MẬT KHẨU");
 		lblMtKhu.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMtKhu.setForeground(Color.BLACK);
 		lblMtKhu.setBounds(30, 320, 159, 25);
 		contentPane.add(lblMtKhu);
-		
+
 		lblNhpLiMt = new JLabel("NHẬP LẠI MẬT KHẨU");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNhpLiMt.setForeground(Color.BLACK);
 		lblNhpLiMt.setBounds(30, 420, 181, 25);
 		contentPane.add(lblNhpLiMt);
-		
+
 		txtRePassword = new JPasswordField("123456");
 		txtRePassword.setToolTipText("password");
 		txtRePassword.setBounds(30, 465, 280, 35);
 		contentPane.add(txtRePassword);
-		
+
 		lblEmail = new JLabel("EMAIL");
 		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblEmail.setForeground(Color.BLACK);
 		lblEmail.setBounds(30, 220, 159, 25);
 		contentPane.add(lblEmail);
-		
+
 		txtEmail = new JTextField();
 		txtEmail.setText("abc@gmail.com");
 		txtEmail.setToolTipText("email");
 		txtEmail.setColumns(10);
 		txtEmail.setBounds(30, 265, 280, 35);
 		contentPane.add(txtEmail);
-		
+
 		lblNgySinh = new JLabel("NGÀY SINH");
 		lblNgySinh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNgySinh.setForeground(Color.BLACK);
 		lblNgySinh.setBounds(30, 125, 159, 25);
 		contentPane.add(lblNgySinh);
-		
+
 		UtilDateModel model = new UtilDateModel();
-		
+
 		Properties p = new Properties();
 		p.put("text.today", "Today");
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		model.setDate(1999, 01, 01);
 		model.setSelected(true);
-		JDatePanelImpl datePanel = new JDatePanelImpl(model,p);
-		datePicker = new JDatePickerImpl(datePanel,new DateLabelFormatter());
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		datePicker.getJFormattedTextField().setBackground(Color.WHITE);
 		datePicker.setSize(173, 28);
 		datePicker.setLocation(30, 170);
-			
+
 		contentPane.add(datePicker);
 		lblGiiTnh = new JLabel("GIỚI TÍNH");
 		lblGiiTnh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblGiiTnh.setForeground(Color.BLACK);
 		lblGiiTnh.setBounds(219, 125, 103, 28);
 		contentPane.add(lblGiiTnh);
-		
+
 		txtGender = new JComboBox<String>();
 		txtGender.setBackground(Color.WHITE);
-		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] {"Nam", "Nữ"}));
+		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] { "Nam", "Nữ" }));
 		txtGender.setBounds(219, 170, 72, 25);
 		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
-		((JTextField)txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
+		((JTextField) txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
-		
+
 		lblCTi = new JLabel("Đã có tài khoản?");
 		lblCTi.setForeground(Color.BLACK);
 		lblCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblCTi.setBounds(72, 560, 103, 25);
 		contentPane.add(lblCTi);
-		
+
 		lblngNhpNgay = new JLabel("Đăng nhập ngay");
 		lblngNhpNgay.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		lblngNhpNgay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -201,125 +202,128 @@ public class Register extends MyFrame {
 				Login frame = new Login();
 				frame.setVisible(true);
 			}
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				lblngNhpNgay.setForeground(new Color(3,87,40).brighter());
+				lblngNhpNgay.setForeground(new Color(3, 87, 40).brighter());
 			}
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 
-				lblngNhpNgay.setForeground(new Color(8,87,40));
+				lblngNhpNgay.setForeground(new Color(8, 87, 40));
 			}
 		});
-		lblngNhpNgay.setForeground(new Color(8,87,40));
+		lblngNhpNgay.setForeground(new Color(8, 87, 40));
 		lblngNhpNgay.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblngNhpNgay.setBounds(167, 560, 159, 25);
 		contentPane.add(lblngNhpNgay);
-		
+
 		errorName = new JLabel("");
 		errorName.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorName.setForeground(Color.RED);
 		errorName.setBounds(30, 105, 280, 14);
 		contentPane.add(errorName);
-		
+
 		errorPassword = new JLabel("");
 		errorPassword.setForeground(Color.RED);
 		errorPassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorPassword.setBounds(30, 400, 280, 14);
 		contentPane.add(errorPassword);
-		
+
 		errorRePassword = new JLabel("");
 		errorRePassword.setForeground(Color.RED);
 		errorRePassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorRePassword.setBounds(30, 500, 280, 14);
 		contentPane.add(errorRePassword);
-		
+
 		errorEmail = new JLabel("");
 		errorEmail.setForeground(Color.RED);
 		errorEmail.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorEmail.setBounds(30, 300, 280, 14);
 		contentPane.add(errorEmail);
-		
+
 		errorBirthdate = new JLabel("");
 		errorBirthdate.setForeground(Color.RED);
 		errorBirthdate.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorBirthdate.setBounds(30, 200, 280, 14);
 		contentPane.add(errorBirthdate);
-		
+
 		arrTF.add(txtName);
 		arrTF.add(txtPassword);
 		arrTF.add(txtRePassword);
 		arrTF.add(txtEmail);
-		
+
 		arrError.add(errorName);
 		arrError.add(errorPassword);
 		arrError.add(errorRePassword);
 		arrError.add(errorEmail);
-		
+
 //		this.setUndecorated(true);
 		setResizable(false);
 		this.setVisible(true);
-		
+
 	}
+
 	private Player getData() { // take data
 		String name = this.txtName.getText();
 		String user = this.txtEmail.getText();
 		String pass = String.valueOf(this.txtPassword.getPassword());
 		String birthdate = this.datePicker.getJFormattedTextField().getText();
-		boolean gender = this.txtGender.getSelectedItem().toString().equals("Nam") ? true: false ;
+		boolean gender = this.txtGender.getSelectedItem().toString().equals("Nam") ? true : false;
 		Player p = new Player(name, user, pass, "", birthdate, gender);
 		return p;
 	}
-	private boolean checkData() { //check data, return true if data is OK
+
+	private boolean checkData() { // check data, return true if data is OK
 		boolean check = true;
 		MyRegEx regex = new MyRegEx();
 		int num = 0;
-		for(JTextField a : arrTF) {
+		for (JTextField a : arrTF) {
 			String theme = a.getToolTipText();
-			if(!a.getText().trim().matches(regex.pattern.get(theme).toString())) {
+			if (!a.getText().trim().matches(regex.pattern.get(theme).toString())) {
 				this.arrError.get(num).setText(regex.error.get(theme).toString());
 				check = false;
-			}
-			else this.arrError.get(num).setText("");
+			} else
+				this.arrError.get(num).setText("");
 			num++;
 		}
 		String pass = String.valueOf(this.txtPassword.getPassword()).trim();
-		String rePass =String.valueOf(txtRePassword.getPassword()).trim();
-		if(!pass.equals(rePass)) {
+		String rePass = String.valueOf(txtRePassword.getPassword()).trim();
+		if (!pass.equals(rePass)) {
 			this.errorRePassword.setText("Mật khẩu nhập lại phải khớp với mật khẩu trên.");
 			check = false;
 		}
 		String birthdate = this.datePicker.getJFormattedTextField().getText();
-		if(birthdate.trim().equals("")) {
+		if (birthdate.trim().equals("")) {
 			errorBirthdate.setText("Không để ngày sinh rỗng.");
 			check = false;
-		}
-		else errorBirthdate.setText("");
+		} else
+			errorBirthdate.setText("");
 		return check;
 	}
+
 	public void registerPlayer() {
-		if(this.checkData()) {
+		if (this.checkData()) {
 			// send request to server
 			Player p = getData();
-			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER,p));
-			SocketResponse response = client.getResponse();	
-			if(response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
-				ActiveCodeDialog dialog = new ActiveCodeDialog (client);
+			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER, p));
+			SocketResponse response = client.getResponse();
+			if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
+				ActiveCodeDialog dialog = new ActiveCodeDialog(client, p);
+				dialog.setLocationRelativeTo(null);
+				dialog.setModal(true);
 				dialog.setVisible(true);
-				if(dialog.getConfirm()) {
+				boolean aaa = dialog.getConfirm();
+				if (aaa == true) {
 					client.connect(p.getUsername(), p.getPassword()); // connect Player
 					JOptionPane.showMessageDialog(this, client.message);
 					this.dispose();
 					MainFrame frame = new MainFrame(client); // open main frame
-					frame.setVisible(true);	
-				}
-				else {
-					
-				}
-					
-			}
-			else {
-				JOptionPane.showMessageDialog(this,response.getMessage(),"Alert",JOptionPane.WARNING_MESSAGE);
+					frame.setVisible(true);
+				} 
+			} else {
+				JOptionPane.showMessageDialog(this, response.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}

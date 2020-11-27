@@ -8,8 +8,10 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Model.Player;
 import Socket.Client;
 import Socket.Request.SocketRequest;
+import Socket.Request.SocketRequestPlayer;
 import Socket.Response.SocketResponse;
 
 import javax.swing.JTextField;
@@ -29,10 +31,12 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 	private JButton btnCancel;
 	private JButton btnReset;
 	Client client;
+	Player player;
 	boolean isOk = false;
 
-	public ActiveCodeDialog(Client client) {
+	public ActiveCodeDialog(Client client, Player player) {
 		this.client = client;
+		this.player = player;
 		setTitle("Mã code");
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
@@ -46,10 +50,7 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 		txtCode.setColumns(10);
 		{
 			btnReset = new JButton("Gửi lại email");
-			btnReset.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
+			btnReset.addActionListener(this);
 			btnReset.setBounds(180, 170, 90, 25);
 			contentPanel.add(btnReset);
 		}
@@ -77,7 +78,7 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 				buttonPane.add(btnCancel);
 			}
 		}
-		
+
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -86,7 +87,7 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 			}
 		});
 	}
-	
+
 	public boolean getConfirm() {
 		return isOk;
 	}
@@ -96,19 +97,26 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 		// TODO Auto-generated method stub
 		JButton source = (JButton) e.getSource();
 		if (source == btnSend) {
-			client.sendRequest(
-					new SocketRequest(SocketRequest.Action.REGISTER, "code" + this.txtCode.getText().trim()));
+			String str = "code " + this.txtCode.getText().trim();
+			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.REGISTER, str, player));
 			SocketResponse response = client.getResponse();
-			if (response.getStatus().equals(SocketResponse.Status.FAILED))
-				JOptionPane.showMessageDialog(this, response.getMessage(),"",JOptionPane.ERROR_MESSAGE);
+			if (response.getStatus().equals(SocketResponse.Status.FAILED)) {
+				JOptionPane.showMessageDialog(this, response.getMessage(), "", JOptionPane.ERROR_MESSAGE);
+				if(response.getMessage().equals("Mã này đã hết giờ")) {
+					this.isOk = false;
+					dispose();
+				}	
+			}
+				
 			else {
-				JOptionPane.showMessageDialog(this, response.getMessage(),"",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(this, response.getMessage(), "", JOptionPane.INFORMATION_MESSAGE);
 				this.isOk = true;
 				dispose();
 			}
 		} else if (source == btnReset) {
 			client.sendRequest(new SocketRequest(SocketRequest.Action.REGISTER, "reset Email"));
 		} else if (source == btnCancel) {
+			this.isOk = false;
 			client.sendRequest(new SocketRequest(SocketRequest.Action.REGISTER, "cancel Email"));
 			dispose();
 		}

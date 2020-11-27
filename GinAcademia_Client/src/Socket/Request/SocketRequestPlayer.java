@@ -10,5 +10,10 @@ public class SocketRequestPlayer extends SocketRequest {
 		 super(action, "Update profile");
 		 this.player = player;
 	}
+	public SocketRequestPlayer(SocketRequest.Action action,String message,Player player) {
+		// TODO Auto-generated constructor stub
+		 super(action, message);
+		 this.player = player;
+	}
 
 }
