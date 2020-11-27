@@ -66,7 +66,8 @@ public class Register extends MyFrame {
 
 		setBackground(new Color(31, 22, 127));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(400, 10, 340, 630);
+		
+		setBounds(450, 20, 350, 610);
 		this.setTitle("GinAcademia - Đăng ký");
 		contentPane = new JPanel();
 		contentPane.setForeground(new Color(0, 0, 0));
@@ -78,7 +79,7 @@ public class Register extends MyFrame {
 		txtName = new JTextField();
 		txtName.setText("Vu Tr");
 		txtName.setToolTipText("name");
-		txtName.setBounds(30, 70, 280, 35);
+		txtName.setBounds(30, 60, 280, 35);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
 
@@ -90,7 +91,7 @@ public class Register extends MyFrame {
 
 		txtPassword = new JPasswordField("12345");
 		txtPassword.setToolTipText("password");
-		txtPassword.setBounds(30, 365, 280, 35);
+		txtPassword.setBounds(30, 330, 280, 35);
 		contentPane.add(txtPassword);
 
 		btnNewButton = new JButton("Đăng ký");
@@ -115,44 +116,44 @@ public class Register extends MyFrame {
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
 		btnNewButton.setForeground(new Color(255, 255, 255));
 		btnNewButton.setBackground(new Color(8, 87, 40));
-		btnNewButton.setBounds(30, 520, 280, 35);
+		btnNewButton.setBounds(30, 495, 280, 35);
 		btnNewButton.setFocusable(false);
 		contentPane.add(btnNewButton);
 
 		lblMtKhu = new JLabel("MẬT KHẨU");
 		lblMtKhu.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblMtKhu.setForeground(Color.BLACK);
-		lblMtKhu.setBounds(30, 320, 159, 25);
+		lblMtKhu.setBounds(30, 295, 159, 25);
 		contentPane.add(lblMtKhu);
 
 		lblNhpLiMt = new JLabel("NHẬP LẠI MẬT KHẨU");
 		lblNhpLiMt.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNhpLiMt.setForeground(Color.BLACK);
-		lblNhpLiMt.setBounds(30, 420, 181, 25);
+		lblNhpLiMt.setBounds(30, 390, 181, 25);
 		contentPane.add(lblNhpLiMt);
 
 		txtRePassword = new JPasswordField("123456");
 		txtRePassword.setToolTipText("password");
-		txtRePassword.setBounds(30, 465, 280, 35);
+		txtRePassword.setBounds(30, 425, 280, 35);
 		contentPane.add(txtRePassword);
 
 		lblEmail = new JLabel("EMAIL");
 		lblEmail.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblEmail.setForeground(Color.BLACK);
-		lblEmail.setBounds(30, 220, 159, 25);
+		lblEmail.setBounds(30, 200, 159, 25);
 		contentPane.add(lblEmail);
 
 		txtEmail = new JTextField();
 		txtEmail.setText("abc@gmail.com");
 		txtEmail.setToolTipText("email");
 		txtEmail.setColumns(10);
-		txtEmail.setBounds(30, 265, 280, 35);
+		txtEmail.setBounds(30, 235, 280, 35);
 		contentPane.add(txtEmail);
 
 		lblNgySinh = new JLabel("NGÀY SINH");
 		lblNgySinh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblNgySinh.setForeground(Color.BLACK);
-		lblNgySinh.setBounds(30, 125, 159, 25);
+		lblNgySinh.setBounds(30, 115, 159, 25);
 		contentPane.add(lblNgySinh);
 
 		UtilDateModel model = new UtilDateModel();
@@ -166,20 +167,20 @@ public class Register extends MyFrame {
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
 		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		datePicker.getJFormattedTextField().setBackground(Color.WHITE);
-		datePicker.setSize(173, 28);
-		datePicker.setLocation(30, 170);
+		datePicker.setSize(173, 30);
+		datePicker.setLocation(30, 150);
 
 		contentPane.add(datePicker);
 		lblGiiTnh = new JLabel("GIỚI TÍNH");
 		lblGiiTnh.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblGiiTnh.setForeground(Color.BLACK);
-		lblGiiTnh.setBounds(219, 125, 103, 28);
+		lblGiiTnh.setBounds(219, 115, 103, 28);
 		contentPane.add(lblGiiTnh);
 
 		txtGender = new JComboBox<String>();
 		txtGender.setBackground(Color.WHITE);
 		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] { "Nam", "Nữ" }));
-		txtGender.setBounds(219, 170, 72, 25);
+		txtGender.setBounds(219, 150, 72, 30);
 		txtGender.getEditor().getEditorComponent().setBackground(Color.WHITE);
 		((JTextField) txtGender.getEditor().getEditorComponent()).setBackground(Color.WHITE);
 		contentPane.add(txtGender);
@@ -187,7 +188,7 @@ public class Register extends MyFrame {
 		lblCTi = new JLabel("Đã có tài khoản?");
 		lblCTi.setForeground(Color.BLACK);
 		lblCTi.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblCTi.setBounds(72, 560, 103, 25);
+		lblCTi.setBounds(72, 535, 103, 25);
 		contentPane.add(lblCTi);
 
 		lblngNhpNgay = new JLabel("Đăng nhập ngay");
@@ -215,37 +216,37 @@ public class Register extends MyFrame {
 		});
 		lblngNhpNgay.setForeground(new Color(8, 87, 40));
 		lblngNhpNgay.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblngNhpNgay.setBounds(167, 560, 159, 25);
+		lblngNhpNgay.setBounds(167, 535, 159, 25);
 		contentPane.add(lblngNhpNgay);
 
 		errorName = new JLabel("");
 		errorName.setFont(new Font("SansSerif", Font.ITALIC, 11));
 		errorName.setForeground(Color.RED);
-		errorName.setBounds(30, 105, 280, 14);
+		errorName.setBounds(30, 95, 280, 15);
 		contentPane.add(errorName);
 
 		errorPassword = new JLabel("");
 		errorPassword.setForeground(Color.RED);
 		errorPassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorPassword.setBounds(30, 400, 280, 14);
+		errorPassword.setBounds(30, 365, 280, 15);
 		contentPane.add(errorPassword);
 
 		errorRePassword = new JLabel("");
 		errorRePassword.setForeground(Color.RED);
 		errorRePassword.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorRePassword.setBounds(30, 500, 280, 14);
+		errorRePassword.setBounds(30, 460, 280, 15);
 		contentPane.add(errorRePassword);
 
 		errorEmail = new JLabel("");
 		errorEmail.setForeground(Color.RED);
 		errorEmail.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorEmail.setBounds(30, 300, 280, 14);
+		errorEmail.setBounds(30, 270, 280, 15);
 		contentPane.add(errorEmail);
 
 		errorBirthdate = new JLabel("");
 		errorBirthdate.setForeground(Color.RED);
 		errorBirthdate.setFont(new Font("SansSerif", Font.ITALIC, 11));
-		errorBirthdate.setBounds(30, 200, 280, 14);
+		errorBirthdate.setBounds(30, 180, 280, 15);
 		contentPane.add(errorBirthdate);
 
 		arrTF.add(txtName);
