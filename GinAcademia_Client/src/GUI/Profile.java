@@ -303,7 +303,7 @@ public class Profile extends MyPanel implements ActionListener {
 		} else if (source == btnLogout) { // logout account
 			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to
 																									// disconnect
-			this.client.close(); // disconnect to server
+//			this.client.close(); // disconnect to server
 			// open login frame
 			Login login = new Login(); // create new socket for new login
 			login.hashCode();

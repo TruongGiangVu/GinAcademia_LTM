@@ -124,9 +124,9 @@ public class Client {
 	public void close() {
 		try {
 			this.isLogin = false;
-			if(this.sender != null)
+			if(this.sender != null && this.checkSend == true)
 				this.sender.close();
-			if(this.receiver != null)
+			if(this.receiver != null && this.checkRequest == true)
 				this.receiver.close();
 			if(this.socket != null)
 				this.socket.close();
