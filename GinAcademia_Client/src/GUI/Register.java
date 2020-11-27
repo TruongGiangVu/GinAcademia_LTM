@@ -28,7 +28,6 @@ import Module.DateLabelFormatter;
 import Module.MyRegEx;
 import Module.MyFrame;
 import Model.Player;
-import Model.Question;
 import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestPlayer;

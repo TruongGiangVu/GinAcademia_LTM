@@ -73,7 +73,6 @@ public class Server {
 
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
-
 		if (clients == null)
 			isExist = false;
 		else {
@@ -84,16 +83,13 @@ public class Server {
 				for (int i = 0; i < n; ++i) {
 					if (clients.get(i).isLoggedIn) {
 						if (username.equals(clients.get(i).player.getUsername())) {
-
 							isExist = true;
 							break;
 						}
 					}
 				}
 			}
-
 		}
-
 		return isExist;
 	}
 

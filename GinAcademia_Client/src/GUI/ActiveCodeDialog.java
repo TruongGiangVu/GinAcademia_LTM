@@ -38,27 +38,27 @@ public class ActiveCodeDialog extends JDialog implements ActionListener {
 		this.client = client;
 		this.player = player;
 		setTitle("Mã code");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 240);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
 		txtCode = new JTextField();
-		txtCode.setBounds(100, 120, 230, 30);
+		txtCode.setBounds(100, 80, 230, 30);
 		contentPanel.add(txtCode);
 		txtCode.setColumns(10);
 		{
 			btnReset = new JButton("Gửi lại email");
 			btnReset.addActionListener(this);
-			btnReset.setBounds(180, 170, 90, 25);
+			btnReset.setBounds(165, 130, 120, 25);
 			contentPanel.add(btnReset);
 		}
 
 		JLabel lblMCodeKch = new JLabel("Mã kích hoạt");
 		lblMCodeKch.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblMCodeKch.setHorizontalAlignment(SwingConstants.CENTER);
-		lblMCodeKch.setBounds(165, 72, 120, 37);
+		lblMCodeKch.setBounds(165, 30, 120, 37);
 		contentPanel.add(lblMCodeKch);
 		{
 			JPanel buttonPane = new JPanel();

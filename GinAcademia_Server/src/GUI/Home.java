@@ -304,7 +304,7 @@ public class Home extends JPanel implements MouseListener {
 		String status = "Offline";
 		int i = 0;
 		boolean flag = true;
-		
+		if(p == null) return ; 
 		if(Server.isOnlinePlayer(p.getUsername())) {
 			status = "Online";
 		}

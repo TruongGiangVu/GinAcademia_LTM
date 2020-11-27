@@ -83,7 +83,7 @@ public class RegisterProcess {
 	}
 
 	class WaitCode extends TimerTask {
-		int time = 10 ;
+		int time = 10 * 60;
 
 		@Override
 		public void run() {
@@ -147,7 +147,7 @@ public class RegisterProcess {
 						+ "<p>Mã code:</p> <b>" + activeCode + " </b>\r\n"
 						+ "<p>Xin hãy nhập mã trên vào khung yêu cầu trên ứng dụng của bạn. Nếu không thấy email hoặc bạn có thể nhấn gửi lại.</p>\r\n"
 						+ "<p>Cảm ơn vì đã quan tâm đến dịch vụ của chúng tôi. </p>\r\n" + "<p>from GinAcademia</p>");
-
+				 message.setContent("<h1>This is actual message</h1>", "text/html");
 				// Send message
 				Transport.send(message);
 				System.out.println("Sent message successfully....");

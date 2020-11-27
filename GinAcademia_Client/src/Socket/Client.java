@@ -33,8 +33,8 @@ public class Client {
 	int port = 5000;
 
 	Socket socket;
-	public ObjectInputStream receiver;
-	public ObjectOutputStream sender;
+	public ObjectInputStream receiver = null;
+	public ObjectOutputStream sender = null;
 
 	public boolean isLogin = false;
 	public Player player = null;
@@ -42,8 +42,8 @@ public class Client {
 	public boolean checkSend = false;
 	public boolean checkRequest = false;
 	public String request = "";
-	private Cipher cipher;
-	private Cipher dcipher;
+	private Cipher cipher = null;
+	private Cipher dcipher = null;
 
 	public Client() {
 		init();
@@ -124,9 +124,12 @@ public class Client {
 	public void close() {
 		try {
 			this.isLogin = false;
-			this.sender.close();
-			this.receiver.close();
-			this.socket.close();
+			if(this.sender != null)
+				this.sender.close();
+			if(this.receiver != null)
+				this.receiver.close();
+			if(this.socket != null)
+				this.socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
