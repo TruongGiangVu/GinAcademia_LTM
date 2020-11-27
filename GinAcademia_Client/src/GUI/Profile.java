@@ -40,13 +40,13 @@ public class Profile extends MyPanel implements ActionListener {
 	private JPanel panelInfo;
 	private JTextField txtName;
 	private JLabel lblNewLabel_1;
-	private JTextField txtEmail;
 	private JComboBox<String> txtGender;
 	private JLabel lblGender;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNgySinh;
 	private JLabel lblBirth;
 	private JLabel lblGiiTnh;
+	private JLabel lblEmail;
 	private JDatePickerImpl datePicker;
 	private Player player;
 	private JPanel panelGame;
@@ -95,13 +95,6 @@ public class Profile extends MyPanel implements ActionListener {
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(280, 20, 50, 25);
 		panelInfo.add(lblNewLabel_1);
-
-		txtEmail = new JTextField();
-		txtEmail.setText("df");
-		txtEmail.setColumns(10);
-		txtEmail.setBounds(345, 20, 170, 25);
-		txtEmail.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
-		panelInfo.add(txtEmail);
 
 		txtGender = new JComboBox<String>();
 		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] { "Nam", "Nữ" }));
@@ -160,6 +153,10 @@ public class Profile extends MyPanel implements ActionListener {
 		lblGender = new JLabel("New label");
 		lblGender.setBounds(345, 72, 75, 25);
 		panelInfo.add(lblGender);
+		
+		lblEmail = new JLabel("");
+		lblEmail.setBounds(345, 20, 170, 25);
+		panelInfo.add(lblEmail);
 		this.btnUpdate.setVisible(false);
 		btnUpdate.addActionListener(this);
 
@@ -230,8 +227,6 @@ public class Profile extends MyPanel implements ActionListener {
 		btnLogout.setBounds(455, 451, 120, 25);
 		add(btnLogout);
 		btnLogout.addActionListener(this);
-
-		this.txtEmail.setEditable(false);
 		this.loadInfo();
 		this.loadGame();
 		this.activeText(false);
@@ -249,11 +244,11 @@ public class Profile extends MyPanel implements ActionListener {
 
 	public void loadInfo() { // load player profile information, can update
 		this.txtName.setText(this.player.getName());
-		this.txtEmail.setText(this.player.getUsername());
 		this.datePicker.getJFormattedTextField().setText(this.player.getBirthdateString());
 		this.txtGender.setSelectedIndex(this.player.getGenderInt());
 		this.lblBirth.setText(this.player.getBirthdateString());
 		this.lblGender.setText(this.player.getGenderString());
+		this.lblEmail.setText(this.player.getUsername());
 	}
 
 	public void updateData() { // update info on GUI
