@@ -222,6 +222,7 @@ public class Home extends JPanel implements MouseListener {
 	public void LoadPlayerOnline() {
 		this.RemoveTableData(this.tbPlayer);
 		if(PlayerActive == null || PlayerActive.size() == 0) {
+			
 			this.remove(this.scrollPane);
 			JPanel pnEmpty = new JPanel();
 			pnEmpty.setBounds(30, 80, 540, 150);
@@ -245,6 +246,7 @@ public class Home extends JPanel implements MouseListener {
 				tbModelPlayer.addRow(row);				
 			}
 			this.tbPlayer.setModel(tbModelPlayer);
+		
 		}
 		
 	}
@@ -255,6 +257,7 @@ public class Home extends JPanel implements MouseListener {
 				PlayerActive.add(p);
 			}
 		}
+//		PlayerActive.sort(Comparator.comparing(Player::getName));
 	}
 	public void loadRank(ArrayList<Player> data) {
 		
@@ -299,6 +302,15 @@ public class Home extends JPanel implements MouseListener {
 	public void RemoveTableData(JTable jtb) {
 		DefaultTableModel tbModel = (DefaultTableModel) jtb.getModel();
 		tbModel.setRowCount(0);
+	}
+	public static void insertNewPlayer(Player p) {
+		String status = "Offline";
+		PlayerActive.add(p);
+		Object[] row = { p.getId(), p.getName(),p.getUsername(), status };
+		tbModelPlayer.addRow(row);
+		tbModelPlayer.fireTableDataChanged();
+		lblNumOnline.setText(Server.countPlayerOnline()+"");
+
 	}
 	public static void updatePlayerOnline(Player p) {
 		String status = "Offline";

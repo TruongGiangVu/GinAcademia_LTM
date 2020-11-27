@@ -314,10 +314,9 @@ public class Register extends MyFrame {
 				dialog.setLocationRelativeTo(null);
 				dialog.setModal(true);
 				dialog.setVisible(true);
-				boolean aaa = dialog.getConfirm();
-				if (aaa == true) {
+				boolean check = dialog.getConfirm();
+				if (check == true) {
 					client.connect(p.getUsername(), p.getPassword()); // connect Player
-					JOptionPane.showMessageDialog(this, client.message);
 					this.dispose();
 					MainFrame frame = new MainFrame(client); // open main frame
 					frame.setVisible(true);

@@ -4,12 +4,9 @@ import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
 
-import Model.Player;
-import Socket.Request.SocketRequest;
-import Socket.Response.SocketResponse;
-import Socket.Response.SocketResponsePlayer;
 
-import javax.activation.*;
+import Socket.Response.SocketResponse;
+
 
 public class RegisterProcess {
 
@@ -142,15 +139,18 @@ public class RegisterProcess {
 				message.setSubject("GinAcademia Active Code");
 
 				// Now set the actual message
-				message.setText("<h1> Đăng ký tài khoản GinAcademia </h1>\r\n" + "<p>Xin chào " + playerName
-						+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>\r\n"
-						+ "<p>Mã code:</p> <b>" + activeCode + " </b>\r\n"
-						+ "<p>Xin hãy nhập mã trên vào khung yêu cầu trên ứng dụng của bạn. Nếu không thấy email hoặc bạn có thể nhấn gửi lại.</p>\r\n"
-						+ "<p>Cảm ơn vì đã quan tâm đến dịch vụ của chúng tôi. </p>\r\n" + "<p>from GinAcademia</p>");
-				 message.setContent("<h1>This is actual message</h1>", "text/html");
+//				message.setText("<h1> Đăng ký tài khoản GinAcademia </h1>\r\n" + "<p>Xin chào " + playerName
+//						+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>\r\n"
+//						+ "<p>Mã code:</p> <b>" + activeCode + " </b>\r\n"
+//						+ "<p>Xin hãy nhập mã trên vào khung yêu cầu trên ứng dụng của bạn. Nếu không thấy email hoặc bạn có thể nhấn gửi lại.</p>\r\n"
+//						+ "<p>Cảm ơn vì đã quan tâm đến dịch vụ của chúng tôi. </p>\r\n" + "<p>from GinAcademia</p>");
+				 message.setContent("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
+				 		+ "<h1>Đăng ký tài khoản GinAcademia</h1>"
+				 		+ "<p>Xin chào " + playerName
+				 		+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>"
+				 		+ "<p>Mã code:</p><b>" + activeCode + " </b>", "text/html; charset=utf-8");
 				// Send message
 				Transport.send(message);
-				System.out.println("Sent message successfully....");
 			} catch (MessagingException mex) {
 				mex.printStackTrace();
 			}

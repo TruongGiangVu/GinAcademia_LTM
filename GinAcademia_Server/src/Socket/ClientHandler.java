@@ -261,6 +261,7 @@ public class ClientHandler implements Runnable {
 					if (ok) {
 						SocketRequestPlayer tempRequest = (SocketRequestPlayer) requestRaw;
 						bus.insert(tempRequest.player);
+						Home.insertNewPlayer(tempRequest.player);
 					}
 				} 
 			}
