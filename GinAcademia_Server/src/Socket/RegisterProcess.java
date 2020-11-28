@@ -139,17 +139,13 @@ public class RegisterProcess {
 				message.setSubject("GinAcademia Active Code");
 
 				// Now set the actual message
-//				message.setText("<h1> Đăng ký tài khoản GinAcademia </h1>\r\n" + "<p>Xin chào " + playerName
-//						+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>\r\n"
-//						+ "<p>Mã code:</p> <b>" + activeCode + " </b>\r\n"
-//						+ "<p>Xin hãy nhập mã trên vào khung yêu cầu trên ứng dụng của bạn. Nếu không thấy email hoặc bạn có thể nhấn gửi lại.</p>\r\n"
-//						+ "<p>Cảm ơn vì đã quan tâm đến dịch vụ của chúng tôi. </p>\r\n" + "<p>from GinAcademia</p>");
 				 message.setContent("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
 				 		+ "<h1>Đăng ký tài khoản GinAcademia</h1>"
 				 		+ "<p>Xin chào " + playerName
 				 		+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>"
 				 		+ "<p>Mã code:</p><b>" + activeCode + " </b>", "text/html; charset=utf-8");
 				// Send message
+				 System.out.println("code: " +activeCode);
 				Transport.send(message);
 			} catch (MessagingException mex) {
 				mex.printStackTrace();

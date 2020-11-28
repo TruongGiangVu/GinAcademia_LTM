@@ -349,5 +349,4 @@ public class Player implements Serializable {
 		this.copy(p);
 		return p;
 	}
-
 }

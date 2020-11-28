@@ -17,8 +17,6 @@ public class Main {
 		Server server = new Server(5000);
 		server.hashCode();
 		
-		
-		
 //		Server server = null;
 //		MainFrame main = null;
 //		boolean isServerRun = false;
@@ -55,5 +53,4 @@ public class Main {
 //		}
 
 	}
-
 }

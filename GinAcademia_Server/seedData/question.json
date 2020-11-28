@@ -419,26 +419,26 @@
     "$oid": "5fa9188749bc0406a86daca8"
   },
   "QuestionId": "00017",
-  "Question": "Khu vực nằm giữa mép dưới váy vải và mép trên tất chân gọi là gì?",
+  "Question": "Quốc gia có dân số đông nhất?",
   "Options": [
     {
       "OptionId": 1,
-      "Option": "Vùng tuyệt đối"
+      "Option": "Việt Nam"
     },
     {
       "OptionId": 2,
-      "Option": "Vùng ... bậy nha"
+      "Option": "Mỹ"
     },
     {
       "OptionId": 3,
-      "Option": "Vùng da"
+      "Option": "Nhật Bản"
     },
     {
       "OptionId": 4,
-      "Option": "Làm gì có tên"
+      "Option": "Trung Quốc"
     }
   ],
-  "Answer": 1,
+  "Answer": 4,
   "Status": 0
 },{
   "_id": {
@@ -514,6 +514,136 @@
     {
       "OptionId": 4,
       "Option": "K, L"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fbdd7c279702f1594ea2fe0"
+  },
+  "QuestionId": "00021",
+  "Question": "6! = ?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "36"
+    },
+    {
+      "OptionId": 2,
+      "Option": "720"
+    },
+    {
+      "OptionId": 3,
+      "Option": "24"
+    },
+    {
+      "OptionId": 4,
+      "Option": "120"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fbdd93379702f17d8dc8ed2"
+  },
+  "QuestionId": "00022",
+  "Question": "Nhiệt độ bay hơi của nước là bao nhiêu?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "99"
+    },
+    {
+      "OptionId": 2,
+      "Option": "101"
+    },
+    {
+      "OptionId": 3,
+      "Option": "100"
+    },
+    {
+      "OptionId": 4,
+      "Option": "0"
+    }
+  ],
+  "Answer": 3,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fc1fc35a1d1111c3453d955"
+  },
+  "QuestionId": "00023",
+  "Question": "Tương truyền rằng khi mỗi đứa trẻ được sinh ra người ta sẽ tặng chúng một chiếc thìa bạc tượng trưng cho ....",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Giàu sang phú quý"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Đầm ấm và hạnh phúc"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Công ăn việc lớn"
+    },
+    {
+      "OptionId": 4,
+      "Option": "May mắn và no đủ"
+    }
+  ],
+  "Answer": 4,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fc1fc81a1d1111c3453d956"
+  },
+  "QuestionId": "00024",
+  "Question": "Khối lượng nguyên tử của Ag là?",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "106"
+    },
+    {
+      "OptionId": 2,
+      "Option": "108"
+    },
+    {
+      "OptionId": 3,
+      "Option": "107"
+    },
+    {
+      "OptionId": 4,
+      "Option": "109"
+    }
+  ],
+  "Answer": 2,
+  "Status": 0
+},{
+  "_id": {
+    "$oid": "5fc1fd15a1d1111c3453d957"
+  },
+  "QuestionId": "00025",
+  "Question": "'Gin' có nghĩa là gì trong tiếng Nhật",
+  "Options": [
+    {
+      "OptionId": 1,
+      "Option": "Vàng"
+    },
+    {
+      "OptionId": 2,
+      "Option": "Nâu"
+    },
+    {
+      "OptionId": 3,
+      "Option": "Bạc"
+    },
+    {
+      "OptionId": 4,
+      "Option": "Đỏ"
     }
   ],
   "Answer": 3,

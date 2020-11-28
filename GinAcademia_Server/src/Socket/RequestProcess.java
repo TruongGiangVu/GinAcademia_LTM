@@ -63,18 +63,6 @@ public class RequestProcess {
 		client.sendResponse(new SocketResponseRank(arr),false);
 	}
 
-	private void registerProcess() { // register new player 
-		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
-		if (playerBus.checkExistPlayer(tempRequest.player) == true) {
-			client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"),false);
-		} else {
-			// send otp
-			playerBus.insert(tempRequest.player);
-			Player p = playerBus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
-			client.sendResponse(new SocketResponsePlayer(p),false);
-		}
-	}
 	private void iQTestProcess() {
 		SocketRequestIQTest iqtest = (SocketRequestIQTest) this.request;
 		int point = iqtest.numRight * 155 / iqtest.numQ;

@@ -15,7 +15,7 @@ public class MyRegEx {
 		pattern.put("name", "^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$");
 		pattern.put("email", "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
 		pattern.put("username", "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
-		pattern.put("password", "^[a-z0-9A-Z]{5,20}$");
+		pattern.put("password", "^[a-z0-9A-Z]{5,40}$");
 	}
 	private void SeedError() {
 		error.put("id", "ID chỉ gồm 5 chữ số!");
