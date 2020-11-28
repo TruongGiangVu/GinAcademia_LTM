@@ -145,7 +145,6 @@ public class RegisterProcess {
 				 		+ ", chúng tôi gửi bạn email này cùng với mã code để bạn có thể kích hoạt tài khoản và tham gia vào cuộc thi đố vui của GinAcademia. </p>"
 				 		+ "<p>Mã code:</p><b>" + activeCode + " </b>", "text/html; charset=utf-8");
 				// Send message
-				 System.out.println("code: " +activeCode);
 				Transport.send(message);
 			} catch (MessagingException mex) {
 				mex.printStackTrace();
