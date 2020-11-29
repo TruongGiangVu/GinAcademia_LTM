@@ -4,7 +4,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.SwingConstants;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -55,6 +58,8 @@ public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblYourname;
 
 	private Thread thread;
+	private JLabel lblYourImg;
+	private JLabel lblEnemyImg;
 
 	/**
 	 * @wbp.parser.constructor
@@ -68,55 +73,57 @@ public class Contest extends MyPanel implements MouseListener {
 		this.setBackground(Color.WHITE);
 
 		lblTime = new JLabel("10");
-		lblTime.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
+		lblTime.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTime.setBounds(270, 10, 40, 40);
 		add(lblTime);
 
 		lblYourPoint = new JLabel("0");
+		lblYourPoint.setHorizontalAlignment(SwingConstants.CENTER);
 		lblYourPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblYourPoint.setBounds(50, 55, 98, 22);
+		lblYourPoint.setBounds(50, 70, 98, 20);
 		add(lblYourPoint);
 
 		lblYourname = new JLabel(this.player.getName());
-		lblYourname.setBounds(40, 23, 188, 35);
+		lblYourname.setBounds(90, 20, 125, 48);
 		add(lblYourname);
 
 		lblEnemyname = new JLabel("");
-		lblEnemyname.setBounds(402, 23, 188, 35);
+		lblEnemyname.setBounds(365, 20, 125, 48);
 		add(lblEnemyname);
 
 		lblEnemyPoint = new JLabel("");
+		lblEnemyPoint.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEnemyPoint.setBounds(412, 55, 98, 22);
+		lblEnemyPoint.setBounds(412, 70, 98, 20);
 		add(lblEnemyPoint);
 		
 		lblQuestion = new JLabel("Question");
 		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuestion.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblQuestion.setBounds(30, 80, 540, 101);
+		lblQuestion.setBounds(30, 100, 540, 80);
 		add(lblQuestion);
 
 		txtA = new MyLabel();
 		txtA.setText("A");
-		txtA.setBounds(50, 150, 500, 80);
+		txtA.setBounds(50, 200, 500, 80);
 		add(txtA);
 		this.arrTxt.add(txtA);
 
 		txtB = new MyLabel();
-		txtB.setBounds(50, 240, 500, 80);
+		txtB.setBounds(50, 290, 500, 80);
 		txtB.setText("B");
 		add(txtB);
 		this.arrTxt.add(txtB);
 
 		txtC = new MyLabel();
-		txtC.setBounds(50, 330, 500, 80);
+		txtC.setBounds(50, 380, 500, 80);
 		txtC.setText("C");
 		add(txtC);
 		this.arrTxt.add(txtC);
 
 		txtD = new MyLabel();
-		txtD.setBounds(50, 420, 500, 80);
+		txtD.setBounds(50, 470, 500, 80);
 		txtD.setText("D");
 		add(txtD);
 		this.arrTxt.add(txtD);
@@ -125,6 +132,15 @@ public class Contest extends MyPanel implements MouseListener {
 		txtB.addMouseListener(this);
 		txtC.addMouseListener(this);
 		txtD.addMouseListener(this);
+		
+		lblYourImg = new JLabel((String) null);
+		lblYourImg.setBounds(30, 20, 48, 48);
+		lblYourImg.setIcon(this.loadImage("./img/Avatar/"+this.player.getImage()));
+		add(lblYourImg);
+		
+		lblEnemyImg = new JLabel((String) null);
+		lblEnemyImg.setBounds(502, 20, 48, 48);
+		add(lblEnemyImg);
 
 		parent.setActiveMenuButton(false);
 		this.initContest();
@@ -187,7 +203,27 @@ public class Contest extends MyPanel implements MouseListener {
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
+	private void initNamePlayer(SocketResponse response) { // update name init
+		SocketResponseContest contest = (SocketResponseContest) response;
+		index = indexOfPlayer(contest.players, player); // get index player
+		this.maxTime = contest.config.getTime();
+		this.numQ = contest.config.getNumQuestion();
+		this.updatePoint(contest.points);
+		int n = contest.players.size();
+		for (int i = 0; i < n; ++i) {
+			if (i != index)
+				this.lblEnemyname.setText(contest.players.get(i).getName());
+				this.lblEnemyImg.setIcon(this.loadImage("./img/Avatar/"+contest.players.get(i).getImage()));
+		}
+	}
 
+	public ImageIcon loadImage(String nameImage) {
+		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
+		Image image = icon.getImage(); // transform it
+		Image newimg = image.getScaledInstance(50, 35, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
+		icon = new ImageIcon(newimg);
+		return icon;
+	}
 	class ContestTask extends TimerTask {
 		int countdown = maxTime;
 
@@ -268,19 +304,7 @@ public class Contest extends MyPanel implements MouseListener {
 		this.updatePoint(points);
 	}
 
-	private void initNamePlayer(SocketResponse response) { // update name init
-		SocketResponseContest contest = (SocketResponseContest) response;
-		index = indexOfPlayer(contest.players, player); // get index player
-		this.maxTime = contest.config.getTime();
-		this.numQ = contest.config.getNumQuestion();
-		this.updatePoint(contest.points);
-		int n = contest.players.size();
-		for (int i = 0; i < n; ++i) {
-			if (i != index)
-				this.lblEnemyname.setText(contest.players.get(i).getName());
-		}
-	}
-
+	
 //	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
 		int n = points.size();

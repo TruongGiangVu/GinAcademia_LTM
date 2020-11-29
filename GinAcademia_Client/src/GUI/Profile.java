@@ -283,23 +283,32 @@ public class Profile extends MyPanel implements ActionListener {
 			this.viewUpdateButton(false);
 		} else if (source == btnUpdate) {
 			// update player
-			this.updateData();
-			client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
-			SocketResponse response = client.getResponse();
-			if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
-				// update on GUI
-				this.loadInfo();
-				// enable view
-				this.activeText(false);
-				this.viewUpdateButton(false);
-				// update name on MainFrame
-				MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
-				parent.lblName.setText(this.player.getName());
-				// update client info
-				client.player = this.player;
-				// show info
-				JOptionPane.showMessageDialog(this, response.getMessage());
+			if(client.checkSend) {
+				client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
+				if(client.checkSend) {
+					this.updateData();
+					SocketResponse response = client.getResponse();
+					if(client.checkRequest) {
+						if (response.getStatus().equals(SocketResponse.Status.SUCCESS)) {
+							// update on GUI
+							this.loadInfo();
+							// enable view
+							this.activeText(false);
+							this.viewUpdateButton(false);
+							// update name on MainFrame
+							MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
+							parent.lblName.setText(this.player.getName());
+							// update client info
+							client.player = this.player;
+							// show info
+							JOptionPane.showMessageDialog(this, response.getMessage());
+						}
+					}
+					
+				}
 			}
+			
+			
 		} else if (source == btnLogout) { // logout account
 			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to
 																									// disconnect

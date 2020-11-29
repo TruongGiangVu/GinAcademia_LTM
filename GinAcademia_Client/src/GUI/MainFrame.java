@@ -17,6 +17,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
 import java.awt.GridLayout;
 import java.awt.Image;
 
@@ -35,7 +37,7 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 
 	private JPanel panelMain;
 	private JPanel panelMenu;
-	private JLabel lblImage;
+	public static JLabel lblImage;
 	public JLabel lblName;
 	private JPanel panelButton;
 	private MenuButton btnHome;
@@ -193,11 +195,16 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		if(arg0.getSource() == lblImage) {
-			AvatarDialog dlg = new AvatarDialog(this.client,this.player);
-			dlg.setLocationRelativeTo(null);
-			dlg.setModal(true);
-			dlg.setResizable(false);
-			dlg.setVisible(true);
+			SwingUtilities.invokeLater(new Runnable() {
+	            public void run() {
+	            	AvatarDialog dlg = new AvatarDialog(client,player);
+	    			dlg.setLocationRelativeTo(null);
+	    			dlg.setModal(true);
+	    			dlg.setResizable(false);
+	    			dlg.setVisible(true);
+	            }
+	        });
+			
 		}
 	}
 
