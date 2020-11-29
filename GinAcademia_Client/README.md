@@ -16,3 +16,4 @@ Run by `Main.java` outside (in default package, if you use Eclipse)
 
 - libraries: libs use in app (.jar)
 - img : images of GUI
+- Font : includes font format 
