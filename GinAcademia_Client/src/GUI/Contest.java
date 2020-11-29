@@ -27,8 +27,6 @@ import Socket.Response.SocketResponseGameRoom;
 import Socket.Response.SocketResponsePlayer;
 import Socket.Response.SocketResponseQuestion;
 
-//import javax.swing.Timer;
-
 @SuppressWarnings("serial")
 public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblQuestion;
@@ -61,31 +59,38 @@ public class Contest extends MyPanel implements MouseListener {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public Contest(MainFrame parent, Client client) {
-		super(client);
-		this.player = client.getPlayer();
-		this.parent = parent;
-	}
-
 	public Contest(MainFrame parent, Client client, int i) {
 		super(client);
 		this.player = client.getPlayer();
 		this.parent = parent;
-		init();
-		this.initContest();
-	}
-
-	public void init() {
 		setLayout(null);
 		this.setSize(600, 600);
 		this.setBackground(Color.WHITE);
 
-		this.initHeader();
+		lblTime = new JLabel("10");
+		lblTime.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
+		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTime.setBounds(270, 10, 40, 40);
+		add(lblTime);
 
-		parent.setActiveMenuButton(false);
-	}
+		lblYourPoint = new JLabel("0");
+		lblYourPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblYourPoint.setBounds(50, 55, 98, 22);
+		add(lblYourPoint);
 
-	private void initQuestion() {
+		lblYourname = new JLabel(this.player.getName());
+		lblYourname.setBounds(40, 23, 188, 35);
+		add(lblYourname);
+
+		lblEnemyname = new JLabel("");
+		lblEnemyname.setBounds(402, 23, 188, 35);
+		add(lblEnemyname);
+
+		lblEnemyPoint = new JLabel("");
+		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblEnemyPoint.setBounds(412, 55, 98, 22);
+		add(lblEnemyPoint);
+		
 		lblQuestion = new JLabel("Question");
 		lblQuestion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuestion.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -120,32 +125,15 @@ public class Contest extends MyPanel implements MouseListener {
 		txtB.addMouseListener(this);
 		txtC.addMouseListener(this);
 		txtD.addMouseListener(this);
+
+		parent.setActiveMenuButton(false);
+		this.initContest();
 	}
-
-	private void initHeader() {
-		lblTime = new JLabel("10");
-		lblTime.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
-		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setBounds(270, 10, 40, 40);
-		add(lblTime);
-
-		lblYourPoint = new JLabel("0");
-		lblYourPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblYourPoint.setBounds(50, 55, 98, 22);
-		add(lblYourPoint);
-
-		lblYourname = new JLabel(this.player.getName());
-		lblYourname.setBounds(40, 23, 188, 35);
-		add(lblYourname);
-
-		lblEnemyname = new JLabel("");
-		lblEnemyname.setBounds(402, 23, 188, 35);
-		add(lblEnemyname);
-
-		lblEnemyPoint = new JLabel("");
-		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEnemyPoint.setBounds(412, 55, 98, 22);
-		add(lblEnemyPoint);
+	
+	public Contest(MainFrame parent, Client client) {
+		super(client);
+		this.player = client.getPlayer();
+		this.parent = parent;
 	}
 
 	private void loadQuestion(Question q) {
@@ -177,7 +165,6 @@ public class Contest extends MyPanel implements MouseListener {
 
 	public void initContest() {
 		System.out.println("Start contest");
-//		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
 		if(client.checkRequest) {
@@ -186,7 +173,6 @@ public class Contest extends MyPanel implements MouseListener {
 					this.initNamePlayer(responseContest);
 				}
 			}
-			this.initQuestion();
 			SocketResponse responseQuestion = client.getResponse(); // get first question
 			if(client.checkRequest) {
 				if (responseQuestion.getAction().equals(SocketResponse.Action.CONTEST)) {
@@ -198,10 +184,6 @@ public class Contest extends MyPanel implements MouseListener {
 			}
 			
 		}
-		
-		
-		
-
 		timer = new Timer();
 		timer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
 	}
