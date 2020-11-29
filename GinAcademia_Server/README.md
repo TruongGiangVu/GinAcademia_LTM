@@ -19,3 +19,5 @@ Run by `Main.java` outside (in default package, if you use Eclipse)
 
 - libraries: libs use in app (.jar)
 - seedData: seed data (file json) in MongoDB
+- img : images use in app
+- Font : format font
