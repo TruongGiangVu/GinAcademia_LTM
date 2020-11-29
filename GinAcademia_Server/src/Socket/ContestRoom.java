@@ -234,8 +234,10 @@ public class ContestRoom {
 
 	public void endGame() {
 		System.out.println("End game");
-
-		if (this.players.size() == 1) {
+		if (this.players.size() == 0) {
+			this.endRoom();
+			return;
+		} else if (this.players.size() == 1) {
 			this.onlyOne();
 		} else {
 			// check tie
@@ -247,6 +249,10 @@ public class ContestRoom {
 		}
 
 		this.refreshGameOfClient();
+		this.endRoom();
+	}
+	
+	private void endRoom() {
 		this.isEndContest = true; // for deleting this game room
 		Server.contestRoomManager.finishRoom(RoomId);
 	}
