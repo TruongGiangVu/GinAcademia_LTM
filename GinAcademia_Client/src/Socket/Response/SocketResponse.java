@@ -2,9 +2,10 @@ package Socket.Response;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class SocketResponse implements Serializable {
-    public static enum Status {
+	private static final long serialVersionUID = 1L;
+
+	public static enum Status {
         SUCCESS,
         FAILED
     }

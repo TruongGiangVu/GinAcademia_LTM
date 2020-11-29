@@ -1,4 +1,3 @@
-
 import Socket.Client;
 
 import javax.swing.UIManager;
@@ -8,17 +7,21 @@ public class Main {
 	public Client clientSocket = null;
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-		
-		Login login = new Login();
+        }	
+		 Login login = new Login("localhost",5000);
+		 
+//		Login login = new Login("192.168.110.103",5000);
 		login.hashCode();
-//		clientSocketConnect.
-		
+
+//		Login login = new Login("192.168.110.103",5000);
+//		Login login = new Login("tcp://2.tcp.ngrok.io",10092);
+		//103.199.40.216
+		// tcp://2.tcp.ngrok.io:17364
+//		
 	}
 
 }

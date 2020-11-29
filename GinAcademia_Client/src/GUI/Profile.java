@@ -40,12 +40,13 @@ public class Profile extends MyPanel implements ActionListener {
 	private JPanel panelInfo;
 	private JTextField txtName;
 	private JLabel lblNewLabel_1;
-	private JTextField txtEmail;
 	private JComboBox<String> txtGender;
+	private JLabel lblGender;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNgySinh;
 	private JLabel lblBirth;
 	private JLabel lblGiiTnh;
+	private JLabel lblEmail;
 	private JDatePickerImpl datePicker;
 	private Player player;
 	private JPanel panelGame;
@@ -94,13 +95,6 @@ public class Profile extends MyPanel implements ActionListener {
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(280, 20, 50, 25);
 		panelInfo.add(lblNewLabel_1);
-
-		txtEmail = new JTextField();
-		txtEmail.setText("df");
-		txtEmail.setColumns(10);
-		txtEmail.setBounds(345, 20, 170, 25);
-		txtEmail.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
-		panelInfo.add(txtEmail);
 
 		txtGender = new JComboBox<String>();
 		txtGender.setModel(new DefaultComboBoxModel<String>(new String[] { "Nam", "Nữ" }));
@@ -155,6 +149,14 @@ public class Profile extends MyPanel implements ActionListener {
 		btnUpdate = new JButton("Cập nhật");
 		btnUpdate.setBounds(325, 125, 120, 23);
 		panelInfo.add(btnUpdate);
+		
+		lblGender = new JLabel("New label");
+		lblGender.setBounds(345, 72, 75, 25);
+		panelInfo.add(lblGender);
+		
+		lblEmail = new JLabel("");
+		lblEmail.setBounds(345, 20, 170, 25);
+		panelInfo.add(lblEmail);
 		this.btnUpdate.setVisible(false);
 		btnUpdate.addActionListener(this);
 
@@ -225,33 +227,32 @@ public class Profile extends MyPanel implements ActionListener {
 		btnLogout.setBounds(455, 451, 120, 25);
 		add(btnLogout);
 		btnLogout.addActionListener(this);
-
 		this.loadInfo();
 		this.loadGame();
 		this.activeText(false);
-
 	}
 
 	public void activeText(boolean active) { // allow edit text
-		this.txtName.setEnabled(active);
-		this.txtGender.setEnabled(active);
-		this.txtEmail.setEnabled(active);
+		this.txtName.setEditable(active);
+		
+		this.lblGender.setVisible(!active);
+		this.txtGender.setVisible(active);
+		
 		this.lblBirth.setVisible(!active);
 		this.datePicker.setVisible(active);
-
 	}
 
 	public void loadInfo() { // load player profile information, can update
 		this.txtName.setText(this.player.getName());
-		this.txtEmail.setText(this.player.getEmail());
 		this.datePicker.getJFormattedTextField().setText(this.player.getBirthdateString());
 		this.txtGender.setSelectedIndex(this.player.getGenderInt());
 		this.lblBirth.setText(this.player.getBirthdateString());
+		this.lblGender.setText(this.player.getGenderString());
+		this.lblEmail.setText(this.player.getUsername());
 	}
 
 	public void updateData() { // update info on GUI
 		this.player.setName(this.txtName.getText());
-		this.player.setEmail(this.txtEmail.getText());
 		this.player.setBirthdate(this.datePicker.getJFormattedTextField().getText());
 		this.player.setGender(this.txtGender.getSelectedItem().toString());
 	}
@@ -294,13 +295,15 @@ public class Profile extends MyPanel implements ActionListener {
 				// update name on MainFrame
 				MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 				parent.lblName.setText(this.player.getName());
+				// update client info
+				client.player = this.player;
 				// show info
 				JOptionPane.showMessageDialog(this, response.getMessage());
 			}
 		} else if (source == btnLogout) { // logout account
 			this.client.sendRequest(new SocketRequest(SocketRequest.Action.DISCONNECT, "Logout")); // send request to
 																									// disconnect
-			this.client.close(); // disconnect to server
+//			this.client.close(); // disconnect to server
 			// open login frame
 			Login login = new Login(); // create new socket for new login
 			login.hashCode();

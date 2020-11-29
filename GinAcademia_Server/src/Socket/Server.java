@@ -10,24 +10,30 @@ import java.util.concurrent.Executors;
 import Model.GameConfig;
 
 public class Server {
+
 	public static ArrayList<ClientHandler> clients;
-//	private ExecutorService pool;
 	public static ContestRoomManager contestRoomManager;
 	private ExecutorService pool;
-	int numThread = 2;
 	int id = 1;
 
-	GameConfig config;
-
+	static GameConfig config;
 	public ServerSocket server;
 
 	public Server() {
+		init(5000);
+	}
+
+	public Server(int port) {
+		init(port);
+	}
+
+	private void init(int port) {
 		try {
 			config = new GameConfig();
 			pool = Executors.newCachedThreadPool();
-			contestRoomManager = new ContestRoomManager(this.config);
+			contestRoomManager = new ContestRoomManager(config);
 			clients = new ArrayList<ClientHandler>();
-			server = new ServerSocket(1234);
+			server = new ServerSocket(port);
 			System.out.println("Waiting client connect ....");
 
 			this.running();
@@ -36,9 +42,8 @@ public class Server {
 			this.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Client off ngu vl");
-//			e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 
@@ -53,9 +58,6 @@ public class Server {
 			id++;
 			clients.add(clientThread);
 			pool.submit(clientThread);
-//			pool.execute(clientThread);
-
-//			if(clients.size() >= numThread) pool.shutdown();
 
 			if (pool.isTerminated()) {
 				System.out.println("All clients have been killed.");
@@ -71,24 +73,30 @@ public class Server {
 
 	public static boolean isOnlinePlayer(String username) {
 		boolean isExist = false;
-
-		int n = clients.size();
-		System.out.println("Size clients:" + n);
-		if (n <= 1)
+		if (clients == null)
 			isExist = false;
-		else
-			for (int i = 0; i < n; ++i) {
-				System.out.print(i+" ");
-				if(clients.get(i).isLoggedIn) {
-					if (username.equals(clients.get(i).player.getUsername())) {
-						
-						isExist = true;
-						break;
+		else {
+			int n = clients.size();
+			if (n < 1) {
+				isExist = false;
+			} else {
+				for (int i = 0; i < n; ++i) {
+					if (clients.get(i).isLoggedIn) {
+						if (username.equals(clients.get(i).player.getUsername())) {
+							isExist = true;
+							break;
+						}
 					}
 				}
 			}
-		System.out.println("is Exist: " + isExist);
+		}
 		return isExist;
+	}
+
+	public static void signOutPlayer(int id) {
+		clients.remove(getIndexOf(id));
+		int n = clients.size();
+		System.out.println("Size clients:" + n);
 	}
 
 	public static int getIndexOf(int id) {
@@ -99,4 +107,26 @@ public class Server {
 		}
 		return -1;
 	}
+
+	public static int countPlayerOnline() {
+		int ans = 0;
+		if (clients == null)
+			return ans;
+		int n = clients.size();
+		for (int i = 0; i < n; ++i) {
+			if (clients.get(i).isLoggedIn)
+				ans++;
+		}
+		return ans;
+	}
+	
+	public static GameConfig getConfig() {
+		return config;
+	}
+
+	public static void setConfig(GameConfig configNew) {
+		config = configNew;
+		contestRoomManager.setConfig(config);
+	}
+
 }

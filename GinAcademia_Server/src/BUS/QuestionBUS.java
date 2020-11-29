@@ -94,6 +94,10 @@ public class QuestionBUS {
 		}
 		return ans;
 	}
+	
+	public int getSize() {
+		return dao.readAll().size();
+	}
 
 	public static class Comparators {
 

@@ -12,12 +12,14 @@ import Socket.Request.SocketRequestAnswer;
 import Socket.Response.SocketResponse;
 import Socket.Response.SocketResponseContest;
 import Socket.Response.SocketResponseGameRoom;
+import Socket.Response.SocketResponsePlayer;
 import Socket.Response.SocketResponseQuestion;
 import BUS.QuestionBUS;
 import BUS.PlayerBUS;
 
 public class ContestRoom {
 	public int RoomId = -1;
+	private boolean isClocked = false;
 	public GameConfig config;
 	public QuestionBUS questionBus = new QuestionBUS();
 	public PlayerBUS playerBus = new PlayerBUS();
@@ -25,6 +27,7 @@ public class ContestRoom {
 	public int currentQ = 0;
 	public Player winner = null;
 	public int countAns = 0;
+	public int accept = 0;
 
 	public boolean isEndContest = false;
 
@@ -41,50 +44,98 @@ public class ContestRoom {
 		this.questions = questionBus.ReadContest(this.config.getNumQuestion());
 	}
 
-	public void joinGame(Player player, ClientHandler client) {
+	public boolean isClocked() {
+		return isClocked;
+	}
+
+	public void joinGame(ClientHandler client) {
+		if (this.isClocked)
+			return;
 		if (this.players.size() < this.config.getNumPlayer()) {
-			this.players.add(player);
+			this.players.add(client.player);
 			this.clients.add(client);
 			this.points.add(0);
 			this.answers.add(0);
 		}
+
 		if (this.players.size() == this.config.getNumPlayer()) {
+			int n = this.clients.size();
+			for (int i = 0; i < n; ++i) {
+				this.clients.get(i).isInGame = true;
+				System.out.println(this.clients.get(i).player.getId() + " ");
+			}
+
+			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"),
+					false);
+
+			try { // delay 1s for client open ContestPanel
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+			this.isClocked = true;
 			System.out.println("start contest");
-			this.sendStartContest(); // announce to all players about starting game
+			// announce to all players about starting game
+			this.sendALL(new SocketResponseContest(this.players, this.points, this.config), true);
 
 			// start contest
 			this.startContest();
 		}
-		System.out.println(this.players.size());
+
 	}
 
-	public void removePlayer(Player player) {
-		int index = this.players.indexOf(player);
+	public void leaveRoom(ClientHandler client) {
+		System.out.println(client.player.getId() + " leave Game " + RoomId);
+		if (this.isClocked)
+			return;
+		int index = this.indexOfPlayer(client.player);
 		if (index >= 0) {
-			this.playerBus.updateLose(player);
+			this.clients.remove(index);
+			this.players.remove(index);
+			this.points.remove(index);
+			this.answers.remove(index);
+		}
+		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
+	}
+
+	public void removePlayer(ClientHandler client) {
+		int index = this.indexOfPlayer(client.player);
+		if (index >= 0) {
+			this.playerBus.updateLose(client.player);
 			this.players.remove(index);
 			this.points.remove(index);
 			this.clients.remove(index);
+			this.answers.remove(index);
 			int num = this.config.getNumPlayer();
 			this.config.setNumPlayer(num - 1);
 		}
+//		if (this.players.size() == 0)
+		System.out.println("Num player in Game:" + this.RoomId + " " + this.players.size());
 	}
 
 	public boolean isRoomAvailable() {
+		if (this.isClocked)
+			return false;
 		if (this.players.size() < this.config.getNumPlayer())
 			return true;
 		else
 			return false;
 	}
 
+	public int amountOfPlayerInGame() {
+		return this.players.size();
+	}
+
 	public void startContest() {
 		contestTimer = new Timer();
 		contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
-		sendQuestionToAll(); // send first
+		this.countAns = 0;
+		this.sendALL(new SocketResponseQuestion(this.questions.get(this.currentQ)), true); // send first question
 	}
 
 	class ContestTask extends TimerTask {
-		int countdown = 10;
+		int countdown = config.getTime();
 
 		public ContestTask() {
 			System.out.println("start countdown");
@@ -103,64 +154,38 @@ public class ContestRoom {
 
 	public void endTurn() {
 		try {
-
-			System.out.println("\nEnd turn" + this.currentQ);
 			contestTimer.cancel(); // cancel current timer
 
 			int next = 1;
-			if (this.currentQ == this.config.getNumQuestion() - 1) // check if has next question
+			if (this.currentQ == this.config.getNumQuestion() - 1) // if has no next question
 				next = 0;
+			this.sendALL( // send to all
+					new SocketResponseGameRoom(this.players, this.points, this.answers,
+							this.questions.get(this.currentQ).getAnswer(), this.questions.get(this.currentQ + next)),
+					true);
+			refreshAnswer(); // reset answer
+			this.currentQ++;
+			Thread.sleep(2000); // delay 2s for players see answer
 
-			// send to all, point, answer, next question
-			this.sendALL(new SocketResponseGameRoom(this.players, this.points, this.answers,
-					this.questions.get(this.currentQ).getAnswer(), this.questions.get(this.currentQ + next)));
-
-			// check point
-			System.out.print("Points: ");
-			for (int p : points) {
-				System.out.print(p + " ");
-			}
-			System.out.println();
-
-			if (next == 0) { // check end game
+			this.countAns = 0; // reset number answer
+			if (next == 0) { // end game and announce result
 				this.endGame();
 				return;
 			}
-			this.currentQ++;
-			Thread.sleep(2000);
-
 			// create new timer for next question
-			System.out.println("Running ...");
-			this.countAns = 0;
 			contestTimer = new Timer();
 			contestTimer.scheduleAtFixedRate(new ContestTask(), 0, 1000);
+
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void sendALL(SocketResponse response) {
+	public void sendALL(SocketResponse response, boolean flag) {
 		int n = this.clients.size();
 		for (int i = 0; i < n; ++i) {
-			this.clients.get(i).sendResponse(response);
+			this.clients.get(i).sendResponse(response, flag);
 		}
-	}
-
-	public void sendQuestionToAll() {
-		System.out.println("send Question");
-		this.countAns = 0;
-		this.sendALL(new SocketResponseQuestion(this.questions.get(this.currentQ)));
-	}
-
-	public void sendStartContest() {
-		System.out.println("send point");
-		this.sendALL(new SocketResponseContest(this.players, this.points));
-
-		System.out.print("Points: ");
-		for (int p : points) {
-			System.out.print(p + " ");
-		}
-		System.out.println();
 	}
 
 	private int indexOfPlayer(Player p) {
@@ -185,6 +210,7 @@ public class ContestRoom {
 		}
 		int time = request.getTime();
 
+		System.out.print(request.player.getId() + " " + request.getAns());
 		this.updatePoint(index, ans, time);
 
 	}
@@ -193,11 +219,10 @@ public class ContestRoom {
 		int currentPoint = this.points.get(index);
 		int res = currentPoint;
 		if (ans) {
-			res = currentPoint + time / 10;
+			res = currentPoint + time / 100;
 		}
 		this.points.set(index, res);
 		this.countAns++;
-		System.out.println(this.players.get(index) + ":" + this.points.get(index));
 	}
 
 	public void refreshAnswer() { // refresh to No (0) answer
@@ -209,6 +234,54 @@ public class ContestRoom {
 
 	public void endGame() {
 		System.out.println("End game");
+		if (this.players.size() == 0) {
+			this.endRoom();
+			return;
+		} else if (this.players.size() == 1) {
+			this.onlyOne();
+		} else {
+			// check tie
+			if (this.checkTie2Player()) { // if no one wins
+				this.noWinner();
+			} else { // if it has winner
+				this.hasWinner();
+			}
+		}
+
+		this.refreshGameOfClient();
+		this.endRoom();
+	}
+	
+	private void endRoom() {
+		this.isEndContest = true; // for deleting this game room
+		Server.contestRoomManager.finishRoom(RoomId);
+	}
+
+	private void refreshGameOfClient() {
+		int n = this.clients.size();
+		for (int i = 0; i < n; ++i) {
+			this.clients.get(i).isInGame = false;
+			this.clients.get(i).contestRoom = null;
+		}
+	}
+
+	private boolean checkTie2Player() {
+		boolean ans = false;
+		if (this.points.get(0) == this.points.get(1))
+			ans = true;
+		return ans;
+	}
+
+	private void noWinner() {
+		int n = this.points.size();
+		for (int i = 0; i < n; ++i) {
+			this.clients.get(i).player = this.players.get(i);
+			this.clients.get(i).sendResponse(new SocketResponsePlayer(this.clients.get(i).player,
+					SocketResponse.Action.MESSAGE, "Trận đấu hòa!"), false);
+		}
+	}
+
+	private void hasWinner() {
 		// get index of winner
 		int n = this.points.size();
 		int index = -1;
@@ -219,24 +292,30 @@ public class ContestRoom {
 				index = i;
 			}
 		}
-		// winner
+		// winner: update and send new info to player
 		this.winner = this.players.get(index);
+		this.clients.get(index).player = this.playerBus.updateWin(this.winner);
 		this.clients.get(index).sendResponse(
-				new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thắng!"));
-//		this.playerBus.updateWin(this.winner);
-		System.out.println("Winner:" + winner.toString());
+				new SocketResponsePlayer(this.clients.get(index).player, SocketResponse.Action.MESSAGE, "Bạn thắng!"),
+				false);
 
-		// loser
+		// loser: update and send new info to player
 		for (int i = 0; i < n; ++i) {
 			if (i == index)
 				continue;
-//			this.playerBus.updateLose(this.players.get(i));
-			System.out.println("Loser:" + this.players.get(i).toString());
+			this.clients.get(i).player = this.playerBus.updateLose(this.players.get(i));
 			this.clients.get(i).sendResponse(
-					new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "Bạn thua!"));
+					new SocketResponsePlayer(this.clients.get(i).player, SocketResponse.Action.MESSAGE, "Bạn thua!"),
+					false);
 		}
+	}
 
-		this.isEndContest = true; // to delete this game room
+	private void onlyOne() { // if it just has a player
+		this.winner = this.players.get(0);
+		this.clients.get(0).player = this.playerBus.updateWin(this.winner);
+		this.clients.get(0).sendResponse(
+				new SocketResponsePlayer(this.clients.get(0).player, SocketResponse.Action.MESSAGE, "Bạn thắng!"),
+				false);
 	}
 
 }

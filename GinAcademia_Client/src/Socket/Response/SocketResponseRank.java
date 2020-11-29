@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import Model.Player;
 
-@SuppressWarnings("serial")
 public class SocketResponseRank extends SocketResponse {
+	private static final long serialVersionUID = 1L;
 	ArrayList<Player> arr;
 	public SocketResponseRank(ArrayList<Player> arr) {
 		// TODO Auto-generated constructor stub

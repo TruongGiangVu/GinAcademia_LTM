@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import BUS.PlayerBUS;
 import BUS.QuestionBUS;
 import Model.Player;
-import Model.Question;
 
 public class RequestProcess {
 	ClientHandler client;
@@ -21,7 +20,7 @@ public class RequestProcess {
 		this.client = clientHandler;
 		this.request = requestRaw;
 		
-		this.playerBus = new PlayerBUS();
+		this.playerBus = new PlayerBUS(); 
 		this.questionBUS = new QuestionBUS();
 	}
 
@@ -36,13 +35,8 @@ public class RequestProcess {
 				case RANK:
 					rankProcess();
 					break;
-				case REGISTER:
-					registerProcess();
-					break;
 				case IQTEST:
-					break;
-				case CONTEST:
-					contestProcess();
+					iQTestProcess();
 					break;
 				default:
 					break;
@@ -61,27 +55,19 @@ public class RequestProcess {
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
 		playerBus.update(tempRequest.player);
 		client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
-				"Cập nhật thành công!"));
+				"Cập nhật thành công!"),false);
 	}
 
 	private void rankProcess() { // send list player
 		ArrayList<Player> arr = playerBus.Read();
-		client.sendResponse(new SocketResponseRank(arr));
+		client.sendResponse(new SocketResponseRank(arr),false);
 	}
 
-	private void registerProcess() { // register new player 
-		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
-		if (playerBus.checkExistPlayer(tempRequest.player) == true) {
-			client.sendResponse(new SocketResponse(SocketResponse.Status.FAILED, SocketResponse.Action.MESSAGE,
-					"Tài khoản này đã tồn tại, Xin hãy đổi tên khác!"));
-		} else {
-			playerBus.insert(tempRequest.player);
-			Player p = playerBus.loginCheckPlayer(tempRequest.player.getUsername(), tempRequest.player.getPassword());
-			client.sendResponse(new SocketResponsePlayer(p));
-		}
-	}
-	private void contestProcess() { // just for test, will delete later
-		ArrayList<Question> arr = questionBUS.ReadContest(5);
-		client.sendResponse(new SocketResponseContestTest(arr));
+	private void iQTestProcess() {
+		SocketRequestIQTest iqtest = (SocketRequestIQTest) this.request;
+		int point = iqtest.numRight * 155 / iqtest.numQ;
+		client.player.setIQPoint(point);
+		playerBus.update(client.player);
+		client.sendResponse(new SocketResponsePlayer(client.player),false);
 	}
 }

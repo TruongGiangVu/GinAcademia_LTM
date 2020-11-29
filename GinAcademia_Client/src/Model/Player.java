@@ -21,6 +21,8 @@ public class Player implements Serializable {
 	private String Username = "";
 	@SerializedName("Password")
 	private String Password = "";
+	@SerializedName("TotalGame")
+	private int TotalGame = 0;
 	@SerializedName("Email")
 	private String Email = "";
 	@SerializedName("Birthdate")
@@ -326,7 +328,9 @@ public class Player implements Serializable {
 	public void setPlayerStatus(int playerStatus) {
 		PlayerStatus = playerStatus;
 	}
-
+	public int getTotalGame() {
+		return getWins() + getLoses();
+	}
 	@Override
 	public String toString() {
 		return "Player [PlayerId=" + PlayerId + ", Name=" + Name + ", Username=" + Username + ", Password=" + Password
@@ -345,5 +349,4 @@ public class Player implements Serializable {
 		this.copy(p);
 		return p;
 	}
-
 }

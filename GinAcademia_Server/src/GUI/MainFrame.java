@@ -1,5 +1,6 @@
 package GUI;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 
@@ -12,19 +13,27 @@ import javax.swing.SwingConstants;
 
 import Module.MenuButton;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 
 @SuppressWarnings("serial")
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JPanel panelButton;
 	private MenuButton btnHome;
 	private MenuButton btnQuestion;
+	private CardLayout deck = new CardLayout();
 	private MenuButton btnPlayer;
 	private JPanel panelContent;
 	private JLabel lblNewLabel;
+	
+	private JPanel pnQuestion;
+	private JPanel pnPlayer;
+	private JPanel pnHome;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static void main(String[] args) {
@@ -55,36 +64,77 @@ public class MainFrame extends JFrame {
 		panelButton.setBackground(Color.WHITE);
 //		panel.setLayout(new GridLayout(0, 1, 0, 0));
 		panelButton.setBounds(10, 70, 180, 215);
-		panelButton.setAlignmentX(MAXIMIZED_HORIZ);;
+		panelButton.setAlignmentX(MAXIMIZED_HORIZ);
 		contentPane.add(panelButton);
 		panelButton.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		btnHome = new MenuButton("Home");
+		btnHome = new MenuButton("Giao diện chính");
 		buttonGroup.add(btnHome);
 		panelButton.add(btnHome);
 		
-		btnQuestion = new MenuButton("Question");
+		btnQuestion = new MenuButton("Câu hỏi");
 		buttonGroup.add(btnQuestion);
 		panelButton.add(btnQuestion);
 		
-		btnPlayer = new MenuButton("Player");
+		btnPlayer = new MenuButton("Người chơi");
 		buttonGroup.add(btnPlayer);
 		panelButton.add(btnPlayer);
 		
-//		panelContent = new JPanel();
-//		panelContent = new QuestionPanel();
-		panelContent = new PlayerManagement();
+		panelContent = new JPanel();
 		panelContent.setBounds(200, 0, 600, 600);
 		panelContent.setBackground(Color.WHITE);
-		panelContent.setBorder(new MatteBorder(2,2,0,0, Color.GRAY));
+		panelContent.setBorder(new MatteBorder(1,1,0,0, (Color) new Color(8, 87, 40).brighter()));
+		panelContent.setLayout(deck);
 		contentPane.add(panelContent);
 		
-		lblNewLabel = new JLabel("MENU");
+		lblNewLabel = new JLabel("QUẢN LÝ");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 17));
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setBounds(0, 0, 201, 55);
-		lblNewLabel.setBorder(new MatteBorder(2,0,2,0,Color.GRAY));
+		lblNewLabel.setBorder(new MatteBorder(1, 0, 1, 0, (Color) new Color(8,87,40).brighter()));
 		contentPane.add(lblNewLabel);
+		
+		pnHome = new Home();
+		panelContent.add(pnHome,"home");
+		
+		pnQuestion = new QuestionPanel();
+		panelContent.add(pnQuestion,"question");
+		
+		pnPlayer = new PlayerPanel();
+		panelContent.add(pnPlayer,"player");
+		
+		deck.show(panelContent, "home");
+		btnHome.setSelected(true);
+		btnHome.addActionListener(this);
+		btnPlayer.addActionListener(this);
+		btnQuestion.addActionListener(this);
+//		btnIQ.addActionListener(this);
+		
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		MenuButton source=(MenuButton) arg0.getSource();
+		
+		if(source == this.btnHome) {
+			deck.removeLayoutComponent(pnHome);
+			this.pnHome = new Home();
+			panelContent.add(pnHome,"home");
+			deck.show(panelContent, "home");
+
+		}
+		else if(source == this.btnQuestion) {
+			deck.removeLayoutComponent(pnQuestion);
+			this.pnQuestion= new QuestionPanel();
+			panelContent.add(pnQuestion,"question");
+			deck.show(panelContent,"question");
+		}
+		else if(source == this.btnPlayer) {
+			deck.removeLayoutComponent(pnPlayer);
+			this.pnPlayer= new PlayerPanel();
+			panelContent.add(pnPlayer,"player");
+			deck.show(panelContent, "player");
+		}
+		
 	}
 }

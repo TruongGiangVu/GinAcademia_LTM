@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import Model.Player;
 import Model.Question;
 
-@SuppressWarnings("serial")
 public class SocketResponseGameRoom extends SocketResponse{
+	private static final long serialVersionUID = 1L;
 	public ArrayList<Player> players;
 	public ArrayList<Integer> points;
 	public ArrayList<Integer> answers;
@@ -19,6 +19,7 @@ public class SocketResponseGameRoom extends SocketResponse{
 		this.answers = answers;
 		this.rightAnswer = rightAnswer;
 		this.question = question;
+		
 		
 	}
 

@@ -10,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTextField;
@@ -27,27 +28,36 @@ import javax.swing.JButton;
 import Module.MyRegEx;
 import Socket.Client;
 import Module.ImagePanel;
+import java.awt.event.KeyAdapter;
+
 
 @SuppressWarnings("serial")
 public class Login extends JFrame {
 	private Client client;
 	private JPanel contentPane;
-	private ImagePanel panel;
+	private ImagePanel panelLamMau;
 	private JTextField txtUsername;
 	private JLabel lblNewLabel;
 	private JLabel label;
 	private JPasswordField txtPassword;
 	private JLabel lblChaCTi;
-	private JLabel label_1;
-	private JButton btnNewButton;
+	public static JLabel lblRegister;
+	public static JButton btnLogin;
 	int xx, xy;
 	private JLabel errorUsername;
 	private JLabel errorPassword;
 	private Image bg;
 
 	public Login() {
+		this.init("localhost", 5000);
+	}
+	
+	public Login(String host, int port) {
+		this.init(host, port);
+	}
+	
+	private void init(String host, int port) {
 		System.out.println("run...");
-		client = new Client("localhost", 1234);
 
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -76,9 +86,9 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		panel = new ImagePanel(client, this.bg, 365, 400);
+		panelLamMau = new ImagePanel(client, this.bg, 365, 400);
 
-		panel.addMouseMotionListener(new MouseMotionAdapter() {
+		panelLamMau.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				int x = e.getXOnScreen();
@@ -86,7 +96,7 @@ public class Login extends JFrame {
 				Login.this.setLocation(x - xx, y - xy);
 			}
 		});
-		panel.addMouseListener(new MouseAdapter() {
+		panelLamMau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				xx = e.getX();
@@ -94,11 +104,11 @@ public class Login extends JFrame {
 			}
 		});
 
-		panel.setBounds(0, 0, 365, 390);
-		contentPane.add(panel);
+		panelLamMau.setBounds(0, 0, 365, 390);
+		contentPane.add(panelLamMau);
 
 		txtUsername = new JTextField();
-		txtUsername.setText("user1");
+		txtUsername.setText("user1@gmail.com");
 		txtUsername.setBounds(391, 106, 280, 36);
 		contentPane.add(txtUsername);
 		txtUsername.setColumns(10);
@@ -126,39 +136,27 @@ public class Login extends JFrame {
 		lblChaCTi.setBounds(427, 305, 113, 14);
 		contentPane.add(lblChaCTi);
 
-		label_1 = new JLabel("Đăng ký ngay");
-		label_1.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		label_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				Login.this.dispose();
-				Register frame = new Register(client);
-				frame.setVisible(true);
-			}
+		lblRegister = new JLabel("Đăng ký ngay");
+		lblRegister.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblRegister.setForeground(new Color(8, 87, 40));
+		lblRegister.setBounds(535, 305, 94, 14);
+		contentPane.add(lblRegister);
 
+		btnLogin = new JButton("Đang tạo kết nối");
+		btnLogin.addKeyListener(new KeyAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent arg0) {
-				label_1.setForeground(new Color(8, 87, 40).brighter());
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-				label_1.setForeground(new Color(8, 87, 40));
+			public void keyPressed(KeyEvent e) {
+				 if (e.getKeyCode()==KeyEvent.VK_ENTER){
+			            loginPlayer();
+			        }
 			}
 		});
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 11));
-		label_1.setForeground(new Color(8, 87, 40));
-		label_1.setBounds(540, 327, 94, 14);
-		contentPane.add(label_1);
-
-		btnNewButton = new JButton("Đăng nhập");
-		btnNewButton.addActionListener(new ActionListener() {
+		btnLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Login.this.loginPlayer();
+				loginPlayer();
 			}
 		});
-		btnNewButton.setUI(new MetalToggleButtonUI() {
+		btnLogin.setUI(new MetalToggleButtonUI() {
 			@Override
 			protected Color getSelectColor() {
 				return new Color(8, 87, 40).brighter();
@@ -167,7 +165,7 @@ public class Login extends JFrame {
 			@Override
 			protected void paintText(Graphics g, AbstractButton b, Rectangle textRect, String text) {
 				Color fg;
-				if (btnNewButton.isSelected() || btnNewButton.getModel().isArmed()) {
+				if (btnLogin.isSelected() || btnLogin.getModel().isArmed()) {
 					fg = Color.WHITE;
 				}
 
@@ -179,25 +177,26 @@ public class Login extends JFrame {
 				super.paintText(g, b, textRect, text);
 			}
 		});
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		btnLogin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				btnNewButton.setBorder(null);
-				btnNewButton.setBackground(new Color(8, 87, 40).brighter());
+				btnLogin.setBorder(null);
+				btnLogin.setBackground(new Color(8, 87, 40).brighter());
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnNewButton.setBackground(new Color(8, 87, 40));
+				btnLogin.setBackground(new Color(8, 87, 40));
 			}
 		});
-		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnNewButton.setForeground(new Color(255, 255, 255));
-		btnNewButton.setBackground(new Color(8, 87, 40));
-		btnNewButton.setBounds(391, 265, 280, 35);
-		btnNewButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnNewButton.setFocusable(false);
-		contentPane.add(btnNewButton);
+		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnLogin.setForeground(new Color(255, 255, 255));
+		btnLogin.setBackground(new Color(8, 87, 40));
+		btnLogin.setBounds(391, 265, 280, 35);
+		btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnLogin.setFocusable(false);
+		btnLogin.setEnabled(false);
+		contentPane.add(btnLogin);
 
 		errorUsername = new JLabel("");
 		errorUsername.setForeground(Color.RED);
@@ -214,6 +213,31 @@ public class Login extends JFrame {
 //		this.setUndecorated(true);
 		setResizable(false);
 		this.setVisible(true);
+		lblRegister.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		client = new Client(host, port);
+		lblRegister.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(client.getSocket() != null) {
+					Login.this.dispose();
+					Register frame = new Register(client);
+					frame.setVisible(true);
+				}
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				lblRegister.setForeground(new Color(8, 87, 40).brighter());
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
+				lblRegister.setForeground(new Color(8, 87, 40));
+			}
+		});
 	}
 
 	private boolean checkData() {
@@ -235,7 +259,7 @@ public class Login extends JFrame {
 	public void loginPlayer() {
 		MainFrame frame;
 		if (this.client.getSocket() == null) {
-			JOptionPane.showMessageDialog(this, "Khong the ket noi toi may chu");
+			JOptionPane.showMessageDialog(this, "Khổng thể kết nối tới máy chủ");
 			return;
 		}
 		if (this.checkData()) {

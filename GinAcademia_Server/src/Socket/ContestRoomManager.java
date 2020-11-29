@@ -43,13 +43,15 @@ public class ContestRoomManager {
 				break;
 			}
 		}
+		System.out.print("RoomId kill: "+ roomId );
+		System.out.print("Num Room: "+ rooms.size() );
 	}
 
 	public ContestRoom findingAvailableRoom() {
 		ContestRoom room = null;
 		int n = rooms.size();
 		if(n == 0) {
-			room = this.createRoom();
+			room = this.createRoom(config);
 		}
 		else {
 			for (int i = 0; i < n; ++i) {
@@ -59,10 +61,18 @@ public class ContestRoomManager {
 				}
 			}
 			if(room == null) {
-				room = this.createRoom();
+				room = this.createRoom(config);
 			}
 		}
 		return room;
+	}
+	
+	public GameConfig getConfig() {
+		return config;
+	}
+
+	public void setConfig(GameConfig config) {
+		this.config = config;
 	}
 
 }

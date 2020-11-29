@@ -2,8 +2,9 @@ package Socket.Request;
 
 import Model.Player;
 
-@SuppressWarnings("serial")
+
 public class SocketRequestAnswer extends SocketRequest {
+	private static final long serialVersionUID = 1L;
 	public Player player;
 	public int ans = 0;
 	public int time = 10000;

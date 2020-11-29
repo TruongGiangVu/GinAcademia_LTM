@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import Model.Player;
 
-@SuppressWarnings("serial")
 public class SocketResponseAnswer extends SocketResponse {
+	private static final long serialVersionUID = 1L;
 	public ArrayList<Player> players;
 	public ArrayList<Integer> answers;
 	public int rightAnswer=0;

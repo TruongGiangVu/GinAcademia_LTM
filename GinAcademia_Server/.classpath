@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="libraries/mongodb-driver-3.4.3.jar"/>
 	<classpathentry kind="lib" path="libraries/mongodb-driver-core-3.4.3.jar"/>
 	<classpathentry kind="lib" path="libraries/jgoodies-forms-1.8.0.jar"/>
+	<classpathentry kind="lib" path="libraries/activation.jar"/>
+	<classpathentry kind="lib" path="libraries/mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
