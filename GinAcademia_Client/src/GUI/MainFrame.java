@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ImageIcon;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
+import java.awt.Cursor;
 
 import javax.swing.SwingConstants;
 import java.awt.GridLayout;
@@ -59,6 +61,9 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 		this.init();
 	}
 
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public MainFrame(Client client, Player p) {
 		super(client);
 		this.player = p;
@@ -87,13 +92,15 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 		panelMenu.setLayout(null);
 
 		lblImage = new JLabel();
-		this.loadImage("./img/profile.png");
-		lblImage.setBounds(5, 15, 190, 140);
+		lblImage.addMouseListener(this);
+		this.loadImage("./img/Avatar/"+this.player.getImage());
+		lblImage.setBounds(30, 23, 140, 130);
+		lblImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		panelMenu.add(lblImage);
 
 		lblName = new JLabel(this.player.getName());
 		lblName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblName.setFont(new Font("SansSerif", Font.PLAIN, 13));
+		lblName.setFont(new Font("SansSerif", Font.BOLD, 14));
 		lblName.setForeground(Color.BLACK);
 		lblName.setBounds(30, 165, 140, 30);
 		panelMenu.add(lblName);
@@ -164,24 +171,34 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		MenuButton a = (MenuButton) arg0.getSource();
-
-//		a.setBorder(null);
-		a.setForeground(Color.WHITE);
-		a.setBackground(new Color(8, 87, 40).brighter());
+		if(arg0.getSource() != lblImage) {
+			MenuButton a = (MenuButton) arg0.getSource();
+			a.setForeground(Color.WHITE);
+			a.setBackground(new Color(8, 87, 40).brighter());
+		}
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		MenuButton a = (MenuButton) e.getSource();
-		a.setBackground(Color.white);
-		a.setForeground(Color.black);
+		if(e.getSource() != lblImage) {
+			MenuButton a = (MenuButton) e.getSource();
+			a.setBackground(Color.white);
+			a.setForeground(Color.black);	
+		}
+		
 
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		if(arg0.getSource() == lblImage) {
+			AvatarDialog dlg = new AvatarDialog(this.client,this.player);
+			dlg.setLocationRelativeTo(null);
+			dlg.setModal(true);
+			dlg.setResizable(false);
+			dlg.setVisible(true);
+		}
 	}
 
 	@Override
@@ -244,9 +261,12 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	public void loadImage(String nameImage) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
 		Image image = icon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(190, 140, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
+		Image newimg = image.getScaledInstance(140, 130, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
 		icon = new ImageIcon(newimg);
 		lblImage.setIcon(icon);
 	}
 
 }
+
+
+

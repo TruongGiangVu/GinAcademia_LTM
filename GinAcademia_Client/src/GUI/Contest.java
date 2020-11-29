@@ -176,7 +176,6 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	public void initContest() {
-		System.out.println("Start contest");
 //		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
@@ -331,6 +330,7 @@ public class Contest extends MyPanel implements MouseListener {
 		for (int i = 0; i < n; ++i) {
 			if (choose == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
+				this.arrTxt.get(i).setForeground(Color.WHITE);
 				break;
 			}
 		}
@@ -341,6 +341,8 @@ public class Contest extends MyPanel implements MouseListener {
 		for (int i = 0; i < n; ++i) {
 			if (right == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("right"));
+				this.arrTxt.get(i).setForeground(Color.WHITE);
+
 				break;
 			}
 		}

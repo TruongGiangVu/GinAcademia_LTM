@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import java.awt.Image;
+import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
 public class IQTestPanel extends MyPanel {
@@ -58,33 +59,38 @@ public class IQTestPanel extends MyPanel {
 		lblTime = new JLabel("2000");
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 13));
-		lblTime.setBounds(286, 11, 80, 25);
+		lblTime.setBounds(260, 11, 80, 25);
 		add(lblTime);
 
 		lblQuestion = new JLabel("question");
+		lblQuestion.setBorder(new EmptyBorder(0, 6, 0, 0));
 		lblQuestion.setBounds(25, 40, 550, 90);
 //		lblQuestion.
 		add(lblQuestion);
 
 		txtAnswer = new JTextField();
-		txtAnswer.setBounds(250, 450, 100, 20);
+		txtAnswer.setBounds(221, 481, 83, 20);
 		add(txtAnswer);
 		txtAnswer.setColumns(10);
 
-		btnEnter = new JButton("Xác nhận");
+		btnEnter = new JButton("Chọn");
+		btnEnter.setBackground(Color.WHITE);
 		btnEnter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getAnswer();
 			}
 		});
-		btnEnter.setBounds(255, 480, 90, 23);
+		btnEnter.setBounds(314, 480, 70, 23);
 		add(btnEnter);
 
 		lblImage = new JLabel("");
+		lblImage.setBackground(Color.WHITE);
 		lblImage.setBounds(25, 140, 550, 300);
 		add(lblImage);
 
 		panelOption = new JPanel();
+		panelOption.setBorder(new EmptyBorder(0, 6, 0, 0));
+		panelOption.setBackground(Color.WHITE);
 		panelOption.setBounds(25, 140, 550, 300);
 		add(panelOption);
 		panelOption.setLayout(new GridLayout(0, 1, 0, 0));
@@ -105,6 +111,11 @@ public class IQTestPanel extends MyPanel {
 		arrTxt.add(lblB);
 		arrTxt.add(lblC);
 		arrTxt.add(lblD);
+		
+		JLabel lblNewLabel = new JLabel("Nhập đáp án vào ô trống dưới đây");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(200, 450, 200, 20);
+		add(lblNewLabel);
 
 		this.seedData();
 		this.startIQTest();

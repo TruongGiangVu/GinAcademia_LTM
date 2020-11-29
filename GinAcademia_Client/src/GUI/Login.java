@@ -108,6 +108,11 @@ public class Login extends JFrame {
 		contentPane.add(panelLamMau);
 
 		txtUsername = new JTextField();
+		txtUsername.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loginPlayer();
+			}
+		});
 		txtUsername.setText("user1@gmail.com");
 		txtUsername.setBounds(391, 106, 280, 36);
 		contentPane.add(txtUsername);
@@ -126,6 +131,11 @@ public class Login extends JFrame {
 		contentPane.add(label);
 
 		txtPassword = new JPasswordField();
+		txtPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				loginPlayer();
+			}
+		});
 		txtPassword.setText("12345");
 		txtPassword.setBounds(391, 186, 280, 36);
 		contentPane.add(txtPassword);

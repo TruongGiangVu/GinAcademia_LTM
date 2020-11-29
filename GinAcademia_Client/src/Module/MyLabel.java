@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
@@ -18,6 +19,8 @@ public class MyLabel extends JLabel{
 
 		this.setForeground(Color.BLACK);
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		UIManager.put("Label.disabledForeground",Color.WHITE);
+
 //		this.setUI(new );
 	}
 	public MyLabel(String text) {

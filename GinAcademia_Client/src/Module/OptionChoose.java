@@ -4,7 +4,7 @@ import java.awt.Color;
 // color for game when player choose options
 
 public class OptionChoose {
-	private Color WrongChoose = new Color(210, 70, 69);
+	private Color WrongChoose = new Color(197, 3, 20);
 	private Color RightChoose = new Color(143, 203, 43);
 	private Color NotChoose = new Color(93, 98, 189);
 	private Color EnemyChoose = new Color(210, 110, 18);

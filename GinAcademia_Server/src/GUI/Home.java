@@ -78,7 +78,7 @@ public class Home extends JPanel implements MouseListener {
 		lblNewLabel.setBounds(30, 30, 105, 30);
 		add(lblNewLabel);
 
-		lblNumPlayer = new JLabel(String.valueOf(this.arr.size()));
+		lblNumPlayer = new JLabel(String.valueOf(PlayerActive.size()));
 		lblNumPlayer.setBounds(145, 30, 30, 30);
 		add(lblNumPlayer);
 
