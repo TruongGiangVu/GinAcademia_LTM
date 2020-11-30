@@ -54,7 +54,8 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		
 		listImg.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 		listImg.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-	    listImg.setVisibleRowCount(2);
+		int rowItems = arrStr.length/3+1;
+	    listImg.setVisibleRowCount(rowItems);
 		listImg.setListData(arrStr);
 		listImg.setCellRenderer(new ImageListRenderer());
 		JScrollPane scrollPane = new JScrollPane(listImg);
@@ -106,8 +107,9 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		int i = 0;
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
-		    	map.put(file.getName(), loadImage("./img/Avatar/"+file.getName())); 
-		    	arrStr[i] = file.getName().split(".")[0];
+				String temp = file.getName();
+		    	map.put(temp, loadImage("./img/Avatar/"+file.getName())); 
+		    	arrStr[i] = temp;
 //		    	*.png
 		    	i+=1;
 			}
