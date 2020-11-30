@@ -13,7 +13,7 @@ public class Server {
 
 	public static ArrayList<ClientHandler> clients;
 	public static ContestRoomManager contestRoomManager;
-	private ExecutorService pool;
+	private static ExecutorService pool;
 	int id = 1;
 
 	static GameConfig config;
@@ -59,13 +59,13 @@ public class Server {
 			clients.add(clientThread);
 			pool.submit(clientThread);
 
-			if (pool.isTerminated()) {
-				System.out.println("All clients have been killed.");
+			if (pool.isTerminated() || pool.isShutdown()) {
+				System.out.println("All clients have been killed 2.");
 				break;
 			}
 
 		}
-		if (pool.isTerminated()) {
+		if (pool.isTerminated() || pool.isShutdown()) {
 			System.out.println("All clients have been killed 2.");
 		}
 		pool.shutdown();
@@ -129,6 +129,8 @@ public class Server {
 		contestRoomManager.setConfig(config);
 	}
 	
-	
+	public static void shutdown() {
+		pool.shutdown();
+	}
 
 }
