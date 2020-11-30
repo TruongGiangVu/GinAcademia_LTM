@@ -19,6 +19,8 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
@@ -129,14 +131,20 @@ public class AvatarDialog extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnSelected) {
-			this.player.setImage(listImg.getSelectedValue()+".png");
-			if(client.checkSend) {
-				client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
+			if(listImg.getSelectedValue() != null) {
+				this.player.setImage(listImg.getSelectedValue()+".png");
 				if(client.checkSend) {
-					MainFrame.lblImage.setIcon(imageMap.get(listImg.getSelectedValue()));
-					dispose();
+					client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
+					if(client.checkSend) {
+						MainFrame.lblImage.setIcon(imageMap.get(listImg.getSelectedValue()));
+						dispose();
+					}
 				}
 			}
+			else {
+				JOptionPane.showMessageDialog(null, (Object) "Chọn ảnh để tiếp tục","Không tìm thấy ảnh",JOptionPane.WARNING_MESSAGE);
+			}
+			
 		}
 		else {
 			if(e.getSource() == btnCancle) {

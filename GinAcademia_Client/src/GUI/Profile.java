@@ -45,7 +45,6 @@ public class Profile extends MyPanel implements ActionListener {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNgySinh;
 	private JLabel lblBirth;
-	private JLabel lblGiiTnh;
 	private JLabel lblEmail;
 	private JDatePickerImpl datePicker;
 	private Player player;
@@ -79,19 +78,21 @@ public class Profile extends MyPanel implements ActionListener {
 		add(panelInfo);
 		panelInfo.setLayout(null);
 
-		lblNewLabel = new JLabel("Họ và tên");
+		lblNewLabel = new JLabel("Họ và tên:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel.setBounds(20, 20, 65, 25);
+		lblNewLabel.setBounds(20, 20, 70, 25);
 		panelInfo.add(lblNewLabel);
 
 		txtName = new JTextField();
+		txtName.setBackground(Color.WHITE);
 		txtName.setText("df");
 		txtName.setBounds(100, 20, 170, 25);
-		txtName.setBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK));
+		txtName.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(0, 0, 0)));
+		txtName.setDisabledTextColor(Color.black);
 		panelInfo.add(txtName);
 		txtName.setColumns(10);
 
-		lblNewLabel_1 = new JLabel("Email");
+		lblNewLabel_1 = new JLabel("Email:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_1.setBounds(280, 20, 50, 25);
 		panelInfo.add(lblNewLabel_1);
@@ -102,14 +103,14 @@ public class Profile extends MyPanel implements ActionListener {
 		txtGender.setBackground(Color.WHITE);
 		panelInfo.add(txtGender);
 
-		lblNewLabel_2 = new JLabel("Giới tính");
+		lblNewLabel_2 = new JLabel("Giới tính:");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblNewLabel_2.setBounds(280, 70, 60, 25);
 		panelInfo.add(lblNewLabel_2);
 
-		lblNgySinh = new JLabel("Ngày sinh");
+		lblNgySinh = new JLabel("Ngày sinh:");
 		lblNgySinh.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNgySinh.setBounds(20, 70, 65, 25);
+		lblNgySinh.setBounds(20, 70, 70, 25);
 		panelInfo.add(lblNgySinh);
 
 		UtilDateModel model = new UtilDateModel();
@@ -127,11 +128,7 @@ public class Profile extends MyPanel implements ActionListener {
 //		datePicker.set
 		panelInfo.add(datePicker);
 
-		lblGiiTnh = new JLabel("GIỚI TÍNH");
-		lblGiiTnh.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblGiiTnh.setForeground(Color.BLACK);
-		lblGiiTnh.setBounds(391, 505, 103, 25);
-		panelInfo.add(lblGiiTnh);
+		
 
 		lblBirth = new JLabel(this.player.getBirthdateString());
 		lblBirth.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -151,7 +148,7 @@ public class Profile extends MyPanel implements ActionListener {
 		panelInfo.add(btnUpdate);
 		
 		lblGender = new JLabel("New label");
-		lblGender.setBounds(345, 72, 75, 25);
+		lblGender.setBounds(345, 70, 75, 25);
 		panelInfo.add(lblGender);
 		
 		lblEmail = new JLabel("");
