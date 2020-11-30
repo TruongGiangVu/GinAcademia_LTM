@@ -5,6 +5,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.Normalizer;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -21,6 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.jdatepicker.impl.*;
 
@@ -66,7 +68,7 @@ public class Register extends MyFrame {
 
 		setBackground(new Color(31, 22, 127));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		setBounds(450, 20, 350, 610);
 		this.setTitle("GinAcademia - Đăng ký");
 		contentPane = new JPanel();
@@ -281,7 +283,12 @@ public class Register extends MyFrame {
 		int num = 0;
 		for (JTextField a : arrTF) {
 			String theme = a.getToolTipText();
-			if (!a.getText().trim().matches(regex.pattern.get(theme).toString())) {
+			if (a.getText() == null)
+				check = false;
+			String txt = a.getText().trim();
+			if (theme.equals("name"))
+				txt = this.removeAccent(txt);
+			if (!txt.matches(regex.pattern.get(theme).toString())) {
 				this.arrError.get(num).setText(regex.error.get(theme).toString());
 				check = false;
 			} else
@@ -320,10 +327,16 @@ public class Register extends MyFrame {
 					this.dispose();
 					MainFrame frame = new MainFrame(client); // open main frame
 					frame.setVisible(true);
-				} 
+				}
 			} else {
 				JOptionPane.showMessageDialog(this, response.getMessage(), "Alert", JOptionPane.WARNING_MESSAGE);
 			}
 		}
+	}
+
+	public String removeAccent(String s) {
+		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		return pattern.matcher(temp).replaceAll("");
 	}
 }

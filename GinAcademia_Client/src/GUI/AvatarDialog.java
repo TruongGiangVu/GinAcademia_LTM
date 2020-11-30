@@ -89,7 +89,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 
         @Override
         public Component getListCellRendererComponent(
-                JList list, Object value, int index,
+                JList<?> list, Object value, int index,
                 boolean isSelected, boolean cellHasFocus) {
 
             JLabel label = (JLabel) super.getListCellRendererComponent(

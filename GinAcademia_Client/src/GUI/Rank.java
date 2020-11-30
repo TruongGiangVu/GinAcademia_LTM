@@ -80,7 +80,7 @@ public class Rank extends MyPanel implements ActionListener{
 		cbbRank.setFont(new Font("Monospace", Font.PLAIN, 12));
 		cbbRank.setBackground(Color.WHITE);
 		cbbRank.setModel(new DefaultComboBoxModel<String>(new String[] { "Số trận thắng", "Số trận tham gia","Chuỗi thắng" }));
-		cbbRank.setBounds(85, 80, 101, 30);
+		cbbRank.setBounds(85, 80, 120, 30);
 		add(cbbRank);
 
 		lblYourRank = new JLabel("0");

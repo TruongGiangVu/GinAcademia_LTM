@@ -13,7 +13,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.Normalizer;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -278,7 +280,8 @@ public class Profile extends MyPanel implements ActionListener {
 		this.lblBirth.setVisible(!active);
 		this.datePicker.setVisible(active);
 	}
-	public static boolean isFullname(String str) {
+	public boolean isFullname(String str) {
+		str = removeAccent(str);
 	    String expression = "^[a-zA-Z\\s]+"; 
 	    return str.matches(expression);        
 	}
@@ -340,6 +343,12 @@ public class Profile extends MyPanel implements ActionListener {
 		this.btnEdit.setVisible(!isUpdate);
 		this.btnCancel.setVisible(isUpdate);
 		this.btnUpdate.setVisible(isUpdate);
+	}
+	
+	public String removeAccent(String s) {
+		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		return pattern.matcher(temp).replaceAll("");
 	}
 
 	@Override
