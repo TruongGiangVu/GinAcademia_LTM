@@ -85,8 +85,8 @@ public class Home extends ImagePanel implements ActionListener {
 		lblTime = new JLabel("-1");
 		lblTime.setForeground(Color.WHITE);
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setFont(font.deriveFont(Font.PLAIN,24));
-		lblTime.setBounds(250, 343, 100, 80);
+		lblTime.setFont(font.deriveFont(Font.PLAIN,36));
+		lblTime.setBounds(240, 330, 120, 80);
 		add(lblTime);
 
 		btnCancel = new JButton("CANCEL");
@@ -99,7 +99,7 @@ public class Home extends ImagePanel implements ActionListener {
 		btnCancel.setFocusable(false);
 		btnCancel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnCancel.setFont(font.deriveFont(Font.PLAIN,18));
-		btnCancel.setBounds(250, 440, 100, 25);
+		btnCancel.setBounds(250, 420, 100, 50);
 
 		btnStart.addActionListener(this);
 		btnCancel.addActionListener(this);

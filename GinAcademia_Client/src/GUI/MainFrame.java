@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -72,6 +73,8 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	}
 
 	public void init() {
+		UIManager.put("Label[Disabled].textForeground",Color.WHITE);
+
 		Image temp = new ImageIcon("./img/background.jpg").getImage().getScaledInstance(600, 600,
 				java.awt.Image.SCALE_AREA_AVERAGING);
 		this.img = new ImageIcon(temp);

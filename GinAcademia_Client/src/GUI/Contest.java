@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -65,7 +66,9 @@ public class Contest extends MyPanel implements MouseListener {
 	 * @wbp.parser.constructor
 	 */
 	public Contest(MainFrame parent, Client client, int i) {
+
 		super(client);
+		UIManager.put("Label[Disabled].textForeground",Color.WHITE);
 		this.player = client.getPlayer();
 		this.parent = parent;
 		setLayout(null);
@@ -106,24 +109,24 @@ public class Contest extends MyPanel implements MouseListener {
 
 		txtA = new MyLabel();
 		txtA.setText("A");
-		txtA.setBounds(50, 200, 500, 80);
+		txtA.setBounds(50, 200, 500, 60);
 		add(txtA);
 		this.arrTxt.add(txtA);
 
 		txtB = new MyLabel();
-		txtB.setBounds(50, 290, 500, 80);
+		txtB.setBounds(50, 280, 500, 60);
 		txtB.setText("B");
 		add(txtB);
 		this.arrTxt.add(txtB);
 
 		txtC = new MyLabel();
-		txtC.setBounds(50, 380, 500, 80);
+		txtC.setBounds(50, 360, 500, 60);
 		txtC.setText("C");
 		add(txtC);
 		this.arrTxt.add(txtC);
 
 		txtD = new MyLabel();
-		txtD.setBounds(50, 470, 500, 80);
+		txtD.setBounds(50, 440, 500, 60);
 		txtD.setText("D");
 		add(txtD);
 		this.arrTxt.add(txtD);
@@ -141,7 +144,7 @@ public class Contest extends MyPanel implements MouseListener {
 		lblEnemyImg = new JLabel((String) null);
 		lblEnemyImg.setBounds(502, 20, 68, 70);
 		add(lblEnemyImg);
-
+		
 		parent.setActiveMenuButton(false);
 		this.initContest();
 	}
@@ -180,7 +183,6 @@ public class Contest extends MyPanel implements MouseListener {
 	}
 
 	public void initContest() {
-//		client.sendRequest(new SocketRequest(SocketRequest.Action.CONTEST, "start contest"));
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
 		if(client.checkRequest) {
@@ -211,9 +213,11 @@ public class Contest extends MyPanel implements MouseListener {
 		this.updatePoint(contest.points);
 		int n = contest.players.size();
 		for (int i = 0; i < n; ++i) {
-			if (i != index)
+			if (i != index) {
 				this.lblEnemyname.setText(contest.players.get(i).getName());
 				this.lblEnemyImg.setIcon(this.loadImage("./img/Avatar/"+contest.players.get(i).getImage()));
+			}
+				
 		}
 	}
 
@@ -337,6 +341,7 @@ public class Contest extends MyPanel implements MouseListener {
 			if (choose == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
 				this.arrTxt.get(i).setForeground(Color.WHITE);
+				this.arrTxt.get(i).repaint();
 				break;
 			}
 		}
@@ -348,7 +353,6 @@ public class Contest extends MyPanel implements MouseListener {
 			if (right == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("right"));
 				this.arrTxt.get(i).setForeground(Color.WHITE);
-
 				break;
 			}
 		}
@@ -366,6 +370,7 @@ public class Contest extends MyPanel implements MouseListener {
 		if(client.checkSend) {
 			this.setEnableOption(false);
 			source.setBackground(this.optionColor.getColor("choose"));
+//			source.setForeground(Color.WHITE);
 //			this.endTurn();
 			thread = new Thread(new ContestGame());
 			thread.start();
