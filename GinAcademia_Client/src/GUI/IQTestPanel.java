@@ -58,8 +58,8 @@ public class IQTestPanel extends MyPanel {
 
 		lblTime = new JLabel("2000");
 		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTime.setFont(new Font("Tahoma", Font.ITALIC, 13));
-		lblTime.setBounds(260, 11, 80, 25);
+		lblTime.setFont(new Font("SansSerif", Font.PLAIN, 15));
+		lblTime.setBounds(240, 11, 80, 25);
 		add(lblTime);
 
 		lblQuestion = new JLabel("question");
@@ -69,6 +69,11 @@ public class IQTestPanel extends MyPanel {
 		add(lblQuestion);
 
 		txtAnswer = new JTextField();
+		txtAnswer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getAnswer();
+			}
+		});
 		txtAnswer.setBounds(221, 481, 83, 20);
 		add(txtAnswer);
 		txtAnswer.setColumns(10);

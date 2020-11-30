@@ -217,7 +217,8 @@ public class ContestRoom {
 		int currentPoint = this.points.get(index);
 		int res = currentPoint;
 		if (ans) {
-			res = currentPoint + time / 100;
+			int p = this.config.getPoint() + time / 100;
+			res = currentPoint + p;
 		}
 		this.points.set(index, res);
 		this.countAns++;

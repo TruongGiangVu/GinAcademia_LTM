@@ -60,6 +60,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 			e.printStackTrace();
 		}
 		panelTable = new JPanel();
+		panelTable.setBackground(Color.WHITE);
 		panelTable.setBounds(30, 155, 540, 400);
 		add(panelTable);
 
@@ -71,6 +72,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	                return false;               
 	        };
 		};
+		table.setBackground(Color.WHITE);
 		table.setAutoCreateRowSorter(true);
 		table.setRowHeight(25);
 		table.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -84,6 +86,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		this.RefreshTableData(arr);
 
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBackground(Color.WHITE);
 		panelTable.setLayout(new GridLayout(0, 1, 0, 0));
 		panelTable.add(scrollPane);
 
@@ -130,6 +133,8 @@ public class QuestionPanel extends JPanel implements ActionListener {
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setBounds(30, 15, 365, 40);
 		add(lblNewLabel);
+		txtSearch.addActionListener(this);
+
 	}
 
 	public void AddData() {
@@ -152,6 +157,9 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	public void RefreshTableData(ArrayList<Question> data) {
 		this.RemoveTableData();
 		int n = data.size();
+		if(n == 0) {
+			JOptionPane.showMessageDialog(this,(Object) "Không tìm thấy câu hỏi","Tìm kiếm thất bại",JOptionPane.WARNING_MESSAGE);
+		}
 		for (int i = 0; i < n; i++) {
 			Object[] row = { data.get(i).getId(), data.get(i).getQuestion(), data.get(i).getOptions().get(0).Option,
 					data.get(i).getOptions().get(1).Option, data.get(i).getOptions().get(2).Option,
@@ -166,13 +174,15 @@ public class QuestionPanel extends JPanel implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JButton source = (JButton) e.getSource();
-		if (source == this.btnAdd) {
+		if (e.getSource() == this.btnAdd) {
 			this.InsertButton();
-		} else if (source == this.btnView)
+		} else if (e.getSource() == this.btnView)
 			this.UpdateButton();
-		else if (source == this.btnSearch)
+		else if (e.getSource() == this.btnSearch)
 			this.searchData();
+		else if(e.getSource() == this.txtSearch) {
+			this.searchData();
+		}
 	}
 
 	public void InsertButton() {
@@ -188,7 +198,9 @@ public class QuestionPanel extends JPanel implements ActionListener {
 //			this.RefreshTableData();
 		}
 	}
-
+	private String normalizedString(String val) {
+		return val.toLowerCase().trim().replaceAll("\\s+", " ");
+	}
 	public void UpdateButton() {
 		int i = table.getSelectedRow();
 		if (i >= 0) {
@@ -216,7 +228,7 @@ public class QuestionPanel extends JPanel implements ActionListener {
 			this.RefreshTableData(arr);
 		} else {
 			for(Question q: arr) {
-				if(q.getQuestion().contains(searchQuerry)) {
+				if(this.normalizedString(q.getQuestion()).contains(this.normalizedString(searchQuerry))) {
 					searchArr.add(q);
 				}
 			}

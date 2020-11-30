@@ -187,7 +187,7 @@ public class Rank extends MyPanel implements ActionListener{
 			
 			scrollPane.revalidate();
 			scrollPane.repaint();
-			int n = data.size() > 1? data.size()-1 : 1;
+			int n = data.size() > 1? data.size() : 1;
 			this.RemoveTableData(this.table);
 			this.tableModel.setRowCount(0);
 			if(opt.equals("Số trận thắng")) {
