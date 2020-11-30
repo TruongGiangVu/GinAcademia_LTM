@@ -81,11 +81,11 @@ public class Contest extends MyPanel implements MouseListener {
 		lblYourPoint = new JLabel("0");
 		lblYourPoint.setHorizontalAlignment(SwingConstants.CENTER);
 		lblYourPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblYourPoint.setBounds(50, 70, 98, 20);
+		lblYourPoint.setBounds(98, 70, 98, 20);
 		add(lblYourPoint);
 
 		lblYourname = new JLabel(this.player.getName());
-		lblYourname.setBounds(90, 20, 125, 48);
+		lblYourname.setBounds(98, 20, 125, 48);
 		add(lblYourname);
 
 		lblEnemyname = new JLabel("");
@@ -95,7 +95,7 @@ public class Contest extends MyPanel implements MouseListener {
 		lblEnemyPoint = new JLabel("");
 		lblEnemyPoint.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEnemyPoint.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblEnemyPoint.setBounds(412, 70, 98, 20);
+		lblEnemyPoint.setBounds(392, 70, 98, 20);
 		add(lblEnemyPoint);
 		
 		lblQuestion = new JLabel("Question");
@@ -134,12 +134,12 @@ public class Contest extends MyPanel implements MouseListener {
 		txtD.addMouseListener(this);
 		
 		lblYourImg = new JLabel((String) null);
-		lblYourImg.setBounds(30, 20, 48, 48);
+		lblYourImg.setBounds(20, 20, 68, 70);
 		lblYourImg.setIcon(this.loadImage("./img/Avatar/"+this.player.getImage()));
 		add(lblYourImg);
 		
 		lblEnemyImg = new JLabel((String) null);
-		lblEnemyImg.setBounds(502, 20, 48, 48);
+		lblEnemyImg.setBounds(502, 20, 68, 70);
 		add(lblEnemyImg);
 
 		parent.setActiveMenuButton(false);
@@ -220,7 +220,7 @@ public class Contest extends MyPanel implements MouseListener {
 	public ImageIcon loadImage(String nameImage) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
 		Image image = icon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(50, 35, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
+		Image newimg = image.getScaledInstance(68, 70, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
 		icon = new ImageIcon(newimg);
 		return icon;
 	}
@@ -308,7 +308,6 @@ public class Contest extends MyPanel implements MouseListener {
 //	Cập nhật điểm của người chơi
 	private void updatePoint(ArrayList<Integer> points) {
 		int n = points.size();
-		System.out.println("index:" + index);
 		this.lblYourPoint.setText(points.get(index) + "");
 
 		for (int i = 0; i < n; ++i) {
@@ -410,6 +409,7 @@ public class Contest extends MyPanel implements MouseListener {
 		int n = arrTxt.size();
 		for (int i = 0; i < n; ++i) {
 			this.arrTxt.get(i).setBackground(new Color(255, 255, 255));
+			this.arrTxt.get(i).setForeground(Color.BLACK);
 		}
 	}
 
