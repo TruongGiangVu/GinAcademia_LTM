@@ -92,6 +92,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 
             JLabel label = (JLabel) super.getListCellRendererComponent(
                     list, value, index, isSelected, cellHasFocus);
+//            label.setText("");
             label.setIcon(imageMap.get(value.toString()));
             label.setVerticalTextPosition(JLabel.BOTTOM); 
             label.setHorizontalTextPosition(JLabel.CENTER);
@@ -108,8 +109,8 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
 				String temp = file.getName();
-		    	map.put(temp, loadImage("./img/Avatar/"+file.getName())); 
-		    	arrStr[i] = temp;
+		    	map.put(temp.substring(0,temp.length()-4), loadImage("./img/Avatar/"+file.getName())); 
+		    	arrStr[i] = temp.substring(0,temp.length()-4);
 //		    	*.png
 		    	i+=1;
 			}
@@ -128,7 +129,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnSelected) {
-			this.player.setImage(listImg.getSelectedValue());
+			this.player.setImage(listImg.getSelectedValue()+".png");
 			if(client.checkSend) {
 				client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
 				if(client.checkSend) {
