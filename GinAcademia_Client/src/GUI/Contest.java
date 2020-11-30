@@ -199,6 +199,7 @@ public class Contest extends MyPanel implements MouseListener {
 	public void initContest() {
 
 		SocketResponse responseContest = client.getResponse(); // get init contest
+		System.out.println("1"+ client.checkRequest);
 		if(client.checkRequest) {
 			if (responseContest.getAction().equals(SocketResponse.Action.CONTEST)) {
 				if (responseContest.getMessage().equals("contest")) {
@@ -269,8 +270,8 @@ public class Contest extends MyPanel implements MouseListener {
 		public void run() {
 			System.out.println("End turn \n");
 			try {
-				SocketResponse responseServer = (SocketResponse) client.getResponse();
-				if(client.checkRequest) {
+				SocketResponse responseServer =  client.getResponse();
+				if(client.checkRequest ) {
 					if (responseServer.getAction().equals(SocketResponse.Action.CONTEST)) {
 						timer.cancel();
 						SocketResponseGameRoom responseGameRoom = (SocketResponseGameRoom) responseServer;

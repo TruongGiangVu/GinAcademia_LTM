@@ -64,11 +64,10 @@ public class ContestRoom {
 				this.clients.get(i).isInGame = true;
 				System.out.println(this.clients.get(i).player.getId() + " ");
 			}
-
 			this.sendALL(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE, "HasGame"),
 					false);
 
-			try { // delay 1s for client open ContestPanel
+			try { // delay 2s for client open ContestPanel
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -78,7 +77,6 @@ public class ContestRoom {
 			System.out.println("start contest");
 			// announce to all players about starting game
 			this.sendALL(new SocketResponseContest(this.players, this.points, this.config), true);
-
 			// start contest
 			this.startContest();
 		}

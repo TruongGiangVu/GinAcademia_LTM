@@ -58,7 +58,6 @@ public class Server {
 			id++;
 			clients.add(clientThread);
 			pool.submit(clientThread);
-//			pool
 
 			if (pool.isTerminated()) {
 				System.out.println("All clients have been killed.");

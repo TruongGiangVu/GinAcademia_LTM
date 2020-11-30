@@ -169,7 +169,6 @@ public class Client {
 			this.message = response.getMessage();
 			checkRequest = true;
 
-
 		} catch (IOException | ClassNotFoundException e) {
 			if(e.getMessage() !=null) {
 				if(e.getMessage().contains("reset")) {

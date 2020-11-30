@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class GameConfig implements Serializable  {
 	private int NumQuestion = 5;
 	private int Point = 100;
-	private int Time = 10; //  second
+	private int Time = 10; // second
 	private int numPlayer = 2;
 	
 	public GameConfig() {
@@ -17,6 +17,13 @@ public class GameConfig implements Serializable  {
 		Point = point;
 		Time = time;
 		this.numPlayer = numPlayer;
+	}
+	
+	public GameConfig(GameConfig cf) {
+		NumQuestion = cf.NumQuestion;
+		Point = cf.Point;
+		Time = cf.Time;
+		this.numPlayer = cf.numPlayer;
 	}
 
 	public int getNumQuestion() {
