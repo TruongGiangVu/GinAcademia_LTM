@@ -171,11 +171,13 @@ public class Client {
 
 
 		} catch (IOException | ClassNotFoundException e) {
-			
-			if(e.getMessage().contains("reset")) {
-				JOptionPane.showMessageDialog(null, (Object) "Không nhận được thông tin phản hồi từ server","Lỗi nhận phản hồi từ server",JOptionPane.ERROR_MESSAGE);
+			if(e.getMessage() !=null) {
+				if(e.getMessage().contains("reset")) {
+					JOptionPane.showMessageDialog(null, (Object) "Không nhận được thông tin phản hồi từ server","Lỗi nhận phản hồi từ server",JOptionPane.ERROR_MESSAGE);
+				}
+				checkRequest = false;
 			}
-			checkRequest = false;
+			
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		} catch (BadPaddingException e) {

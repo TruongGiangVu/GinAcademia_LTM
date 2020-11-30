@@ -163,7 +163,7 @@ public class Home extends JPanel implements MouseListener {
 		this.tbGameRank.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 
 		this.tbGameRank.getColumnModel().getColumn(1).setPreferredWidth(200);
-		this.tbGameRank.getColumnModel().getColumn(2).setPreferredWidth(100);
+		this.tbGameRank.getColumnModel().getColumn(2).setPreferredWidth(200);
 
 		this.tbWinRank = new JTable(this.tbModelWinRank) {
 			private static final long serialVersionUID = 1L;
@@ -177,7 +177,7 @@ public class Home extends JPanel implements MouseListener {
 		this.tbWinRank.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		this.tbWinRank.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 		this.tbWinRank.getColumnModel().getColumn(1).setPreferredWidth(200);
-		this.tbWinRank.getColumnModel().getColumn(2).setPreferredWidth(100);
+		this.tbWinRank.getColumnModel().getColumn(2).setPreferredWidth(200);
 
 		this.tbWinSQRank = new JTable(this.tbModelWinSQRank) {
 			private static final long serialVersionUID = 1L;
@@ -191,7 +191,7 @@ public class Home extends JPanel implements MouseListener {
 		this.tbWinSQRank.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
 		this.tbWinSQRank.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 		this.tbWinSQRank.getColumnModel().getColumn(1).setPreferredWidth(200);
-		this.tbWinSQRank.getColumnModel().getColumn(2).setPreferredWidth(100);
+		this.tbWinSQRank.getColumnModel().getColumn(2).setPreferredWidth(200);
 		this.loadRank(arr);
 		scrollPane_1 = new JScrollPane(this.tbGameRank);
 		scrollPane_1.getViewport().setBackground(Color.WHITE);

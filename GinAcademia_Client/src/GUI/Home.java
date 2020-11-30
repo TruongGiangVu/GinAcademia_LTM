@@ -161,26 +161,28 @@ public class Home extends ImagePanel implements ActionListener {
 		public void run() {
 //			while (waitGame) {
 				try {
-
-					SocketResponse response = client.getResponse(); 
 					if(client.checkRequest) {
-						if (response.getMessage().equals("HasGame")) {
-							waitGame = false;
-							joinGame = true; 
-							System.out.println("Get start contest in Home");
+						SocketResponse response = client.getResponse(); 
+						if(client.checkRequest) {
+							if (response.getMessage().equals("HasGame")) {
+								waitGame = false;
+								joinGame = true; 
+								System.out.println("Get start contest in Home");
+							}
+							else if(response.getMessage().equals("cancelGame")) {
+								waitGame = false;
+								joinGame = false; 
+								System.out.println("Get start contest in Home");
+								Thread.currentThread().interrupt();
+							}
 						}
-						else if(response.getMessage().equals("cancelGame")) {
-							waitGame = false;
-							joinGame = false; 
-							System.out.println("Get start contest in Home");
-							Thread.currentThread().interrupt();
+						else {
+							waitTask.cancel(); 
+							timer.cancel();
+							timer.purge();
 						}
 					}
-					else {
-						waitTask.cancel(); 
-						timer.cancel();
-						timer.purge();
-					}
+					
 					
 				} catch (Exception e) {
 					e.printStackTrace();

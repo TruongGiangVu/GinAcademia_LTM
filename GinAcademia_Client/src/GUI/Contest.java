@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -57,7 +58,8 @@ public class Contest extends MyPanel implements MouseListener {
 	private JLabel lblEnemyname;
 	private JLabel lblEnemyPoint;
 	private JLabel lblYourname;
-
+	private JLabel lblYourAnswerImg;
+	private JLabel lblEnemyAnswerImg;
 	private Thread thread;
 	private JLabel lblYourImg;
 	private JLabel lblEnemyImg;
@@ -109,24 +111,24 @@ public class Contest extends MyPanel implements MouseListener {
 
 		txtA = new MyLabel();
 		txtA.setText("A");
-		txtA.setBounds(50, 200, 500, 60);
+		txtA.setBounds(110, 200, 460, 60);
 		add(txtA);
 		this.arrTxt.add(txtA);
 
 		txtB = new MyLabel();
-		txtB.setBounds(50, 280, 500, 60);
+		txtB.setBounds(110, 280, 440, 60);
 		txtB.setText("B");
 		add(txtB);
 		this.arrTxt.add(txtB);
 
 		txtC = new MyLabel();
-		txtC.setBounds(50, 360, 500, 60);
+		txtC.setBounds(110, 360, 440, 60);
 		txtC.setText("C");
 		add(txtC);
 		this.arrTxt.add(txtC);
 
 		txtD = new MyLabel();
-		txtD.setBounds(50, 440, 500, 60);
+		txtD.setBounds(110, 440, 440, 60);
 		txtD.setText("D");
 		add(txtD);
 		this.arrTxt.add(txtD);
@@ -138,12 +140,24 @@ public class Contest extends MyPanel implements MouseListener {
 		
 		lblYourImg = new JLabel((String) null);
 		lblYourImg.setBounds(20, 20, 68, 70);
-		lblYourImg.setIcon(this.loadImage("./img/Avatar/"+this.player.getImage()));
+		lblYourImg.setIcon(this.loadImage("./img/Avatar/"+this.player.getImage(),68,70));
+//		lblYourImg.setVisible(false);
 		add(lblYourImg);
 		
 		lblEnemyImg = new JLabel((String) null);
 		lblEnemyImg.setBounds(502, 20, 68, 70);
 		add(lblEnemyImg);
+		
+		lblYourAnswerImg = new JLabel("");
+//		lblYourAnswerImg.setBounds(10, 200, 55, 60);
+		lblYourAnswerImg.setVisible(false);
+		lblYourAnswerImg.setIcon(this.loadImage("./img/Avatar/"+this.player.getImage(),30,30));
+		add(lblYourAnswerImg);
+		
+		lblEnemyAnswerImg = new JLabel("");
+		lblEnemyAnswerImg.setVisible(false);
+//		lblEnemyAnswerImg.setBounds(75, 200, 55, 60);
+		add(lblEnemyAnswerImg);
 		
 		parent.setActiveMenuButton(false);
 		this.initContest();
@@ -215,16 +229,17 @@ public class Contest extends MyPanel implements MouseListener {
 		for (int i = 0; i < n; ++i) {
 			if (i != index) {
 				this.lblEnemyname.setText(contest.players.get(i).getName());
-				this.lblEnemyImg.setIcon(this.loadImage("./img/Avatar/"+contest.players.get(i).getImage()));
+				this.lblEnemyImg.setIcon(this.loadImage("./img/Avatar/"+contest.players.get(i).getImage(),68,70));
+				this.lblEnemyAnswerImg.setIcon(this.loadImage("./img/Avatar/"+contest.players.get(i).getImage(),30,30));
 			}
 				
 		}
 	}
 
-	public ImageIcon loadImage(String nameImage) {
+	public ImageIcon loadImage(String nameImage,int w, int h) {
 		ImageIcon icon = new ImageIcon(nameImage); // load the image to a imageIcon
 		Image image = icon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(68, 70, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
+		Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH); // scale it the// smooth way
 		icon = new ImageIcon(newimg);
 		return icon;
 	}
@@ -341,7 +356,9 @@ public class Contest extends MyPanel implements MouseListener {
 			if (choose == this.arrTxt.get(i).theme) {
 				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
 				this.arrTxt.get(i).setForeground(Color.WHITE);
-				this.arrTxt.get(i).repaint();
+				Rectangle temp = this.arrTxt.get(i).getBounds();
+				lblEnemyAnswerImg.setBounds(50,temp.y+15,30,30);
+				lblEnemyAnswerImg.setVisible(true);
 				break;
 			}
 		}
@@ -370,6 +387,9 @@ public class Contest extends MyPanel implements MouseListener {
 		if(client.checkSend) {
 			this.setEnableOption(false);
 			source.setBackground(this.optionColor.getColor("choose"));
+			Rectangle temp = source.getBounds();
+			lblYourAnswerImg.setBounds(10,temp.y+15,30,30);
+			lblYourAnswerImg.setVisible(true);
 //			source.setForeground(Color.WHITE);
 //			this.endTurn();
 			thread = new Thread(new ContestGame());
@@ -415,6 +435,8 @@ public class Contest extends MyPanel implements MouseListener {
 		for (int i = 0; i < n; ++i) {
 			this.arrTxt.get(i).setBackground(new Color(255, 255, 255));
 			this.arrTxt.get(i).setForeground(Color.BLACK);
+			lblYourAnswerImg.setVisible(false);
+			lblEnemyAnswerImg.setVisible(false);
 		}
 	}
 
