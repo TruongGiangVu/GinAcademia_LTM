@@ -40,7 +40,7 @@ public class ContestRoom {
 
 	public ContestRoom(int RoomId, GameConfig config) {
 		this.RoomId = RoomId;
-		this.config = config;
+		this.config =  new GameConfig(config);
 		this.questions = questionBus.ReadContest(this.config.getNumQuestion());
 	}
 

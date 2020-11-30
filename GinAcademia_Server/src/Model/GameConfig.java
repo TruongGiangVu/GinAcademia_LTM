@@ -18,6 +18,13 @@ public class GameConfig implements Serializable  {
 		Time = time;
 		this.numPlayer = numPlayer;
 	}
+	
+	public GameConfig(GameConfig cf) {
+		NumQuestion = cf.NumQuestion;
+		Point = cf.Point;
+		Time = cf.Time;
+		this.numPlayer = cf.numPlayer;
+	}
 
 	public int getNumQuestion() {
 		return NumQuestion;
