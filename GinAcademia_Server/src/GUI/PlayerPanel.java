@@ -157,7 +157,7 @@ public class PlayerPanel extends JPanel implements ActionListener {
 			this.tbPlayer.setModel(tbModelPlayer);
 		}
 		else {
-			System.out.println("False");
+			JOptionPane.showMessageDialog(this,(Object)"Không tim thấy người chơi nào","Kết quả",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 	public void UpdateData(int i, String status) {

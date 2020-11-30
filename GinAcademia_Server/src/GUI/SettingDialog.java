@@ -51,18 +51,21 @@ public class SettingDialog extends JDialog {
 	}
 	public void init() {
 		setTitle("Thiết lập trò chơi");
-		setBounds(100, 100, 320, 250);
+		setBounds(100, 100, 320, 270);
 		getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Số lượng câu hỏi: ");
+		lblNewLabel.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblNewLabel.setBounds(20, 20, 120, 30);
 		getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Thời gian trả lời: ");
+		lblNewLabel_1.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblNewLabel_1.setBounds(20, 70, 100, 30);
 		getContentPane().add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Điểm mỗi câu: ");
+		JLabel lblNewLabel_2 = new JLabel("Điểm gốc: ");
+		lblNewLabel_2.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblNewLabel_2.setBounds(20, 120, 100, 30);
 		getContentPane().add(lblNewLabel_2);
 		
@@ -221,7 +224,7 @@ public class SettingDialog extends JDialog {
 				}
 			}
 		});
-		btnNewButton.setBounds(56, 170, 100, 23);
+		btnNewButton.setBounds(56, 197, 100, 23);
 		getContentPane().add(btnNewButton);
 		JLabel lblNewLabel_3_1_1 = new JLabel("Điểm/câu");
 		lblNewLabel_3_1_1.setBounds(210, 120, 60, 30);
@@ -233,8 +236,13 @@ public class SettingDialog extends JDialog {
 				dispose();
 			}
 		});
-		btnNewButton_1.setBounds(166, 170, 90, 23);
+		btnNewButton_1.setBounds(166, 197, 90, 23);
 		getContentPane().add(btnNewButton_1);
+		
+		JLabel lblNewLabel_4 = new JLabel("Điểm mỗi câu = Điểm gốc + thời gian * 10");
+		lblNewLabel_4.setFont(new Font("SansSerif", Font.ITALIC, 12));
+		lblNewLabel_4.setBounds(20, 171, 236, 14);
+		getContentPane().add(lblNewLabel_4);
 		
 			
 	}

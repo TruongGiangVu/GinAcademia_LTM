@@ -355,8 +355,8 @@ public class Contest extends MyPanel implements MouseListener {
 		int n = arrTxt.size();
 		for (int i = 0; i < n; ++i) {
 			if (choose == this.arrTxt.get(i).theme) {
-				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
-				this.arrTxt.get(i).setForeground(Color.WHITE);
+//				this.arrTxt.get(i).setBackground(this.optionColor.getColor("enemy"));
+//				this.arrTxt.get(i).setForeground(Color.WHITE);
 				Rectangle temp = this.arrTxt.get(i).getBounds();
 				lblEnemyAnswerImg.setBounds(50,temp.y+15,30,30);
 				lblEnemyAnswerImg.setVisible(true);
