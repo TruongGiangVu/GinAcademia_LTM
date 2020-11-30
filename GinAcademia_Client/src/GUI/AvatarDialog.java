@@ -11,11 +11,9 @@ import Model.Player;
 import Socket.Client;
 import Socket.Request.SocketRequest;
 import Socket.Request.SocketRequestPlayer;
-import Socket.Response.SocketResponse;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.awt.event.ActionEvent;
@@ -25,10 +23,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 
 import javax.swing.JScrollPane;
-import javax.swing.AbstractListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.ScrollPaneConstants;
@@ -41,6 +37,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 	private String[] arrStr;
 	private JButton btnSelected;
 	private JButton btnCancle;
+	public boolean check = false;
 	
 	Client client;
 	Player player;
@@ -110,7 +107,8 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
 		    	map.put(file.getName(), loadImage("./img/Avatar/"+file.getName())); 
-		    	arrStr[i] = file.getName();
+		    	arrStr[i] = file.getName().split(".")[0];
+//		    	*.png
 		    	i+=1;
 			}
 		}
@@ -139,6 +137,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		}
 		else {
 			if(e.getSource() == btnCancle) {
+				check = true;
 				dispose();
 			}
 		}
