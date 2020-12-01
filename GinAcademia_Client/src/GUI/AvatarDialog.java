@@ -133,6 +133,7 @@ public class AvatarDialog extends JDialog implements ActionListener {
 		if(e.getSource() == btnSelected) {
 			if(listImg.getSelectedValue() != null) {
 				this.player.setImage(listImg.getSelectedValue()+".png");
+				this.client.player = this.player;
 				if(client.checkSend) {
 					client.sendRequest(new SocketRequestPlayer(SocketRequest.Action.UPDATEPROFILE, this.player));
 					if(client.checkSend) {
