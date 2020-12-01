@@ -150,7 +150,7 @@ public class Client {
 					JOptionPane.showMessageDialog(null, (Object) "Không thể kết nối tới server","Lỗi kết nối",JOptionPane.ERROR_MESSAGE);
 				}
 			}
-			
+			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		}
@@ -176,7 +176,7 @@ public class Client {
 				}
 				checkRequest = false;
 			}
-			
+			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
