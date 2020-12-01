@@ -54,6 +54,7 @@ public class RequestProcess {
 	private void updateProfileProcess() { // update profile
 		SocketRequestPlayer tempRequest = (SocketRequestPlayer) request;
 		playerBus.update(tempRequest.player);
+		client.player = tempRequest.player;
 		client.sendResponse(new SocketResponse(SocketResponse.Status.SUCCESS, SocketResponse.Action.MESSAGE,
 				"Cập nhật thành công!"),false);
 	}
