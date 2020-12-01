@@ -225,6 +225,8 @@ public class IQTestPanel extends MyPanel {
 			}
 			MainFrame parent = (MainFrame) SwingUtilities.getWindowAncestor(this);
 			parent.clickReturnHome();
+			parent.btnHome.setSelected(true);
+			parent.btnIQ.setSelected(false);
 		}
 		this.txtAnswer.requestFocus();
 	}

@@ -40,8 +40,8 @@ public class MainFrame extends MyFrame implements MouseListener, ActionListener 
 	public static JLabel lblImage;
 	public JLabel lblName;
 	private JPanel panelButton;
-	private MenuButton btnHome;
-	private MenuButton btnIQ;
+	public MenuButton btnHome;
+	public MenuButton btnIQ;
 	private MenuButton btnRank;
 	private MenuButton btnProfile;
 	int xx, xy;
