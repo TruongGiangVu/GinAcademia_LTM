@@ -337,6 +337,8 @@ public class Register extends MyFrame {
 	public String removeAccent(String s) {
 		String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
 		Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+		temp = temp.replaceAll("đ", "d");
+		temp = temp.replaceAll("Đ", "D");
 		return pattern.matcher(temp).replaceAll("");
 	}
 }
